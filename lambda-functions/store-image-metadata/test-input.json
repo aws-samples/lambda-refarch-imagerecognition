@@ -1,0 +1,173 @@
+{
+  "Base filename": "-",
+  "Format": "JPEG (Joint Photographic Experts Group JFIF format)",
+  "format": "JPEG",
+  "Class": "DirectClass",
+  "Geometry": "4032x3024+0+0",
+  "size": {
+    "width": 4032,
+    "height": 3024
+  },
+  "Resolution": "72x72",
+  "Print size": "56x42",
+  "Units": "PixelsPerInch",
+  "Type": "TrueColor",
+  "Endianess": "Undefined",
+  "Colorspace": "sRGB",
+  "Depth": "8-bit",
+  "depth": 8,
+  "Channel depth": {
+    "red": "8-bit",
+    "green": "8-bit",
+    "blue": "8-bit"
+  },
+  "Channel statistics": {
+    "Red": {
+      "min": "0 (0)",
+      "max": "255 (1)",
+      "mean": "105.551 (0.413924)",
+      "standard deviation": "66.7027 (0.261579)",
+      "kurtosis": "-1.0928",
+      "skewness": "0.268703"
+    },
+    "Green": {
+      "min": "0 (0)",
+      "max": "255 (1)",
+      "mean": "103.976 (0.407749)",
+      "standard deviation": "59.9784 (0.23521)",
+      "kurtosis": "-1.14034",
+      "skewness": "0.119108"
+    },
+    "Blue": {
+      "min": "0 (0)",
+      "max": "255 (1)",
+      "mean": "93.1383 (0.365248)",
+      "standard deviation": "57.303 (0.224718)",
+      "kurtosis": "-1.11568",
+      "skewness": "0.254665"
+    }
+  },
+  "Image statistics": {
+    "Overall": {
+      "min": "0 (0)",
+      "max": "255 (1)",
+      "mean": "100.888 (0.395641)",
+      "standard deviation": "61.4554 (0.241002)",
+      "kurtosis": "-1.02694",
+      "skewness": "0.24736"
+    }
+  },
+  "Rendering intent": "Perceptual",
+  "Gamma": "0.454545",
+  "Chromaticity": {
+    "red primary": "(0.64,0.33)",
+    "green primary": "(0.3,0.6)",
+    "blue primary": "(0.15,0.06)",
+    "white point": "(0.3127,0.329)"
+  },
+  "Interlace": "None",
+  "Background color": "white",
+  "Border color": "srgb(223,223,223)",
+  "Matte color": "grey74",
+  "Transparent color": "black",
+  "Compose": "Over",
+  "Page geometry": "4032x3024+0+0",
+  "Dispose": "Undefined",
+  "Iterations": "0",
+  "Compression": "JPEG",
+  "Quality": "94",
+  "Orientation": "Undefined",
+  "Properties": {
+    "date:create": "2016-12-30T17:15:00+00:00",
+    "date:modify": "2016-12-30T17:15:00+00:00",
+    "exif:ApertureValue": "200/100",
+    "exif:BrightnessValue": "0/100",
+    "exif:ColorSpace": "1",
+    "exif:ComponentsConfiguration": "1, 2, 3, 0",
+    "exif:Compression": "6",
+    "exif:DateTime": "2016:08:10 16:31:29",
+    "exif:DateTimeDigitized": "2016:08:10 16:31:29",
+    "exif:DateTimeOriginal": "2016:08:10 16:31:29",
+    "exif:ExifImageLength": "3024",
+    "exif:ExifImageWidth": "4032",
+    "exif:ExifOffset": "228",
+    "exif:ExifVersion": "48, 50, 50, 48",
+    "exif:ExposureBiasValue": "0/1",
+    "exif:ExposureMode": "0",
+    "exif:ExposureProgram": "0",
+    "exif:ExposureTime": "1/60",
+    "exif:Flash": "16",
+    "exif:FlashPixVersion": "48, 49, 48, 48",
+    "exif:FNumber": "200/100",
+    "exif:FocalLength": "4670/1000",
+    "exif:FocalLengthIn35mmFilm": "0",
+    "exif:GPSAltitude": "14300/100",
+    "exif:GPSAltitudeRef": "0",
+    "exif:GPSDateStamp": "2016:08:10",
+    "exif:GPSInfo": "744",
+    "exif:GPSLatitude": "17/1, 44/1, 2124/100",
+    "exif:GPSLatitudeRef": "N",
+    "exif:GPSLongitude": "64/1, 50/1, 4202/100",
+    "exif:GPSLongitudeRef": "W",
+    "exif:GPSTimeStamp": "20/1, 31/1, 22/1",
+    "exif:GPSVersionID": "2, 2, 0, 0",
+    "exif:ImageUniqueID": "6e823e81cd99732b0000000000000000",
+    "exif:InteroperabilityIndex": "R98",
+    "exif:InteroperabilityOffset": "950",
+    "exif:InteroperabilityVersion": "48, 49, 48, 48",
+    "exif:ISOSpeedRatings": "147",
+    "exif:JPEGInterchangeFormat": "1074",
+    "exif:JPEGInterchangeFormatLength": "6808",
+    "exif:Make": "LGE",
+    "exif:MeteringMode": "0",
+    "exif:Model": "Nexus 5X",
+    "exif:ResolutionUnit": "2",
+    "exif:SceneCaptureType": "0",
+    "exif:SceneType": "0",
+    "exif:SensingMethod": "0",
+    "exif:ShutterSpeedValue": "5906/1000",
+    "exif:Software": "bullhead-user 6.0.1 MTC19V 2862947 release-keys",
+    "exif:SubSecTime": "965965",
+    "exif:SubSecTimeDigitized": "965965",
+    "exif:SubSecTimeOriginal": "965965",
+    "exif:WhiteBalance": "0",
+    "exif:XResolution": "72/1",
+    "exif:YCbCrPositioning": "1",
+    "exif:YResolution": "72/1",
+    "jpeg:colorspace": "2",
+    "jpeg:sampling-factor": "2x2,1x1,1x1",
+    "signature": "baf5303281a80be00da4b79ce7f22dc1be95b73ea4b383ceec60470844e2d3c7"
+  },
+  "Profiles": {
+    "Profile-exif": "7888 bytes",
+    "Profile-icc": {
+      "Description": "sRGB IEC61966-2-1 black scaled",
+      "Manufacturer": "sRGB IEC61966-2-1 black scaled",
+      "Model": "IEC 61966-2-1 Default RGB Colour Space - sRGB",
+      "Copyright": "Copyright International Color Consortium, 2009"
+    },
+    "Profile-xmp": "259 bytes"
+  },
+  "Artifacts": {
+    "filename": "-",
+    "verbose": "true"
+  },
+  "Tainted": "False",
+  "Filesize": "1.581MB",
+  "Number pixels": "12.19M",
+  "Pixels per second": "67.74MB",
+  "User time": "0.110u",
+  "Elapsed time": "0:01.179",
+  "Version": "ImageMagick 6.7.8-9 2016-06-22 Q16 http://www.imagemagick.org",
+  "path": "unknown.jpg",
+  "eventData": {
+    "s3Bucket": "photo-sharing-backend-123-photorepos3bucket-1p51462uzs5zi",
+    "s3Key": "Incoming/9926908113841-angelaw/portland-IMG_20160810_163127.jpg",
+    "objectID": "9926908113841-angelaw/portland-IMG_20160810_163127.jpg",
+    "size": {
+      "width": 4032,
+      "height": 3024
+    },
+    "format": "JPEG"
+  }
+}

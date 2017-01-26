@@ -1,0 +1,38 @@
+{
+  "Records": [
+    {
+      "eventVersion": "2.0",
+      "eventSource": "aws:s3",
+      "awsRegion": "us-west-2",
+      "eventTime": "2016-12-30T17:14:57.763Z",
+      "eventName": "ObjectCreated:Put",
+      "userIdentity": {
+        "principalId": "AWS:AIDAIZG5COMFSIS6YVZAS"
+      },
+      "requestParameters": {
+        "sourceIPAddress": "205.251.233.50"
+      },
+      "responseElements": {
+        "x-amz-request-id": "7A158E46F737A0A3",
+        "x-amz-id-2": "8LKJnfyG4umL4Ad0iAMp7xd1hrGtLo+2N9vTjZk5DDd1EluvIGC10hyKlEiyZWTzJKNokNaaeWk="
+      },
+      "s3": {
+        "s3SchemaVersion": "1.0",
+        "configurationId": "ecf121c0-8b17-42d8-8db5-e8ef9b74871d",
+        "bucket": {
+          "name": "photo-sharing-backend-123-photorepos3bucket-1p51462uzs5zi",
+          "ownerIdentity": {
+            "principalId": "A39U1Z4T6X0Y9J"
+          },
+          "arn": "arn:aws:s3:::photo-sharing-backend-123-photorepos3bucket-1p51462uzs5zi"
+        },
+        "object": {
+          "key": "Incoming/9926908113841-angelaw/portland-IMG_20160810_163127.jpg",
+          "size": 1580973,
+          "eTag": "eb3006e76e92335b3a8bf2095eae980e",
+          "sequencer": "0058669611A38DD509"
+        }
+      }
+    }
+  ]
+}

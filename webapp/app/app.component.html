@@ -1,0 +1,17 @@
+<nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <span class="navbar-brand">Photo processing test app</span>
+    </div>
+    <ul class="nav navbar-nav">
+      <li routerLink="/welcome" routerLinkActive="active"><a>Welcome (login) </a></li>
+      <li routerLink="/albumlist" routerLinkActive="active"><a>Album list</a></li>
+    </ul>
+    <ul class="nav navbar-nav navbar-right" *ngIf="loggedIn | async">
+      <li><a><span class="glyphicon glyphicon-user"></span> {{loggedInUser|async}}</a></li>
+      <li><a routerLink="/welcome">
+        <span class="glyphicon glyphicon-log-in"></span> Switch user</a></li>
+    </ul>
+  </div>
+</nav>
+<router-outlet></router-outlet>

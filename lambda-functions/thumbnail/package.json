@@ -1,0 +1,7 @@
+{
+  "name": "generate-thumbnail",
+  "version": "0.0.1",
+  "dependencies": {
+    "gm" : "1.23.0"
+  }
+}

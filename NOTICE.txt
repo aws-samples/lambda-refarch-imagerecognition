@@ -1,0 +1,9 @@
+AWS Serverless Reference Architecture: Image Recognition and Processing Backend
+Copyright 2017 Amazon Web Services, Inc. or its affiliates. All Rights Reserved.
+
+**********************
+THIRD PARTY COMPONENTS
+**********************
+The web app used Angular quickstart (https://github.com/angular/quickstart) as a starting point -- Copyright 2014-2016 Google, Inc.
+
+The licenses for these third party components are included in LICENSE

@@ -1,0 +1,34 @@
+{
+  "Labels": [
+    {
+      "Name": "Animal",
+      "Confidence": 81.12936401367188
+    },
+    {
+      "Name": "Boar",
+      "Confidence": 81.12936401367188
+    },
+    {
+      "Name": "Hog",
+      "Confidence": 81.12936401367188
+    },
+    {
+      "Name": "Mammal",
+      "Confidence": 81.12936401367188
+    },
+    {
+      "Name": "Pig",
+      "Confidence": 81.12936401367188
+    }
+  ],
+  "eventData": {
+    "s3Bucket": "photo-sharing-backend-123-photorepos3bucket-1p51462uzs5zi",
+    "s3Key": "Incoming/9926908113841-angelaw/portland-IMG_20160810_163127.jpg",
+    "objectID": "9926908113841-angelaw/portland-IMG_20160810_163127.jpg",
+    "size": {
+      "width": 4032,
+      "height": 3024
+    },
+    "format": "JPEG"
+  }
+}

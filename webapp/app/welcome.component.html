@@ -1,0 +1,18 @@
+<div class="container">
+  <h1 class="text-center">Welcome</h1>
+  <div class="text-center">
+    <p>Please type a username of your choice to log in. </p>
+    <div class="form-group form-inline">
+      <label for="username">Username:</label>
+      <input id="username" class="form-control" type="text" [(ngModel)]='username' placeholder="e.g. bob"
+             name="username">
+    </div>
+    <button [disabled]="(!username)" class="btn btn-primary" (click)="login()">log in</button>
+
+    <p class="text-muted">(This is a test page to showcase the media sharing processing backend so it's not using real
+      user
+      authentication. In
+      an actual app, you can use Amazon Cognito to manage user sign-up and login.)</p>
+    <img id="architecture-diagram" src="assets/photo-processing-backend-diagram.png">
+  </div>
+</div>

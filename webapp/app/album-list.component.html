@@ -1,0 +1,20 @@
+<div class="text-center">
+  <h2>List of albums</h2>
+  <div id="album-creation" class="form-group form-inline">
+    <input class="form-control" [(ngModel)]='albumName' placeholder="e.g. Portland trip">
+    <button [disabled]="(isCreating||(!albumName))" class="btn btn-primary" (click)="createAlbum(albumName)"> create new
+      album
+    </button>
+  </div>
+  <div class="container">
+    <div class="alert alert-danger" role="alert" *ngIf="errorMsg">{{errorMsg}}</div>
+  </div>
+  <div class="list-group">
+    <div *ngFor="let album of albums">
+      <a (click)="goToAlbum(album)" class="list-group-item">
+        <h4 class="list-group-item-heading">{{album.name}}</h4>
+        <p class="list-group-item-text"> Created on: {{(album.creationTime*1000) | date:'medium'}}</p>
+      </a>
+    </div>
+  </div>
+</div>

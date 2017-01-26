@@ -1,0 +1,16 @@
+{
+  "RequestType": "Create",
+  "ServiceToken": "arn:aws:lambda:us-west-2:123456789012:function:photo-sharing-backend-CreateS3EventTriggerFunction-1MTXAWKC2LXF",
+  "ResponseURL": "https://cloudformation-custom-resource-response-uswest2.s3-us-west-2.amazonaws.com/arn%3Aaws%3Acloudformation%3Aus-west-2%3A123456789012%3Astack/consolidate3/5b7c9330-dd03-11e6-ab65-503ac9ec2435%7CS3EventTrigger%7Cfa1673fd-0438-4411-b3d9-632d03b13758?AWSAccessKeyId=AKIAI4KYMPPRGIACET5Q&Expires=1484698997&Signature=qTbz0zAU35IB9fA7BSmL4S78Xlk%3D",
+  "StackId": "arn:aws:cloudformation:us-west-2:123456789012:stack/consolidate3/5b7c9330-dd03-11e6-ab65-503ac9ec2435",
+  "RequestId": "fa1673fd-0438-4411-b3d9-632d03b13758",
+  "LogicalResourceId": "S3EventTrigger",
+  "ResourceType": "Custom::S3EventTrigger",
+  "ResourceProperties": {
+    "ServiceToken": "arn:aws:lambda:us-west-2:123456789012:function:photo-sharing-backend-CreateS3EventTriggerFunction-1MTXAWKC2LXF",
+    "accountId": "123456789012",
+    "StartExecutionFunction": "photo-sharing-backend-ImageProcStartExecutionFunction-CSMQX9E7369E",
+    "StartExecutionFunctionArn": "arn:aws:lambda:us-west-2:123456789012:function:photo-sharing-backend-ImageProcStartExecutionFunction-CSMQX9E7369E",
+    "PhotoRepoS3Bucket": "photo-sharing-backend-photorepos3bucket-1kdx8v1un1flb"
+  }
+}

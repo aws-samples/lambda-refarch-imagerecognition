@@ -1,0 +1,7 @@
+{
+  "name": "create-s3-event-trigger",
+  "version": "0.0.1",
+  "dependencies" :{
+    "cfn-response" : "1.0.1"
+  }
+}

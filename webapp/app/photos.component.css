@@ -1,0 +1,39 @@
+.photo-blocks {
+  float: left;
+  width: 310px;
+  height: 280px;
+  display: flex;
+  padding: 5px;
+}
+.photo-blocks a:hover{
+  text-decoration: none;
+}
+
+.thumbnail {
+  min-width: 300px;
+  overflow: scroll;
+}
+
+.upload-area {
+  margin-bottom: 10px;
+}
+
+.success-banner {
+  color: #3c763d;
+}
+
+.alert {
+  margin-bottom: 0px;
+}
+
+#in-progress {
+  display: inline;
+}
+
+#in-progress-spinner {
+  width: 40px;
+}
+
+.photo-tags {
+  display: inline;
+}

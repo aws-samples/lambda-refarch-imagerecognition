@@ -1,0 +1,9 @@
+# Specifies files to intentionally ignore when using Git
+# http://git-scm.com/docs/gitignore
+
+.idea
+.DS_Store
+
+**/node_modules/
+*/java/
+*.iml

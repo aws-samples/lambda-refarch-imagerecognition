@@ -1,0 +1,532 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Backend for photo sharing reference architecture.
+Outputs:
+  AccessKeyId:
+    Value:
+      Ref: TestClientKeys
+  DDBAlbumMetadataTable:
+    Value:
+      Ref: AlbumMetadataDDBTable
+  DDBImageMetadataTable:
+    Value:
+      Ref: ImageMetadataDDBTable
+  DescribeExecutionLambda:
+    Value:
+      Ref: DescribeExecutionFunction
+  Region:
+    Value:
+      Ref: AWS::Region
+  S3PhotoRepoBucket:
+    Value:
+      Ref: PhotoRepoS3Bucket
+  SecretAccessKey:
+    Value:
+      Fn::GetAtt:
+      - TestClientKeys
+      - SecretAccessKey
+Resources:
+  AlbumMetadataDDBTable:
+    Properties:
+      AttributeDefinitions:
+      - AttributeName: albumID
+        AttributeType: S
+      - AttributeName: creationTime
+        AttributeType: N
+      - AttributeName: userID
+        AttributeType: S
+      GlobalSecondaryIndexes:
+      - IndexName: userID-creationTime-index
+        KeySchema:
+        - AttributeName: userID
+          KeyType: HASH
+        - AttributeName: creationTime
+          KeyType: RANGE
+        Projection:
+          ProjectionType: ALL
+        ProvisionedThroughput:
+          ReadCapacityUnits: '2'
+          WriteCapacityUnits: '1'
+      KeySchema:
+      - AttributeName: albumID
+        KeyType: HASH
+      ProvisionedThroughput:
+        ReadCapacityUnits: '2'
+        WriteCapacityUnits: '1'
+    Type: AWS::DynamoDB::Table
+  BackendProcessingLambdaRole:
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+        - Action:
+          - sts:AssumeRole
+          Effect: Allow
+          Principal:
+            Service:
+            - lambda.amazonaws.com
+        Version: '2012-10-17'
+      Path: /MediaSharingRefarch/
+      Policies:
+      - PolicyDocument:
+          Statement:
+          - Action:
+            - logs:CreateLogGroup
+            - logs:CreateLogStream
+            - logs:PutLogEvents
+            Effect: Allow
+            Resource: '*'
+            Sid: AllowLogging
+          Version: '2012-10-17'
+        PolicyName: LambdaWriteCWLogs
+      - PolicyDocument:
+          Statement:
+          - Action:
+            - s3:Get*
+            Effect: Allow
+            Resource:
+              Fn::Sub: arn:aws:s3:::${PhotoRepoS3Bucket}/*
+            Sid: ReadFromPhotoRepoS3Bucket
+          Version: '2012-10-17'
+        PolicyName: ReadFromPhotoRepoS3Bucket
+      - PolicyDocument:
+          Statement:
+          - Action:
+            - s3:PutObject
+            Effect: Allow
+            Resource:
+              Fn::Sub: arn:aws:s3:::${PhotoRepoS3Bucket}/*
+            Sid: WriteToPhotoRepoS3Bucket
+          Version: '2012-10-17'
+        PolicyName: WriteToPhotoRepoS3Bucket
+      - PolicyDocument:
+          Statement:
+          - Action:
+            - dynamodb:UpdateItem
+            - dynamodb:PutItem
+            Effect: Allow
+            Resource:
+              Fn::Sub: arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/${ImageMetadataDDBTable}
+            Sid: WriteToImageMetadataDDBTable
+          Version: '2012-10-17'
+        PolicyName: WriteToImageMetadataDDBTable
+      - PolicyDocument:
+          Statement:
+          - Action:
+            - rekognition:DetectLabels
+            Effect: Allow
+            Resource: '*'
+            Sid: RekognitionDetectLabels
+          Version: '2012-10-17'
+        PolicyName: RekognitionDetectLabels
+      - PolicyDocument:
+          Statement:
+          - Action:
+            - states:StartExecution
+            Effect: Allow
+            Resource: '*'
+            Sid: StepFunctionStartExecution
+          Version: '2012-10-17'
+        PolicyName: StepFunctionStartExecution
+    Type: AWS::IAM::Role
+  CreateS3EventTriggerFunction:
+    Properties:
+      CodeUri: s3://media-sharing-refarch/263e15346cea1ba2dab7a07207add91f
+      Description: Used with CloudFormation as a custom resource helper to enable
+        S3 event trigger to invoke the start step function Lambda function.
+      Handler: index.handler
+      MemorySize: 1024
+      Role:
+        Fn::GetAtt:
+        - CustomResourceHelperRole
+        - Arn
+      Runtime: nodejs4.3
+      Timeout: 200
+    Type: AWS::Serverless::Function
+  CreateStepFunctionHelperFunction:
+    Properties:
+      CodeUri: s3://media-sharing-refarch/2707dfbb5b31acda2719fc7eeb360664
+      Description: Used with CloudFormation as a custom resource helper to create/delete
+        a state machine in AWS Step Functions service.
+      Handler: index.handler
+      MemorySize: 1024
+      Role:
+        Fn::GetAtt:
+        - CustomResourceHelperRole
+        - Arn
+      Runtime: nodejs4.3
+      Timeout: 200
+    Type: AWS::Serverless::Function
+  CustomResourceHelperRole:
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+        - Action:
+          - sts:AssumeRole
+          Effect: Allow
+          Principal:
+            Service:
+            - lambda.amazonaws.com
+        Version: '2012-10-17'
+      Path: /MediaSharingRefarch/
+      Policies:
+      - PolicyDocument:
+          Statement:
+          - Action:
+            - logs:CreateLogGroup
+            - logs:CreateLogStream
+            - logs:PutLogEvents
+            Effect: Allow
+            Resource: '*'
+            Sid: AllowLogging
+          Version: '2012-10-17'
+        PolicyName: LambdaWriteCWLogs
+      - PolicyDocument:
+          Statement:
+          - Action:
+            - states:CreateStateMachine
+            Effect: Allow
+            Resource: '*'
+            Sid: CreateStepFunction
+          - Action:
+            - states:DeleteStateMachine
+            Effect: Allow
+            Resource: '*'
+            Sid: DeleteStepFunction
+          - Action:
+            - iam:PassRole
+            Effect: Allow
+            Resource: '*'
+            Sid: PassStepFunctionRole
+          Version: '2012-10-17'
+        PolicyName: CreateDeleteStepFunction
+      - PolicyDocument:
+          Statement:
+          - Action:
+            - s3:PutBucketNotification
+            Effect: Allow
+            Resource:
+              Fn::Sub: arn:aws:s3:::${PhotoRepoS3Bucket}
+            Sid: PutS3EventNofication
+          - Action:
+            - lambda:AddPermission
+            Effect: Allow
+            Resource: '*'
+            Sid: AddPermissionToLambda
+          Version: '2012-10-17'
+        PolicyName: AddS3EventTrigger
+    Type: AWS::IAM::Role
+  DescribeExecutionFunction:
+    Properties:
+      CodeUri: s3://media-sharing-refarch/eda916998955ce26034aa2ff1650024f
+      Description: Calls DescribeExecution on a state machine execution.
+      Handler: index.handler
+      MemorySize: 1024
+      Role:
+        Fn::GetAtt:
+        - DescribeExecutionFunctionRole
+        - Arn
+      Runtime: nodejs4.3
+      Timeout: 200
+    Type: AWS::Serverless::Function
+  DescribeExecutionFunctionRole:
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+        - Action:
+          - sts:AssumeRole
+          Effect: Allow
+          Principal:
+            Service:
+            - lambda.amazonaws.com
+        Version: '2012-10-17'
+      Path: /MediaSharingRefarch/
+      Policies:
+      - PolicyDocument:
+          Statement:
+          - Action:
+            - logs:CreateLogGroup
+            - logs:CreateLogStream
+            - logs:PutLogEvents
+            Effect: Allow
+            Resource: '*'
+            Sid: AllowLogging
+          Version: '2012-10-17'
+        PolicyName: LambdaWriteCWLogs
+      - PolicyDocument:
+          Statement:
+          - Action:
+            - states:DescribeExecution
+            Effect: Allow
+            Resource: '*'
+            Sid: DescribeStepFunction
+          Version: '2012-10-17'
+        PolicyName: DescribeStepFunction
+    Type: AWS::IAM::Role
+  ExtractImageMetadataFunction:
+    Properties:
+      CodeUri: s3://media-sharing-refarch/04186ecd4d92fa84ebf66f32520c864c
+      Description: Extract image metadata such as format, size, geolocation, etc.
+      Handler: index.handler
+      MemorySize: 1024
+      Role:
+        Fn::GetAtt:
+        - BackendProcessingLambdaRole
+        - Arn
+      Runtime: nodejs4.3
+      Timeout: 200
+    Type: AWS::Serverless::Function
+  GenerateThumbnailFunction:
+    Properties:
+      CodeUri: s3://media-sharing-refarch/1b6b43d98f621c45cb068cfba0959d53
+      Description: Generate thumbnails for images
+      Handler: index.handler
+      MemorySize: 1536
+      Role:
+        Fn::GetAtt:
+        - BackendProcessingLambdaRole
+        - Arn
+      Runtime: nodejs4.3
+      Timeout: 300
+    Type: AWS::Serverless::Function
+  ImageMetadataDDBTable:
+    Properties:
+      AttributeDefinitions:
+      - AttributeName: albumID
+        AttributeType: S
+      - AttributeName: imageID
+        AttributeType: S
+      - AttributeName: uploadTime
+        AttributeType: N
+      GlobalSecondaryIndexes:
+      - IndexName: albumID-uploadTime-index
+        KeySchema:
+        - AttributeName: albumID
+          KeyType: HASH
+        - AttributeName: uploadTime
+          KeyType: RANGE
+        Projection:
+          ProjectionType: ALL
+        ProvisionedThroughput:
+          ReadCapacityUnits: '3'
+          WriteCapacityUnits: '3'
+      KeySchema:
+      - AttributeName: imageID
+        KeyType: HASH
+      ProvisionedThroughput:
+        ReadCapacityUnits: '3'
+        WriteCapacityUnits: '3'
+    Type: AWS::DynamoDB::Table
+  ImageProcStartExecutionFunction:
+    DependsOn: PhotoRepoS3Bucket
+    Properties:
+      CodeUri: s3://media-sharing-refarch/a16cc9d8db8233b3cf2615a13ad149e4
+      Description: Triggered by S3 image upload to the repo bucket and start the image
+        processing step function workflow
+      Environment:
+        Variables:
+          IMAGE_METADATA_DDB_TABLE:
+            Ref: ImageMetadataDDBTable
+          STATE_MACHINE_ARN:
+            Fn::GetAtt:
+            - ImageProcStateMachine
+            - Arn
+      Handler: index.handler
+      MemorySize: 256
+      Role:
+        Fn::GetAtt:
+        - BackendProcessingLambdaRole
+        - Arn
+      Runtime: nodejs4.3
+      Timeout: 60
+    Type: AWS::Serverless::Function
+  ImageProcStateMachine:
+    DependsOn:
+    - CreateStepFunctionHelperFunction
+    - ExtractImageMetadataFunction
+    - StoreImageMetadataFunction
+    - RekognitionFunction
+    - StoreRekognizedTagsFunction
+    - GenerateThumbnailFunction
+    - StateMachineRole
+    Properties:
+      ExtractImageMetadataFunction:
+        Fn::GetAtt:
+        - ExtractImageMetadataFunction
+        - Arn
+      GenerateThumbnailFunction:
+        Fn::GetAtt:
+        - GenerateThumbnailFunction
+        - Arn
+      RekognitionFunction:
+        Fn::GetAtt:
+        - RekognitionFunction
+        - Arn
+      RoleArn:
+        Fn::GetAtt:
+        - StateMachineRole
+        - Arn
+      ServiceToken:
+        Fn::GetAtt:
+        - CreateStepFunctionHelperFunction
+        - Arn
+      StackName:
+        Ref: AWS::StackName
+      StoreImageMetadataFunction:
+        Fn::GetAtt:
+        - StoreImageMetadataFunction
+        - Arn
+      StoreRekognizedTagsFunction:
+        Fn::GetAtt:
+        - StoreRekognizedTagsFunction
+        - Arn
+    Type: Custom::StepFunctionsStateMachine
+    Version: '1.0'
+  PhotoRepoS3Bucket:
+    Properties:
+      CorsConfiguration:
+        CorsRules:
+        - AllowedHeaders:
+          - '*'
+          AllowedMethods:
+          - PUT
+          - GET
+          - POST
+          - HEAD
+          AllowedOrigins:
+          - '*'
+          ExposedHeaders:
+          - ETag
+    Type: AWS::S3::Bucket
+  RekognitionFunction:
+    Properties:
+      CodeUri: s3://media-sharing-refarch/bafedfe7137b5366d4d39fdfc6d5f642
+      Description: Use Amazon Rekognition to detect labels from image
+      Handler: index.handler
+      MemorySize: 256
+      Role:
+        Fn::GetAtt:
+        - BackendProcessingLambdaRole
+        - Arn
+      Runtime: nodejs4.3
+      Timeout: 60
+    Type: AWS::Serverless::Function
+  S3EventTrigger:
+    DependsOn:
+    - PhotoRepoS3Bucket
+    - ImageProcStartExecutionFunction
+    Properties:
+      PhotoRepoS3Bucket:
+        Ref: PhotoRepoS3Bucket
+      ServiceToken:
+        Fn::GetAtt:
+        - CreateS3EventTriggerFunction
+        - Arn
+      StartExecutionFunction:
+        Ref: ImageProcStartExecutionFunction
+      StartExecutionFunctionArn:
+        Fn::GetAtt:
+        - ImageProcStartExecutionFunction
+        - Arn
+      accountId:
+        Ref: AWS::AccountId
+    Type: Custom::S3EventTrigger
+    Version: '1.0'
+  StateMachineRole:
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+        - Action:
+          - sts:AssumeRole
+          Effect: Allow
+          Principal:
+            Service:
+              Fn::Sub: states.${AWS::Region}.amazonaws.com
+        Version: '2012-10-17'
+      Path: /MediaSharingRefarch/
+      Policies:
+      - PolicyDocument:
+          Statement:
+          - Action:
+            - lambda:InvokeFunction
+            Effect: Allow
+            Resource: '*'
+            Sid: InvokeLambda
+          Version: '2012-10-17'
+        PolicyName: InvokeLambda
+    Type: AWS::IAM::Role
+  StoreImageMetadataFunction:
+    Properties:
+      CodeUri: s3://media-sharing-refarch/c5ae293a139927637ef50c54154fe807
+      Description: Store image metadata into database
+      Environment:
+        Variables:
+          IMAGE_METADATA_DDB_TABLE:
+            Ref: ImageMetadataDDBTable
+      Handler: index.handler
+      MemorySize: 256
+      Role:
+        Fn::GetAtt:
+        - BackendProcessingLambdaRole
+        - Arn
+      Runtime: nodejs4.3
+      Timeout: 60
+    Type: AWS::Serverless::Function
+  StoreRekognizedTagsFunction:
+    Properties:
+      CodeUri: s3://media-sharing-refarch/eee6fe2f71dcc6cbb10a4d9ce62b4068
+      Description: Store tags detected by Amazon Rekognition into database
+      Environment:
+        Variables:
+          IMAGE_METADATA_DDB_TABLE:
+            Ref: ImageMetadataDDBTable
+      Handler: index.handler
+      MemorySize: 256
+      Role:
+        Fn::GetAtt:
+        - BackendProcessingLambdaRole
+        - Arn
+      Runtime: nodejs4.3
+      Timeout: 60
+    Type: AWS::Serverless::Function
+  TestClientKeys:
+    Properties:
+      UserName:
+        Ref: TestClientUser
+    Type: AWS::IAM::AccessKey
+  TestClientUser:
+    Properties:
+      Policies:
+      - PolicyDocument:
+          Statement:
+          - Action:
+            - s3:*
+            Effect: Allow
+            Resource:
+              Fn::Sub: arn:aws:s3:::${PhotoRepoS3Bucket}/*
+            Sid: S3ReadWrite
+          Version: '2012-10-17'
+        PolicyName: S3PhotoRepoBucketAccess
+      - PolicyDocument:
+          Statement:
+          - Action:
+            - dynamodb:*
+            Effect: Allow
+            Resource:
+            - Fn::Sub: arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/${AlbumMetadataDDBTable}
+            - Fn::Sub: arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/${AlbumMetadataDDBTable}/*
+            - Fn::Sub: arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/${ImageMetadataDDBTable}
+            - Fn::Sub: arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/${ImageMetadataDDBTable}/*
+            Sid: DynamoTableAccess
+          Version: '2012-10-17'
+        PolicyName: DynamoTableAccess
+      - PolicyDocument:
+          Statement:
+          - Action:
+            - lambda:InvokeFunction
+            Effect: Allow
+            Resource:
+            - Fn::Sub: arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:${DescribeExecutionFunction}
+            Sid: InvokeDescribeExecutionLambda
+          Version: '2012-10-17'
+        PolicyName: InvokeDescribeExecutionLambda
+    Type: AWS::IAM::User
+Transform: AWS::Serverless-2016-10-31
