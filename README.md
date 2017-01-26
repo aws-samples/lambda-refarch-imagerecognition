@@ -137,7 +137,7 @@ The following sections explain all of the resources created by the CloudFormatio
 - **TestClientKeys** - Access keys that enable the test web app to sign API requests to query the metadata DynamoDB tables and Step Functions execution status, and read/write from the `PhotoRepoS3Bucket`
 
 ### IAM roles
-> This CloudFormation template chose not to create one IAM role for each Lambda function and consolidated them, simply to reduce the number of IAM roles it takes up in your account. When developing your application, you might instead create individual IAM roles for each Lambda function to follow the Least privilege principle. 
+> This CloudFormation template chose not to create one IAM role for each Lambda function and consolidated them, simply to reduce the number of IAM roles it takes up in your account. When developing your application, you might instead create individual IAM roles for each Lambda function to follow the Least Privilege principle. 
 
 - **BackendProcessingLambdaRole** - An IAM role assumed by Lambda functions that make up the `ImageProcStateMachine` and the `ImageProcStartExecutionFunction` which kicks off the state machine execution. This role provides logging permissions and access to read/write the `PhotoRepoS3Bucket`, the `ImageMetadataDDBTable`, call the `DetectLabels` Amazon Rekognition API and start state machine execution in Step Functions. 
 - **CustomResourceHelperRole** -  An IAM role the Lambda functions that are used by  `CreateS3EventTriggerFunction` and `CreateStepFunctionHelperFunction	` for creating custom resources in the CloudFormation template
