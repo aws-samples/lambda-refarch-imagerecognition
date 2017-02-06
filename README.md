@@ -18,7 +18,7 @@ This repository contains sample code for all the Lambda functions depicted in th
      * Generate a thumbnail and store it under the "Thumbnails/" prefix in the `PhotoRepo` S3 bucket 
 
 ### Test web app
-You can use the test web app to upload images and see the result of image recognition and processing workflow. 
+You can use the test web app to upload images and see the result of the image recognition and processing workflow. 
 ![screenshot for instruction](images/app-screenshot.png)
 
 
