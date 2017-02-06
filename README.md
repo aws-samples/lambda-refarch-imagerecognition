@@ -17,6 +17,11 @@ This repository contains sample code for all the Lambda functions depicted in th
      * Call Amazon Rekognition to detect objects in the image file. If detected, store the tags in the `ImageMetadata` DynamoDB table
      * Generate a thumbnail and store it under the "Thumbnails/" prefix in the `PhotoRepo` S3 bucket 
 
+### Test web app
+You can use the test web app to upload images and see the result of image recognition and processing workflow. 
+![screenshot for instruction](images/app-screenshot.png)
+
+
 
 ## Running the Example
  
@@ -96,7 +101,7 @@ Upload images and see status updates when:
 
 A sample set of extracted image metadata and recognized tags, along with the thumbnail generated in the Step Function execution is displayed for each uploaded image.
 
-Below is the diagram of the state machine being executed every time a new image is uploaded:
+Below is the diagram of the state machine being executed every time a new image is uploaded (you can explore this in the Step Functions [Console](https://console.aws.amazon.com/states/home)):
 
 <img src="images/step-function-execution.png" alt="state machine diagram" width="50%">
 
