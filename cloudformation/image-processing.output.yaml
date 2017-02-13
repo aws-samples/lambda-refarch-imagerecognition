@@ -129,23 +129,9 @@ Resources:
     Type: AWS::IAM::Role
   CreateS3EventTriggerFunction:
     Properties:
-      CodeUri: s3://media-sharing-refarch/263e15346cea1ba2dab7a07207add91f
+      CodeUri: s3://media-sharing-refarch/8c7e2179b5bc3480407509396c78b95e
       Description: Used with CloudFormation as a custom resource helper to enable
         S3 event trigger to invoke the start step function Lambda function.
-      Handler: index.handler
-      MemorySize: 1024
-      Role:
-        Fn::GetAtt:
-        - CustomResourceHelperRole
-        - Arn
-      Runtime: nodejs4.3
-      Timeout: 200
-    Type: AWS::Serverless::Function
-  CreateStepFunctionHelperFunction:
-    Properties:
-      CodeUri: s3://media-sharing-refarch/2707dfbb5b31acda2719fc7eeb360664
-      Description: Used with CloudFormation as a custom resource helper to create/delete
-        a state machine in AWS Step Functions service.
       Handler: index.handler
       MemorySize: 1024
       Role:
@@ -182,25 +168,6 @@ Resources:
       - PolicyDocument:
           Statement:
           - Action:
-            - states:CreateStateMachine
-            Effect: Allow
-            Resource: '*'
-            Sid: CreateStepFunction
-          - Action:
-            - states:DeleteStateMachine
-            Effect: Allow
-            Resource: '*'
-            Sid: DeleteStepFunction
-          - Action:
-            - iam:PassRole
-            Effect: Allow
-            Resource: '*'
-            Sid: PassStepFunctionRole
-          Version: '2012-10-17'
-        PolicyName: CreateDeleteStepFunction
-      - PolicyDocument:
-          Statement:
-          - Action:
             - s3:PutBucketNotification
             Effect: Allow
             Resource:
@@ -216,7 +183,7 @@ Resources:
     Type: AWS::IAM::Role
   DescribeExecutionFunction:
     Properties:
-      CodeUri: s3://media-sharing-refarch/eda916998955ce26034aa2ff1650024f
+      CodeUri: s3://media-sharing-refarch/1f00cdd048caae4e89d5ce2a890ebe76
       Description: Calls DescribeExecution on a state machine execution.
       Handler: index.handler
       MemorySize: 1024
@@ -263,7 +230,7 @@ Resources:
     Type: AWS::IAM::Role
   ExtractImageMetadataFunction:
     Properties:
-      CodeUri: s3://media-sharing-refarch/04186ecd4d92fa84ebf66f32520c864c
+      CodeUri: s3://media-sharing-refarch/2ba23a31a9fbe9596065fc65ba4f3086
       Description: Extract image metadata such as format, size, geolocation, etc.
       Handler: index.handler
       MemorySize: 1024
@@ -276,7 +243,7 @@ Resources:
     Type: AWS::Serverless::Function
   GenerateThumbnailFunction:
     Properties:
-      CodeUri: s3://media-sharing-refarch/1b6b43d98f621c45cb068cfba0959d53
+      CodeUri: s3://media-sharing-refarch/60dd5db44c4b4c7c636abf276a56c731
       Description: Generate thumbnails for images
       Handler: index.handler
       MemorySize: 1536
@@ -318,7 +285,7 @@ Resources:
   ImageProcStartExecutionFunction:
     DependsOn: PhotoRepoS3Bucket
     Properties:
-      CodeUri: s3://media-sharing-refarch/a16cc9d8db8233b3cf2615a13ad149e4
+      CodeUri: s3://media-sharing-refarch/2db09bf6931a36fae77883ec8c32f740
       Description: Triggered by S3 image upload to the repo bucket and start the image
         processing step function workflow
       Environment:
@@ -326,9 +293,7 @@ Resources:
           IMAGE_METADATA_DDB_TABLE:
             Ref: ImageMetadataDDBTable
           STATE_MACHINE_ARN:
-            Fn::GetAtt:
-            - ImageProcStateMachine
-            - Arn
+            Ref: ImageProcStateMachine
       Handler: index.handler
       MemorySize: 256
       Role:
@@ -339,47 +304,61 @@ Resources:
       Timeout: 60
     Type: AWS::Serverless::Function
   ImageProcStateMachine:
-    DependsOn:
-    - CreateStepFunctionHelperFunction
-    - ExtractImageMetadataFunction
-    - StoreImageMetadataFunction
-    - RekognitionFunction
-    - StoreRekognizedTagsFunction
-    - GenerateThumbnailFunction
-    - StateMachineRole
     Properties:
-      ExtractImageMetadataFunction:
-        Fn::GetAtt:
-        - ExtractImageMetadataFunction
-        - Arn
-      GenerateThumbnailFunction:
-        Fn::GetAtt:
-        - GenerateThumbnailFunction
-        - Arn
-      RekognitionFunction:
-        Fn::GetAtt:
-        - RekognitionFunction
-        - Arn
+      DefinitionString:
+        Fn::Sub:
+        - "{\n  \"Comment\": \"Image Processing workflow\",\n  \"StartAt\": \"ExtractImageMetadata\"\
+          ,\n  \"States\": {\n    \"ExtractImageMetadata\": {\n      \"Type\": \"\
+          Task\",\n      \"Resource\": \"${ExtractImageMetadataLambdaArn}\",\n   \
+          \   \"Next\": \"ImageTypeCheck\"\n    },\n    \"ImageTypeCheck\": {\n  \
+          \    \"Type\": \"Choice\",\n      \"Choices\": [\n        {\n          \"\
+          Or\": [\n            {\n              \"Variable\": \"$.format\",\n    \
+          \          \"StringEquals\": \"JPEG\"\n            },\n            {\n \
+          \             \"Variable\": \"$.format\",\n              \"StringEquals\"\
+          : \"PNG\"\n            }\n          ],\n          \"Next\": \"StoreImageMetadata\"\
+          \n        }\n      ],\n      \"Default\": \"NotSupportedImageType\"\n  \
+          \  },\n    \"StoreImageMetadata\": {\n      \"Type\": \"Task\",\n      \"\
+          Resource\": \"${StoreImageMetadataLambdaArn}\",\n      \"Next\": \"ParallelProcessing\"\
+          \n    },\n    \"NotSupportedImageType\": {\n      \"Type\": \"Fail\",\n\
+          \      \"Cause\": \"Image type not supported!\",\n      \"Error\": \"FileTypeNotSupported\"\
+          \n    },\n    \"ParallelProcessing\": {\n      \"Type\": \"Parallel\",\n\
+          \      \"Branches\": [\n        {\n          \"StartAt\": \"Rekognition\"\
+          ,\n          \"States\": {\n            \"Rekognition\": {\n           \
+          \   \"Type\": \"Task\",\n              \"Resource\": \"${RekognitionLambdaArn}\"\
+          ,\n              \"Next\": \"AddRekognizedTags\"\n            },\n     \
+          \       \"AddRekognizedTags\": {\n              \"Type\": \"Task\",\n  \
+          \            \"Resource\": \"${StoreRekognizedTagsLambdaArn}\",\n      \
+          \        \"End\": true\n            }\n          }\n        },\n       \
+          \ {\n          \"StartAt\": \"Thumbnail\",\n          \"States\": {\n  \
+          \          \"Thumbnail\": {\n              \"Type\": \"Task\",\n       \
+          \       \"Resource\": \"${GenerateThumbnailLambdaArn}\",\n             \
+          \ \"End\": true\n            }\n          }\n        }\n      ],\n     \
+          \ \"End\": true\n    }\n  }\n}"
+        - ExtractImageMetadataLambdaArn:
+            Fn::GetAtt:
+            - ExtractImageMetadataFunction
+            - Arn
+          GenerateThumbnailLambdaArn:
+            Fn::GetAtt:
+            - GenerateThumbnailFunction
+            - Arn
+          RekognitionLambdaArn:
+            Fn::GetAtt:
+            - RekognitionFunction
+            - Arn
+          StoreImageMetadataLambdaArn:
+            Fn::GetAtt:
+            - StoreImageMetadataFunction
+            - Arn
+          StoreRekognizedTagsLambdaArn:
+            Fn::GetAtt:
+            - StoreRekognizedTagsFunction
+            - Arn
       RoleArn:
         Fn::GetAtt:
         - StateMachineRole
         - Arn
-      ServiceToken:
-        Fn::GetAtt:
-        - CreateStepFunctionHelperFunction
-        - Arn
-      StackName:
-        Ref: AWS::StackName
-      StoreImageMetadataFunction:
-        Fn::GetAtt:
-        - StoreImageMetadataFunction
-        - Arn
-      StoreRekognizedTagsFunction:
-        Fn::GetAtt:
-        - StoreRekognizedTagsFunction
-        - Arn
-    Type: Custom::StepFunctionsStateMachine
-    Version: '1.0'
+    Type: AWS::StepFunctions::StateMachine
   PhotoRepoS3Bucket:
     Properties:
       CorsConfiguration:
@@ -398,7 +377,7 @@ Resources:
     Type: AWS::S3::Bucket
   RekognitionFunction:
     Properties:
-      CodeUri: s3://media-sharing-refarch/bafedfe7137b5366d4d39fdfc6d5f642
+      CodeUri: s3://media-sharing-refarch/5a7363a692f86e2d4db25b4a5c1018ba
       Description: Use Amazon Rekognition to detect labels from image
       Handler: index.handler
       MemorySize: 256
@@ -455,7 +434,7 @@ Resources:
     Type: AWS::IAM::Role
   StoreImageMetadataFunction:
     Properties:
-      CodeUri: s3://media-sharing-refarch/c5ae293a139927637ef50c54154fe807
+      CodeUri: s3://media-sharing-refarch/2339e841cf80b5676e36dfa596912d5d
       Description: Store image metadata into database
       Environment:
         Variables:
@@ -472,7 +451,7 @@ Resources:
     Type: AWS::Serverless::Function
   StoreRekognizedTagsFunction:
     Properties:
-      CodeUri: s3://media-sharing-refarch/eee6fe2f71dcc6cbb10a4d9ce62b4068
+      CodeUri: s3://media-sharing-refarch/b21c0531855097d17598c44ea82ec73a
       Description: Store tags detected by Amazon Rekognition into database
       Environment:
         Variables:

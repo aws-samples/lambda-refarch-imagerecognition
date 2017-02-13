@@ -188,7 +188,7 @@ Resources:
       Environment:
         Variables:
           IMAGE_METADATA_DDB_TABLE: !Ref ImageMetadataDDBTable
-          STATE_MACHINE_ARN: !GetAtt ImageProcStateMachine.Arn
+          STATE_MACHINE_ARN: !Ref ImageProcStateMachine
       Runtime: nodejs4.3
       Timeout: 60
     Type: AWS::Serverless::Function
@@ -269,8 +269,7 @@ Resources:
 
 # ---------------------------------------------------------------------------------------------------------------------
 # Custom resources created with Lambda functions:
-# 1. Step function state machine
-# 2. S3 event trigger to Lambda function
+# S3 event trigger to Lambda function
 # ---------------------------------------------------------------------------------------------------------------------
   CustomResourceHelperRole:
     Type: "AWS::IAM::Role"
@@ -301,29 +300,6 @@ Resources:
                   - "logs:PutLogEvents"
                 Resource: "*"
         -
-          PolicyName: "CreateDeleteStepFunction"
-          PolicyDocument:
-            Version: "2012-10-17"
-            Statement:
-              -
-                Sid: "CreateStepFunction"
-                Effect: "Allow"
-                Action:
-                  - "states:CreateStateMachine"
-                Resource: "*"
-              -
-                Sid: "DeleteStepFunction"
-                Effect: "Allow"
-                Action:
-                  - "states:DeleteStateMachine"
-                Resource: "*"
-              -
-                Sid: "PassStepFunctionRole"
-                Effect: "Allow"
-                Action:
-                  - "iam:PassRole"
-                Resource: "*"
-        -
           PolicyName: "AddS3EventTrigger"
           PolicyDocument:
             Version: "2012-10-17"
@@ -342,19 +318,6 @@ Resources:
                   - "lambda:AddPermission"
                 Resource: "*"
 
-  CreateStepFunctionHelperFunction:
-    Properties:
-      Description: "Used with CloudFormation as a custom resource helper to create/delete a state machine in AWS Step Functions service."
-      Handler: index.handler
-      MemorySize: 1024
-      Timeout: 200
-      Role:
-        !GetAtt CustomResourceHelperRole.Arn
-      CodeUri:
-        ../lambda-functions/create-step-function-helper
-      Runtime: nodejs4.3
-    Type: AWS::Serverless::Function
-
   CreateS3EventTriggerFunction:
     Properties:
       Description: "Used with CloudFormation as a custom resource helper to enable S3 event trigger to invoke the start step function Lambda function."
@@ -368,7 +331,26 @@ Resources:
       Runtime: nodejs4.3
     Type: AWS::Serverless::Function
 
-
+  S3EventTrigger:
+    Type: "Custom::S3EventTrigger"
+    Version: "1.0"
+    DependsOn:
+      - PhotoRepoS3Bucket
+      - ImageProcStartExecutionFunction
+    Properties:
+      ServiceToken:
+        !GetAtt CreateS3EventTriggerFunction.Arn
+      PhotoRepoS3Bucket:
+        !Ref PhotoRepoS3Bucket
+      StartExecutionFunctionArn:
+        !GetAtt ImageProcStartExecutionFunction.Arn
+      StartExecutionFunction:
+        !Ref ImageProcStartExecutionFunction
+      accountId:
+        !Ref AWS::AccountId
+# ---------------------------------------------------------------------------------------------------------------------
+# Step functions State Machine
+# ---------------------------------------------------------------------------------------------------------------------
   StateMachineRole:
     Type: "AWS::IAM::Role"
     Properties:
@@ -396,53 +378,89 @@ Resources:
                   - "lambda:InvokeFunction"
                 Resource: "*"
 
-  S3EventTrigger:
-    Type: "Custom::S3EventTrigger"
-    Version: "1.0"
-    DependsOn:
-      - PhotoRepoS3Bucket
-      - ImageProcStartExecutionFunction
-    Properties:
-      ServiceToken:
-        !GetAtt CreateS3EventTriggerFunction.Arn
-      PhotoRepoS3Bucket:
-        !Ref PhotoRepoS3Bucket
-      StartExecutionFunctionArn:
-        !GetAtt ImageProcStartExecutionFunction.Arn
-      StartExecutionFunction:
-        !Ref ImageProcStartExecutionFunction
-      accountId:
-        !Ref AWS::AccountId
-
-
   ImageProcStateMachine:
-    Type: "Custom::StepFunctionsStateMachine"
-    Version: "1.0"
-    DependsOn:
-      - CreateStepFunctionHelperFunction
-      - ExtractImageMetadataFunction
-      - StoreImageMetadataFunction
-      - RekognitionFunction
-      - StoreRekognizedTagsFunction
-      - GenerateThumbnailFunction
-      - StateMachineRole
+    Type: "AWS::StepFunctions::StateMachine"
     Properties:
-      ServiceToken:
-        !GetAtt CreateStepFunctionHelperFunction.Arn
-      ExtractImageMetadataFunction:
-        !GetAtt ExtractImageMetadataFunction.Arn
-      StoreImageMetadataFunction:
-        !GetAtt StoreImageMetadataFunction.Arn
-      RekognitionFunction:
-        !GetAtt RekognitionFunction.Arn
-      StoreRekognizedTagsFunction:
-        !GetAtt StoreRekognizedTagsFunction.Arn
-      GenerateThumbnailFunction:
-        !GetAtt GenerateThumbnailFunction.Arn
-      RoleArn:
-        !GetAtt StateMachineRole.Arn
-      StackName:
-        !Ref AWS::StackName
+      DefinitionString:
+        !Sub
+          - |-
+            {
+              "Comment": "Image Processing workflow",
+              "StartAt": "ExtractImageMetadata",
+              "States": {
+                "ExtractImageMetadata": {
+                  "Type": "Task",
+                  "Resource": "${ExtractImageMetadataLambdaArn}",
+                  "Next": "ImageTypeCheck"
+                },
+                "ImageTypeCheck": {
+                  "Type": "Choice",
+                  "Choices": [
+                    {
+                      "Or": [
+                        {
+                          "Variable": "$.format",
+                          "StringEquals": "JPEG"
+                        },
+                        {
+                          "Variable": "$.format",
+                          "StringEquals": "PNG"
+                        }
+                      ],
+                      "Next": "StoreImageMetadata"
+                    }
+                  ],
+                  "Default": "NotSupportedImageType"
+                },
+                "StoreImageMetadata": {
+                  "Type": "Task",
+                  "Resource": "${StoreImageMetadataLambdaArn}",
+                  "Next": "ParallelProcessing"
+                },
+                "NotSupportedImageType": {
+                  "Type": "Fail",
+                  "Cause": "Image type not supported!",
+                  "Error": "FileTypeNotSupported"
+                },
+                "ParallelProcessing": {
+                  "Type": "Parallel",
+                  "Branches": [
+                    {
+                      "StartAt": "Rekognition",
+                      "States": {
+                        "Rekognition": {
+                          "Type": "Task",
+                          "Resource": "${RekognitionLambdaArn}",
+                          "Next": "AddRekognizedTags"
+                        },
+                        "AddRekognizedTags": {
+                          "Type": "Task",
+                          "Resource": "${StoreRekognizedTagsLambdaArn}",
+                          "End": true
+                        }
+                      }
+                    },
+                    {
+                      "StartAt": "Thumbnail",
+                      "States": {
+                        "Thumbnail": {
+                          "Type": "Task",
+                          "Resource": "${GenerateThumbnailLambdaArn}",
+                          "End": true
+                        }
+                      }
+                    }
+                  ],
+                  "End": true
+                }
+              }
+            }
+          - {ExtractImageMetadataLambdaArn: !GetAtt ExtractImageMetadataFunction.Arn ,
+            StoreImageMetadataLambdaArn: !GetAtt StoreImageMetadataFunction.Arn,
+            RekognitionLambdaArn: !GetAtt RekognitionFunction.Arn,
+            StoreRekognizedTagsLambdaArn: !GetAtt StoreRekognizedTagsFunction.Arn,
+            GenerateThumbnailLambdaArn: !GetAtt GenerateThumbnailFunction.Arn}
+      RoleArn: !GetAtt StateMachineRole.Arn
 
 # ---------------------------------------------------------------------------------------------------------------------
 # Used by the frontend test web app to query status of a Step Function state machine execution.
