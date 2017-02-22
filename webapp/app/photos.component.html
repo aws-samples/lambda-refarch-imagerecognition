@@ -61,6 +61,12 @@
           <strong>Geolocation:</strong> {{photo.latitude.D}}°{{photo.latitude.M}}'{{photo.latitude.S | round}}" {{photo.latitude.Direction}}
           {{photo.longitude.D}}°{{photo.longitude.M}}'{{photo.longitude.S | round}}" {{photo.longitude.Direction}}
         </div>
+        <div *ngIf="photo.exifModel">
+          <strong>Device model:</strong> {{photo.exifModel}}
+        </div>
+        <div *ngIf="photo.exifMake">
+          <strong>Device make:</strong> {{photo.exifMake}}
+        </div>
         <div >
           <strong>Image Size: </strong>{{photo.fileSize}}, {{photo.dimensions.width}}x{{photo.dimensions.height}}
         </div>
