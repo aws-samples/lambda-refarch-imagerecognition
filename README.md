@@ -40,14 +40,21 @@ Click **Launch Stack** to launch the template in the US West - Oregon (us-west-2
 
 #### Option 2: Launch the CloudFormation Template in a different region than US West - Oregon (us-west-2) 
 
-If you would like to deploy the template to a different region (must be a region that supports **Amazon Rekognition** and **AWS Step Functions**, e.g. US East (N.Virginia) or EU (Ireland), you need a S3 bucket in the target region, and then package the Lambda functions into that S3 bucket by using the `aws cloudformation package` utility:
+If you would like to deploy the template to a different region (must be a region that supports **Amazon Rekognition** and **AWS Step Functions**, e.g. US East (N.Virginia) or EU (Ireland), you need a S3 bucket in the target region, and then package the Lambda functions into that S3 bucket by using the `aws cloudformation package` utility.
 
-In the terminal, go to the `cloudformation` folder, then type
+First, In the terminal,  go to the `lambda-functions` folder. Then  prepare npm dependencies for the following Lambda functions:
+```bash
+cd lambda-functions
+cd create-s3-event-trigger-helper && npm install && cd ../thumbnail  && npm install && cd ../extract-image-metadata && npm install && cd ..
+```
+
+Then go to the `cloudformation` folder and use the `aws cloudformation package` utility
 
 ```bash
+cd ../cloudformation
 aws cloudformation package --region [YOUR_TARGET_REGION] --s3-bucket [REPLACE_WITH_YOUR_BUCKET] --template image-processing.serverless.yaml --output-template-file image-processing.output.yaml
 ```
-Then deploy the stack with the resulting yaml (`image-processing.output.yaml `) through the CloudFormation Console or command line:
+Last, deploy the stack with the resulting yaml (`image-processing.output.yaml `) through the CloudFormation Console or command line:
 
 ```bash
 aws cloudformation deploy --region [YOUR_TARGET_REGION] --template-file image-processing.output.yaml --stack-name photo-sharing-backend --capabilities CAPABILITY_IAM
