@@ -29,7 +29,7 @@ You can use the test web app to upload images and see the result of the image re
 The backend infrastructure can be deployed in US West - Oregon (us-west-2) using the provided CloudFormation template.
 Click **Launch Stack** to launch the template in the US West - Oregon (us-west-2) region in your account:
 
-[![Launch Lambda IoT Backend into Oregon with CloudFormation](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/images/cloudformation-launch-stack-button.png)](https://console.aws.amazon.com/cloudformation/home?region=us-west-2#/stacks/new?stackName=photo-sharing-backend&templateURL=https://s3-us-west-2.amazonaws.com/media-sharing-refarch/cloudformation/image-processing.output.yaml)
+[![Launch Lambda IoT Backend into Oregon with CloudFormation](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/images/cloudformation-launch-stack-button.png)](https://console.aws.amazon.com/cloudformation/home?region=us-west-2#/stacks/new?stackName=photo-sharing-backend&templateURL=https://s3-us-west-2.amazonaws.com/media-sharing-refarch/cloudformation/image-processing-v2.output.yaml)
 
 (In the last page of the wizard, make sure to:
 
@@ -42,22 +42,33 @@ Click **Launch Stack** to launch the template in the US West - Oregon (us-west-2
 
 If you would like to deploy the template to a different region (must be a region that supports **Amazon Rekognition** and **AWS Step Functions**, e.g. US East (N.Virginia) or EU (Ireland), you need a S3 bucket in the target region, and then package the Lambda functions into that S3 bucket by using the `aws cloudformation package` utility.
 
-First, In the terminal,  go to the `lambda-functions` folder. Then  prepare npm dependencies for the following Lambda functions:
+First, In the terminal,  go to the `lambda-functions` folder. Then prepare npm dependencies for the following Lambda functions:
+
 ```bash
 cd lambda-functions
 cd create-s3-event-trigger-helper && npm install && cd ../thumbnail  && npm install && cd ../extract-image-metadata && npm install && cd ..
+```
+
+Set environment variables for later commands to use:
+
+```bash
+REGION=[YOUR_TARGET_REGION]
+S3BUCKET=[REPLACE_WITH_YOUR_BUCKET]
 ```
 
 Then go to the `cloudformation` folder and use the `aws cloudformation package` utility
 
 ```bash
 cd ../cloudformation
-aws cloudformation package --region [YOUR_TARGET_REGION] --s3-bucket [REPLACE_WITH_YOUR_BUCKET] --template image-processing.serverless.yaml --output-template-file image-processing.output.yaml
+
+python inject_state_machine_cfn.py -s state-machine.json -c image-processing.serverless.yaml -o image-processing.complete.yaml
+
+aws cloudformation package --region $REGION --s3-bucket $S3BUCKET --template image-processing.complete.yaml --output-template-file image-processing.output.yaml
 ```
 Last, deploy the stack with the resulting yaml (`image-processing.output.yaml `) through the CloudFormation Console or command line:
 
 ```bash
-aws cloudformation deploy --region [YOUR_TARGET_REGION] --template-file image-processing.output.yaml --stack-name photo-sharing-backend --capabilities CAPABILITY_IAM
+aws cloudformation deploy --region $REGION --template-file image-processing.output.yaml --stack-name photo-sharing-backend --capabilities CAPABILITY_IAM
 ```
 
 ## Testing the example

@@ -209,6 +209,19 @@ Resources:
       Runtime: nodejs4.3
     Type: AWS::Serverless::Function
 
+  TransformMetadataFunction:
+    Properties:
+      CodeUri:
+        ../lambda-functions/transform-metadata
+      Description: "massages JSON of extracted image metadata"
+      Handler: index.handler
+      MemorySize: 256
+      Timeout: 60
+      Role:
+        !GetAtt BackendProcessingLambdaRole.Arn
+      Runtime: nodejs4.3
+    Type: AWS::Serverless::Function
+
   StoreImageMetadataFunction:
     Properties:
       CodeUri:
@@ -384,78 +397,9 @@ Resources:
       DefinitionString:
         !Sub
           - |-
-            {
-              "Comment": "Image Processing workflow",
-              "StartAt": "ExtractImageMetadata",
-              "States": {
-                "ExtractImageMetadata": {
-                  "Type": "Task",
-                  "Resource": "${ExtractImageMetadataLambdaArn}",
-                  "Next": "ImageTypeCheck"
-                },
-                "ImageTypeCheck": {
-                  "Type": "Choice",
-                  "Choices": [
-                    {
-                      "Or": [
-                        {
-                          "Variable": "$.format",
-                          "StringEquals": "JPEG"
-                        },
-                        {
-                          "Variable": "$.format",
-                          "StringEquals": "PNG"
-                        }
-                      ],
-                      "Next": "StoreImageMetadata"
-                    }
-                  ],
-                  "Default": "NotSupportedImageType"
-                },
-                "StoreImageMetadata": {
-                  "Type": "Task",
-                  "Resource": "${StoreImageMetadataLambdaArn}",
-                  "Next": "ParallelProcessing"
-                },
-                "NotSupportedImageType": {
-                  "Type": "Fail",
-                  "Cause": "Image type not supported!",
-                  "Error": "FileTypeNotSupported"
-                },
-                "ParallelProcessing": {
-                  "Type": "Parallel",
-                  "Branches": [
-                    {
-                      "StartAt": "Rekognition",
-                      "States": {
-                        "Rekognition": {
-                          "Type": "Task",
-                          "Resource": "${RekognitionLambdaArn}",
-                          "Next": "AddRekognizedTags"
-                        },
-                        "AddRekognizedTags": {
-                          "Type": "Task",
-                          "Resource": "${StoreRekognizedTagsLambdaArn}",
-                          "End": true
-                        }
-                      }
-                    },
-                    {
-                      "StartAt": "Thumbnail",
-                      "States": {
-                        "Thumbnail": {
-                          "Type": "Task",
-                          "Resource": "${GenerateThumbnailLambdaArn}",
-                          "End": true
-                        }
-                      }
-                    }
-                  ],
-                  "End": true
-                }
-              }
-            }
-          - {ExtractImageMetadataLambdaArn: !GetAtt ExtractImageMetadataFunction.Arn ,
+          ##{{STATEMACHINE_DEF}}
+          - {ExtractImageMetadataLambdaArn: !GetAtt ExtractImageMetadataFunction.Arn,
+             TransformMetadataLambdaArn: !GetAtt TransformMetadataFunction.Arn,
             StoreImageMetadataLambdaArn: !GetAtt StoreImageMetadataFunction.Arn,
             RekognitionLambdaArn: !GetAtt RekognitionFunction.Arn,
             StoreRekognizedTagsLambdaArn: !GetAtt StoreRekognizedTagsFunction.Arn,

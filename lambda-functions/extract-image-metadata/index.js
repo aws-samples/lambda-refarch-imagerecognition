@@ -6,7 +6,7 @@ const Promise = require('bluebird');
 Promise.promisifyAll(gm.prototype);
 
 // get reference to S3 client
-var s3 = new AWS.S3();
+const s3 = new AWS.S3();
 
 exports.handler = (event, context, callback) => {
     // Read input from the event.
@@ -20,16 +20,21 @@ exports.handler = (event, context, callback) => {
         Key: srcKey
     }).promise();
 
-    getObjectPromise.then(function (getObjectResponse) {
+    getObjectPromise.then((getObjectResponse) => {
         gm(getObjectResponse.Body).identifyAsync().then((data) => {
-            data.eventData = event;
-            data.eventData.size = data.size;
-            data.eventData.format = data.format;
+            console.log("Identified metadata:\n", util.inspect(data, {depth: 5}));
             callback(null, data);
         }).catch(function (err) {
-            callback(err);
+            callback(new ImageIdentifyError(err));
+
         });
     }).catch(function (err) {
         callback(err);
     });
 };
+
+function ImageIdentifyError(message) {
+    this.name = "ImageIdentifyError";
+    this.message = message;
+}
+ImageIdentifyError.prototype = new Error();

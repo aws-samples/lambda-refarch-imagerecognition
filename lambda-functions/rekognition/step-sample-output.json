@@ -1,0 +1,26 @@
+[
+  {
+    "Name": "Plant",
+    "Confidence": 88.06138610839844
+  },
+  {
+    "Name": "Potted Plant",
+    "Confidence": 88.06138610839844
+  },
+  {
+    "Name": "Blossom",
+    "Confidence": 64.35401916503906
+  },
+  {
+    "Name": "Flora",
+    "Confidence": 64.35401916503906
+  },
+  {
+    "Name": "Flower",
+    "Confidence": 64.35401916503906
+  },
+  {
+    "Name": "Amaryllis",
+    "Confidence": 60.95824432373047
+  }
+]

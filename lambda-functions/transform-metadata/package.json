@@ -1,0 +1,11 @@
+{
+  "name": "transform-metadata",
+  "version": "1.0.0",
+  "description": "formats and filters the detected metadata JSON for easier processing in future steps",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Angela Wang",
+  "license": "Apache-2.0",
+}

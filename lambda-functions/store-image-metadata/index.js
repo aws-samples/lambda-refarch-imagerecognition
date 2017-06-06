@@ -11,9 +11,9 @@ const docClient = new AWS.DynamoDB.DocumentClient({
 
 exports.handler = (event, context, callback) => {
     console.log("Reading input from event:\n", util.inspect(event, {depth: 5}));
-    const srcBucket = event.eventData.s3Bucket;
+    const srcBucket = event.s3Bucket;
     // Object key may have spaces or unicode non-ASCII characters.
-    const srcKey = decodeURIComponent(event.eventData.s3Key.replace(/\+/g, " "));
+    const srcKey = decodeURIComponent(event.s3Key.replace(/\+/g, " "));
 
     const s3ObjectParams = {
         Bucket: srcBucket,
@@ -33,50 +33,50 @@ exports.handler = (event, context, callback) => {
 
         var ExpressionAttributeValues = {
             ":uploadTime": fileUploadTimeStamp,
-            ":format": event.format,
-            ":dimensions": event.size,
-            ":fileSize": event.Filesize,
+            ":format": event.extractedMetadata.format,
+            ":dimensions": event.extractedMetadata.dimensions,
+            ":fileSize": event.extractedMetadata.fileSize,
             ":userID": s3ObjectMetadata.Metadata.userid,
             ":albumID": s3ObjectMetadata.Metadata.albumid
         };
 
-        // extract exif info
-        if (event.Properties) {
-            if (event.Properties["exif:DateTime"]) {
-                UpdateExpression += ", exifTime = :exifTime"
-                ExpressionAttributeValues[":exifTime"] = event.Properties["exif:DateTime"];
-            }
-            if (event.Properties["exif:GPSLatitude"] && event.Properties["exif:GPSLatitudeRef"] && event.Properties["exif:GPSLongitude"] && event.Properties["exif:GPSLongitudeRef"]) {
-                try {
-                    const lat = parseCoordinate(event.Properties["exif:GPSLatitude"], event.Properties["exif:GPSLatitudeRef"]);
-                    UpdateExpression += ", latitude = :latitude"
-                    ExpressionAttributeValues[":latitude"] = lat;
-                    const long = parseCoordinate(event.Properties["exif:GPSLongitude"], event.Properties["exif:GPSLongitudeRef"]);
-                    UpdateExpression += ", longitude = :longitude"
-                    ExpressionAttributeValues[":longitude"] = long;
-                    console.log("lat", lat);
-                    console.log("long", long);
-                } catch (err) {
-                    // ignore failure in parsing coordinates
-                    console.log(err);
-                }
-            }
-            if (event.Properties["exif:Make"]) {
-                UpdateExpression += ", exifMake = :exifMake"
-                ExpressionAttributeValues[":exifMake"] = event.Properties["exif:Make"];
-            }
-            if (event.Properties["exif:Model"]) {
-                UpdateExpression += ", exifModel = :exifModel"
-                ExpressionAttributeValues[":exifModel"] = event.Properties["exif:Model"];
-            }
+        if (event.extractedMetadata.geo) {
+            UpdateExpression += ", latitude = :latitude"
+            ExpressionAttributeValues[":latitude"] = event.extractedMetadata.geo.latitude;
+            UpdateExpression += ", longitude = :longitude"
+            ExpressionAttributeValues[":longitude"] = event.extractedMetadata.geo.longitude;
+        }
+
+        if (event.extractedMetadata.exifMake) {
+            UpdateExpression += ", exifMake = :exifMake"
+            ExpressionAttributeValues[":exifMake"] = event.extractedMetadata.exifMake;
+        }
+        if (event.extractedMetadata.exifModel) {
+            UpdateExpression += ", exifModel = :exifModel"
+            ExpressionAttributeValues[":exifModel"] = event.extractedMetadata.exifModel;
+        }
+
+        if (event.parallelResults[0]) {
+            const labels = event.parallelResults[0];
+            var tags = labels.map((data) => {
+                return data["Name"];
+            });
+            UpdateExpression += ", tags = :tags"
+            ExpressionAttributeValues[":tags"] = tags;
+        }
+
+        if (event.parallelResults[1]) {
+            UpdateExpression += ", thumbnail = :thumbnail"
+            ExpressionAttributeValues[":thumbnail"] = event.parallelResults[1];
         }
 
         console.log("UpdateExpression", UpdateExpression);
         console.log("ExpressionAttributeValues", ExpressionAttributeValues);
+
         var ddbparams = {
             TableName: tableName,
             Key: {
-                'imageID': event.eventData.objectID
+                'imageID': event.objectID
             },
             UpdateExpression: UpdateExpression,
             ExpressionAttributeValues: ExpressionAttributeValues,
@@ -84,18 +84,9 @@ exports.handler = (event, context, callback) => {
         };
 
         docClient.update(ddbparams).promise().then(function (data) {
-            callback(null, {"eventData": event.eventData});
+            callback(null, data);
         }).catch(function (err) {
             callback(err);
         });
     })
-}
-
-function parseCoordinate(coordinate, coordinateDirection) {
-    return {
-        "D": parseInt(coordinate.split(",")[0].trim().split("/")[0]),
-        "M": parseInt(coordinate.split(",")[1].trim().split("/")[0]),
-        "S": parseInt(coordinate.split(",")[2].trim().split("/")[0]) / 100,
-        "Direction": coordinateDirection
-    };
 }
