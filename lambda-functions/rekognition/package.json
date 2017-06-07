@@ -1,0 +1,11 @@
+{
+  "name": "rekognition",
+  "version": "1.0.0",
+  "description": "call Amazon Rekognition to detect labels in an image stored in s3",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Angela Wang",
+  "license": "Apache-2.0",
+}

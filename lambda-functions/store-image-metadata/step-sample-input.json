@@ -1,0 +1,75 @@
+{
+  "s3Bucket": "refarch-photorepos3bucket-xvqjajtk05bo",
+  "s3Key": "Incoming/0990309876941-bob/ba-IMG_20160706_094820.jpg",
+  "objectID": "0990309876941-bob/ba-IMG_20160706_094820.jpg",
+  "extractedMetadata": {
+    "creationTime": "2016:07:06 09:48:21",
+    "geo": {
+      "latitude": {
+        "D": 33,
+        "M": 53,
+        "S": 52.41,
+        "Direction": "N"
+      },
+      "longitude": {
+        "D": 118,
+        "M": 25,
+        "S": 7.25,
+        "Direction": "W"
+      }
+    },
+    "exifMake": "LGE",
+    "exifModel": "Nexus 5X",
+    "dimensions": {
+      "width": 4032,
+      "height": 3024
+    },
+    "fileSize": "2.136MB",
+    "format": "JPEG"
+  },
+  "parallelResults": [
+    [
+      {
+        "Name": "Palm Tree",
+        "Confidence": 99.21247100830078
+      },
+      {
+        "Name": "Plant",
+        "Confidence": 99.21247100830078
+      },
+      {
+        "Name": "Tree",
+        "Confidence": 99.21247100830078
+      },
+      {
+        "Name": "Agavaceae",
+        "Confidence": 96.6033935546875
+      },
+      {
+        "Name": "Aloe",
+        "Confidence": 96.2696762084961
+      },
+      {
+        "Name": "Beach",
+        "Confidence": 94.15129089355469
+      },
+      {
+        "Name": "Coast",
+        "Confidence": 94.15129089355469
+      },
+      {
+        "Name": "Outdoors",
+        "Confidence": 94.15129089355469
+      },
+      {
+        "Name": "Sea",
+        "Confidence": 94.15129089355469
+      },
+      {
+        "Name": "Water",
+        "Confidence": 94.15129089355469
+      }
+    ],
+    "Thumbnail/0990309876941-bob/ba-IMG_20160706_094820.jpg"
+  ]
+}

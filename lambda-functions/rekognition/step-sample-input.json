@@ -1,0 +1,30 @@
+{
+  "s3Bucket": "refarch-photorepos3bucket-xvqjajtk05bo",
+  "s3Key": "Incoming/3165139876941-bob/ba-IMG_20160903_172634.jpg",
+  "objectID": "3165139876941-bob/ba-IMG_20160903_172634.jpg",
+  "extractedMetadata": {
+    "creationTime": "2016:09:03 17:26:36",
+    "geo": {
+      "latitude": {
+        "D": 47,
+        "M": 37,
+        "S": 15.11,
+        "Direction": "N"
+      },
+      "longitude": {
+        "D": 122,
+        "M": 20,
+        "S": 59.96,
+        "Direction": "W"
+      }
+    },
+    "exifMake": "LGE",
+    "exifModel": "Nexus 5X",
+    "dimensions": {
+      "width": 4032,
+      "height": 3024
+    },
+    "fileSize": "1.983MB",
+    "format": "JPEG"
+  }
+}

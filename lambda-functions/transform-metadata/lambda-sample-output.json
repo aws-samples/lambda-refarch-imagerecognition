@@ -1,0 +1,25 @@
+{
+  "creationTime": "2016:04:09 14:08:13",
+  "geo": {
+    "latitude": {
+      "D": 46,
+      "M": 49,
+      "S": 32.43,
+      "Direction": "N"
+    },
+    "longitude": {
+      "D": 121,
+      "M": 43,
+      "S": 41.88,
+      "Direction": "W"
+    }
+  },
+  "exifMake": "LGE",
+  "exifModel": "Nexus 5X",
+  "dimensions": {
+    "width": 4032,
+    "height": 3024
+  },
+  "fileSize": "1.354MB",
+  "format": "JPEG"
+}
