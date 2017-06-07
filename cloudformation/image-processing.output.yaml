@@ -230,7 +230,7 @@ Resources:
     Type: AWS::IAM::Role
   ExtractImageMetadataFunction:
     Properties:
-      CodeUri: s3://media-sharing-refarch/2ba23a31a9fbe9596065fc65ba4f3086
+      CodeUri: s3://media-sharing-refarch/85cfd440512536a13ea58fe42d838984
       Description: Extract image metadata such as format, size, geolocation, etc.
       Handler: index.handler
       MemorySize: 1024
@@ -243,7 +243,7 @@ Resources:
     Type: AWS::Serverless::Function
   GenerateThumbnailFunction:
     Properties:
-      CodeUri: s3://media-sharing-refarch/60dd5db44c4b4c7c636abf276a56c731
+      CodeUri: s3://media-sharing-refarch/bf7eda74763ba43004262c3a9867bbc9
       Description: Generate thumbnails for images
       Handler: index.handler
       MemorySize: 1536
@@ -310,30 +310,55 @@ Resources:
         - "{\n  \"Comment\": \"Image Processing workflow\",\n  \"StartAt\": \"ExtractImageMetadata\"\
           ,\n  \"States\": {\n    \"ExtractImageMetadata\": {\n      \"Type\": \"\
           Task\",\n      \"Resource\": \"${ExtractImageMetadataLambdaArn}\",\n   \
-          \   \"Next\": \"ImageTypeCheck\"\n    },\n    \"ImageTypeCheck\": {\n  \
-          \    \"Type\": \"Choice\",\n      \"Choices\": [\n        {\n          \"\
-          Or\": [\n            {\n              \"Variable\": \"$.format\",\n    \
-          \          \"StringEquals\": \"JPEG\"\n            },\n            {\n \
-          \             \"Variable\": \"$.format\",\n              \"StringEquals\"\
-          : \"PNG\"\n            }\n          ],\n          \"Next\": \"StoreImageMetadata\"\
+          \   \"InputPath\": \"$\",\n      \"ResultPath\": \"$.extractedMetadata\"\
+          ,\n      \"Next\": \"ImageTypeCheck\",\n      \"Catch\": [\n        {\n\
+          \          \"ErrorEquals\": [\n            \"ImageIdentifyError\"\n    \
+          \      ],\n          \"Next\": \"NotSupportedImageType\"\n        }\n  \
+          \    ],\n      \"Retry\": [\n        {\n          \"ErrorEquals\": [\n \
+          \           \"ImageIdentifyError\"\n          ],\n          \"MaxAttempts\"\
+          : 0\n        },\n        {\n          \"ErrorEquals\": [\n            \"\
+          States.ALL\"\n          ],\n          \"IntervalSeconds\": 1,\n        \
+          \  \"MaxAttempts\": 2,\n          \"BackoffRate\": 1.5\n        }\n    \
+          \  ]\n    },\n    \"ImageTypeCheck\": {\n      \"Type\": \"Choice\",\n \
+          \     \"Choices\": [\n        {\n          \"Or\": [\n            {\n  \
+          \            \"Variable\": \"$.extractedMetadata.format\",\n           \
+          \   \"StringEquals\": \"JPEG\"\n            },\n            {\n        \
+          \      \"Variable\": \"$.extractedMetadata.format\",\n              \"StringEquals\"\
+          : \"PNG\"\n            }\n          ],\n          \"Next\": \"TransformMetadata\"\
           \n        }\n      ],\n      \"Default\": \"NotSupportedImageType\"\n  \
-          \  },\n    \"StoreImageMetadata\": {\n      \"Type\": \"Task\",\n      \"\
-          Resource\": \"${StoreImageMetadataLambdaArn}\",\n      \"Next\": \"ParallelProcessing\"\
-          \n    },\n    \"NotSupportedImageType\": {\n      \"Type\": \"Fail\",\n\
-          \      \"Cause\": \"Image type not supported!\",\n      \"Error\": \"FileTypeNotSupported\"\
-          \n    },\n    \"ParallelProcessing\": {\n      \"Type\": \"Parallel\",\n\
-          \      \"Branches\": [\n        {\n          \"StartAt\": \"Rekognition\"\
-          ,\n          \"States\": {\n            \"Rekognition\": {\n           \
-          \   \"Type\": \"Task\",\n              \"Resource\": \"${RekognitionLambdaArn}\"\
-          ,\n              \"Next\": \"AddRekognizedTags\"\n            },\n     \
-          \       \"AddRekognizedTags\": {\n              \"Type\": \"Task\",\n  \
-          \            \"Resource\": \"${StoreRekognizedTagsLambdaArn}\",\n      \
-          \        \"End\": true\n            }\n          }\n        },\n       \
-          \ {\n          \"StartAt\": \"Thumbnail\",\n          \"States\": {\n  \
-          \          \"Thumbnail\": {\n              \"Type\": \"Task\",\n       \
-          \       \"Resource\": \"${GenerateThumbnailLambdaArn}\",\n             \
-          \ \"End\": true\n            }\n          }\n        }\n      ],\n     \
-          \ \"End\": true\n    }\n  }\n}"
+          \  },\n    \"TransformMetadata\": {\n      \"Type\": \"Task\",\n      \"\
+          Resource\": \"${TransformMetadataLambdaArn}\",\n      \"InputPath\": \"\
+          $.extractedMetadata\",\n      \"ResultPath\": \"$.extractedMetadata\",\n\
+          \      \"Retry\": [\n        {\n          \"ErrorEquals\": [\n         \
+          \   \"States.ALL\"\n          ],\n          \"IntervalSeconds\": 1,\n  \
+          \        \"MaxAttempts\": 2,\n          \"BackoffRate\": 1.5\n        }\n\
+          \      ],\n      \"Next\": \"ParallelProcessing\"\n    },\n    \"NotSupportedImageType\"\
+          : {\n      \"Type\": \"Fail\",\n      \"Cause\": \"Image type not supported!\"\
+          ,\n      \"Error\": \"FileTypeNotSupported\"\n    },\n    \"ParallelProcessing\"\
+          : {\n      \"Type\": \"Parallel\",\n      \"Branches\": [\n        {\n \
+          \         \"StartAt\": \"Rekognition\",\n          \"States\": {\n     \
+          \       \"Rekognition\": {\n              \"Type\": \"Task\",\n        \
+          \      \"Resource\": \"${RekognitionLambdaArn}\",\n              \"Retry\"\
+          : [\n                {\n                  \"ErrorEquals\": [\n         \
+          \           \"States.ALL\"\n                  ],\n                  \"IntervalSeconds\"\
+          : 1,\n                  \"MaxAttempts\": 2,\n                  \"BackoffRate\"\
+          : 1.5\n                }\n              ],\n              \"End\": true\n\
+          \            }\n          }\n        },\n        {\n          \"StartAt\"\
+          : \"Thumbnail\",\n          \"States\": {\n            \"Thumbnail\": {\n\
+          \              \"Type\": \"Task\",\n              \"Resource\": \"${GenerateThumbnailLambdaArn}\"\
+          ,\n              \"Retry\": [\n                {\n                  \"ErrorEquals\"\
+          : [\n                    \"States.ALL\"\n                  ],\n        \
+          \          \"IntervalSeconds\": 1,\n                  \"MaxAttempts\": 2,\n\
+          \                  \"BackoffRate\": 1.5\n                }\n           \
+          \   ],\n              \"End\": true\n            }\n          }\n      \
+          \  }\n      ],\n      \"ResultPath\": \"$.parallelResults\",\n      \"Next\"\
+          : \"StoreImageMetadata\"\n    },\n    \"StoreImageMetadata\": {\n      \"\
+          Type\": \"Task\",\n      \"Resource\": \"${StoreImageMetadataLambdaArn}\"\
+          ,\n      \"InputPath\": \"$\",\n      \"ResultPath\": \"$.storeResult\"\
+          ,\n      \"Retry\": [\n        {\n          \"ErrorEquals\": [\n       \
+          \     \"States.ALL\"\n          ],\n          \"IntervalSeconds\": 1,\n\
+          \          \"MaxAttempts\": 2,\n          \"BackoffRate\": 1.5\n       \
+          \ }\n      ],\n      \"End\": true\n    }\n  }\n}"
         - ExtractImageMetadataLambdaArn:
             Fn::GetAtt:
             - ExtractImageMetadataFunction
@@ -350,9 +375,9 @@ Resources:
             Fn::GetAtt:
             - StoreImageMetadataFunction
             - Arn
-          StoreRekognizedTagsLambdaArn:
+          TransformMetadataLambdaArn:
             Fn::GetAtt:
-            - StoreRekognizedTagsFunction
+            - TransformMetadataFunction
             - Arn
       RoleArn:
         Fn::GetAtt:
@@ -377,7 +402,7 @@ Resources:
     Type: AWS::S3::Bucket
   RekognitionFunction:
     Properties:
-      CodeUri: s3://media-sharing-refarch/5a7363a692f86e2d4db25b4a5c1018ba
+      CodeUri: s3://media-sharing-refarch/31d08688ac4c72609539eba52cd520f8
       Description: Use Amazon Rekognition to detect labels from image
       Handler: index.handler
       MemorySize: 256
@@ -434,25 +459,8 @@ Resources:
     Type: AWS::IAM::Role
   StoreImageMetadataFunction:
     Properties:
-      CodeUri: s3://media-sharing-refarch/2339e841cf80b5676e36dfa596912d5d
+      CodeUri: s3://media-sharing-refarch/1a8335158b144e084df0e1aa485faeb5
       Description: Store image metadata into database
-      Environment:
-        Variables:
-          IMAGE_METADATA_DDB_TABLE:
-            Ref: ImageMetadataDDBTable
-      Handler: index.handler
-      MemorySize: 256
-      Role:
-        Fn::GetAtt:
-        - BackendProcessingLambdaRole
-        - Arn
-      Runtime: nodejs4.3
-      Timeout: 60
-    Type: AWS::Serverless::Function
-  StoreRekognizedTagsFunction:
-    Properties:
-      CodeUri: s3://media-sharing-refarch/b21c0531855097d17598c44ea82ec73a
-      Description: Store tags detected by Amazon Rekognition into database
       Environment:
         Variables:
           IMAGE_METADATA_DDB_TABLE:
@@ -508,4 +516,17 @@ Resources:
           Version: '2012-10-17'
         PolicyName: InvokeDescribeExecutionLambda
     Type: AWS::IAM::User
+  TransformMetadataFunction:
+    Properties:
+      CodeUri: s3://media-sharing-refarch/7761cb906913bffe76391119cff090f0
+      Description: massages JSON of extracted image metadata
+      Handler: index.handler
+      MemorySize: 256
+      Role:
+        Fn::GetAtt:
+        - BackendProcessingLambdaRole
+        - Arn
+      Runtime: nodejs4.3
+      Timeout: 60
+    Type: AWS::Serverless::Function
 Transform: AWS::Serverless-2016-10-31

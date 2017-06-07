@@ -251,22 +251,6 @@ Resources:
         ../lambda-functions/rekognition
     Type: AWS::Serverless::Function
 
-  StoreRekognizedTagsFunction:
-    Properties:
-      CodeUri:
-        ../lambda-functions/add-rekognized-tags
-      Description: "Store tags detected by Amazon Rekognition into database"
-      Handler: index.handler
-      MemorySize: 256
-      Timeout: 60
-      Role:
-        !GetAtt BackendProcessingLambdaRole.Arn
-      Runtime: nodejs4.3
-      Environment:
-        Variables:
-          IMAGE_METADATA_DDB_TABLE: !Ref ImageMetadataDDBTable
-    Type: AWS::Serverless::Function
-
   GenerateThumbnailFunction:
     Properties:
       CodeUri:
@@ -402,7 +386,6 @@ Resources:
              TransformMetadataLambdaArn: !GetAtt TransformMetadataFunction.Arn,
             StoreImageMetadataLambdaArn: !GetAtt StoreImageMetadataFunction.Arn,
             RekognitionLambdaArn: !GetAtt RekognitionFunction.Arn,
-            StoreRekognizedTagsLambdaArn: !GetAtt StoreRekognizedTagsFunction.Arn,
             GenerateThumbnailLambdaArn: !GetAtt GenerateThumbnailFunction.Arn}
       RoleArn: !GetAtt StateMachineRole.Arn
 
