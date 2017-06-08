@@ -9,7 +9,8 @@ export class AlbumInfoService {
   private docClient: any;
 
   constructor() {
-    AWS.config.credentials = new AWS.Credentials(CONFIG.AccessKeyId, CONFIG.SecretAccessKey);
+    AWS.config.region = CONFIG.Region;
+    AWS.config.credentials = new AWS.CognitoIdentityCredentials({IdentityPoolId: CONFIG.CognitoIdentityPool});
     this.docClient = new AWS.DynamoDB.DocumentClient({
       region: CONFIG.Region
     });

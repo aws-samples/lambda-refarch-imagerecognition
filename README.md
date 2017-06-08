@@ -29,7 +29,7 @@ You can use the test web app to upload images and see the result of the image re
 The backend infrastructure can be deployed in US West - Oregon (us-west-2) using the provided CloudFormation template.
 Click **Launch Stack** to launch the template in the US West - Oregon (us-west-2) region in your account:
 
-[![Launch Lambda IoT Backend into Oregon with CloudFormation](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/images/cloudformation-launch-stack-button.png)](https://console.aws.amazon.com/cloudformation/home?region=us-west-2#/stacks/new?stackName=photo-sharing-backend&templateURL=https://s3-us-west-2.amazonaws.com/media-sharing-refarch/cloudformation/image-processing-v2.output.yaml)
+[![Launch Lambda IoT Backend into Oregon with CloudFormation](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/images/cloudformation-launch-stack-button.png)](https://console.aws.amazon.com/cloudformation/home?region=us-west-2#/stacks/new?stackName=photo-sharing-backend&templateURL=https://s3-us-west-2.amazonaws.com/media-sharing-refarch/cloudformation/image-processing-v3.output.yaml)
 
 (In the last page of the wizard, make sure to:
 
@@ -155,8 +155,7 @@ The following sections explain all of the resources created by the CloudFormatio
 
 ### Resources for the test web app
 - **DescribeExecutionFunction** - A Lambda function that queries the AWS Step Functions service on the status of a given execution 
-- **TestClientUser** - An IAM user used by the test web app.
-- **TestClientKeys** - Access keys that enable the test web app to sign API requests to query the metadata DynamoDB tables and Step Functions execution status, and read/write from the `PhotoRepoS3Bucket`
+- **TestClientIdentityPool** - A Cognito Identity Pool used by the test web app to sign API requests to query the metadata DynamoDB tables and Step Functions execution status, and read/write from the `PhotoRepoS3Bucket`
 
 ### IAM roles
 > This CloudFormation template chose not to create one IAM role for each Lambda function and consolidated them, simply to reduce the number of IAM roles it takes up in your account. When developing your application, you might instead create individual IAM roles for each Lambda function to follow the Least Privilege principle. 
@@ -165,6 +164,7 @@ The following sections explain all of the resources created by the CloudFormatio
 - **CustomResourceHelperRole** -  An IAM role the Lambda functions that are used by  `CreateS3EventTriggerFunction` for creating custom resources in the CloudFormation template
 - **StateMachineRole** - An IAM role assumed by the `ImageProcStateMachine` during execution. It has permission to invoke Lambda functions. 
 - **DescribeExecutionFunctionRole**  - An IAM role assumed by `DescribeExecutionFunction`. It has permission to `DescribeExecution` API in Step Functions.
+- **TestClientIAMRole** - An IAM role assumed by the `TestClientIdentityPool` Cognito Identity pool
 
 ## License
 
