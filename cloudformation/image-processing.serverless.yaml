@@ -446,8 +446,22 @@ Resources:
       Runtime: nodejs4.3
     Type: AWS::Serverless::Function
 
-  TestClientUser:
-    Type: "AWS::IAM::User"
+  TestClientIdentityPool:
+    Type: "AWS::Cognito::IdentityPool"
+    Properties:
+      IdentityPoolName: "TestWebApp"
+      AllowUnauthenticatedIdentities: true
+
+  TestClientIdentityPoolRoles:
+    Type: "AWS::Cognito::IdentityPoolRoleAttachment"
+    Properties:
+      IdentityPoolId: !Ref TestClientIdentityPool
+      Roles:
+        authenticated: !GetAtt TestClientIAMRole.Arn
+        unauthenticated: !GetAtt TestClientIAMRole.Arn
+
+  TestClientIAMRole:
+    Type: "AWS::IAM::Role"
     Properties:
       Policies:
         -
@@ -489,11 +503,18 @@ Resources:
                   - "lambda:InvokeFunction"
                 Resource:
                   - !Sub "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:${DescribeExecutionFunction}"
-  TestClientKeys:
-    Type: "AWS::IAM::AccessKey"
-    Properties:
-      UserName:
-        !Ref TestClientUser
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          -
+            Effect: "Allow"
+            Principal:
+              Federated:
+                - "cognito-identity.amazonaws.com"
+            Action:
+              - "sts:AssumeRole"
+              - "sts:AssumeRoleWithWebIdentity"
+
 
 Outputs:
   S3PhotoRepoBucket:
@@ -511,10 +532,7 @@ Outputs:
   DescribeExecutionLambda:
     Value:
       Ref: "DescribeExecutionFunction"
-  AccessKeyId:
+  CognitoIdentityPool:
     Value:
-      Ref: TestClientKeys
-  SecretAccessKey:
-    Value: !GetAtt TestClientKeys.SecretAccessKey
-
+      Ref: TestClientIdentityPool
 

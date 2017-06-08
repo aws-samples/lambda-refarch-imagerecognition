@@ -7,7 +7,8 @@ export class S3Service {
   private s3Client: any;
 
   constructor() {
-    AWS.config.credentials = new AWS.Credentials(CONFIG.AccessKeyId, CONFIG.SecretAccessKey);
+    AWS.config.region = CONFIG.Region;
+    AWS.config.credentials = new AWS.CognitoIdentityCredentials({IdentityPoolId: CONFIG.CognitoIdentityPool});
     this.s3Client = new AWS.S3({
       region: CONFIG.Region
     });

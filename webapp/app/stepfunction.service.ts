@@ -7,7 +7,8 @@ export class StepFunctionService {
   private lambdaClient: any;
 
   constructor() {
-    AWS.config.credentials = new AWS.Credentials(CONFIG.AccessKeyId, CONFIG.SecretAccessKey);
+    AWS.config.region = CONFIG.Region;
+    AWS.config.credentials = new AWS.CognitoIdentityCredentials({IdentityPoolId: CONFIG.CognitoIdentityPool});
     this.lambdaClient = new AWS.Lambda({
       region: CONFIG.Region
     });

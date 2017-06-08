@@ -1,9 +1,9 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Description: Backend for photo sharing reference architecture.
 Outputs:
-  AccessKeyId:
+  CognitoIdentityPool:
     Value:
-      Ref: TestClientKeys
+      Ref: TestClientIdentityPool
   DDBAlbumMetadataTable:
     Value:
       Ref: AlbumMetadataDDBTable
@@ -19,11 +19,6 @@ Outputs:
   S3PhotoRepoBucket:
     Value:
       Ref: PhotoRepoS3Bucket
-  SecretAccessKey:
-    Value:
-      Fn::GetAtt:
-      - TestClientKeys
-      - SecretAccessKey
 Resources:
   AlbumMetadataDDBTable:
     Properties:
@@ -474,13 +469,18 @@ Resources:
       Runtime: nodejs4.3
       Timeout: 60
     Type: AWS::Serverless::Function
-  TestClientKeys:
+  TestClientIAMRole:
     Properties:
-      UserName:
-        Ref: TestClientUser
-    Type: AWS::IAM::AccessKey
-  TestClientUser:
-    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+        - Action:
+          - sts:AssumeRole
+          - sts:AssumeRoleWithWebIdentity
+          Effect: Allow
+          Principal:
+            Federated:
+            - cognito-identity.amazonaws.com
+        Version: '2012-10-17'
       Policies:
       - PolicyDocument:
           Statement:
@@ -515,7 +515,26 @@ Resources:
             Sid: InvokeDescribeExecutionLambda
           Version: '2012-10-17'
         PolicyName: InvokeDescribeExecutionLambda
-    Type: AWS::IAM::User
+    Type: AWS::IAM::Role
+  TestClientIdentityPool:
+    Properties:
+      AllowUnauthenticatedIdentities: true
+      IdentityPoolName: TestWebApp
+    Type: AWS::Cognito::IdentityPool
+  TestClientIdentityPoolRoles:
+    Properties:
+      IdentityPoolId:
+        Ref: TestClientIdentityPool
+      Roles:
+        authenticated:
+          Fn::GetAtt:
+          - TestClientIAMRole
+          - Arn
+        unauthenticated:
+          Fn::GetAtt:
+          - TestClientIAMRole
+          - Arn
+    Type: AWS::Cognito::IdentityPoolRoleAttachment
   TransformMetadataFunction:
     Properties:
       CodeUri: s3://media-sharing-refarch/7761cb906913bffe76391119cff090f0
