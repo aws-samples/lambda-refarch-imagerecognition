@@ -1,5 +1,5 @@
 // dependencies
-const AWS = require('aws-sdk');
+const S3 = require('aws-sdk/clients/s3');
 const gm = require('gm').subClass({imageMagick: true}); // Enable ImageMagick integration.
 const util = require('util');
 
@@ -7,8 +7,7 @@ const util = require('util');
 const MAX_WIDTH = 250;
 const MAX_HEIGHT = 250;
 
-// get reference to S3 client
-const s3 = new AWS.S3();
+const s3 = new S3();
 
 /**
  * Generate a thumbnail of an image stored in s3 and store the thumbnail back in the same bucket under the "Thumbnail/" prefix
