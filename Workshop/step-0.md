@@ -12,8 +12,9 @@ EU (Ireland) | <span style="font-family:'Courier';">eu-west-1</span> | [![Launch
 US East (N. Virginia) | <span style="font-family:'Courier';">us-east-1</span> | [![Launch Step 0A in us-east-1](images/cfn-launch-stack.png)](https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/new?stackName=sfn-workshop-setup&templateURL=https://s3.amazonaws.com/sfn-image-workshop-us-east-1/cloudformation/step0-sam.yaml)
 US West (Oregon) | <span style="font-family:'Courier';">us-west-2</span> | [![Launch Step 0A in us-west-2](images/cfn-launch-stack.png)](https://console.aws.amazon.com/cloudformation/home?region=us-west-2#/stacks/new?stackName=sfn-workshop-setup&templateURL=https://s3-us-west-2.amazonaws.com/sfn-image-workshop-us-west-2/cloudformation/step0-sam.yaml)
 
-#### CloudFormation launch instructions (expand for details)
-
+<details>
+<summary><strong> CloudFormation launch instructions (expand for details) </strong></summary><p>
+ 
 1. Click the **Launch Stack** link above for the region of your choice.
 
 1. Click **Next** on the Select Template page.
@@ -31,6 +32,7 @@ US West (Oregon) | <span style="font-family:'Courier';">us-west-2</span> | [![La
 	![Execute Change Set Screenshot](./images/0a-cfn-execute-change-set.png)
 
 1. Wait for the `sfn-workshop-setup` stack to reach a status of `CREATE_COMPLETE` (you might need to click the refresh button to see the stack being created). 
+</details>
 
 	
 ### Next step
