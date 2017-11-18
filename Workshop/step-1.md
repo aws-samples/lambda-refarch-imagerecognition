@@ -55,7 +55,7 @@ Paste in the JSON exported from Step Easy tool in Step 1A
 
 1. You can click on the &#x21ba; icon next to **Visual Workflow** to refresh the visual representation of the state machine:
 
- <img src="images/1b-step-console-preview.png" width="90%">
+	<img src="images/1b-step-console-preview.png" width="90%">
 
 1. Click **Create State Machine** to create the state machine.
 
