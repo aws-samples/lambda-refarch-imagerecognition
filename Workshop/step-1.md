@@ -36,7 +36,7 @@ Another option is to use a visual editor tool to generate the JSON, such as [Ste
 	> 
 	> It should look something like `arn:aws:lambda:us-west-2:<YOUR-ACCOUNT-ID>:function:sfn-workshop-setup-ExtractMetadata`
 
- <img src="images/1a-step-lambda-details.png" width="90%">
+	<img src="images/1a-step-lambda-details.png" width="90%">
 
 1. Draw a connector between the state machine start point and the Lambda Task on the canvas
 
