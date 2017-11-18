@@ -53,7 +53,7 @@ US West (Oregon) | <span style="font-family:'Courier';">us-west-2</span> | [![La
 
 
 
-### Step 6B: Use the web
+### Step 6B: Test the end-to-end workflow using the sample web app
 ##### Login
 Pick any username to log in (This is a test app to showcase the backend so it's not using real user authentication. In an actual app, you can use Amazon Cognito to manage user sign-up and login.)
 
@@ -70,3 +70,5 @@ Upload images and see status updates when:
 3. The AWS Step Function execution completes
 
 A sample set of extracted image metadata and recognized tags, along with the thumbnail generated in the Step Function execution is displayed for each uploaded image.
+
+<img alt="Pipeline Screenshot" src="./images/web app screenshot.png" width="90%">
