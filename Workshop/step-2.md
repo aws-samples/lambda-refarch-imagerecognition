@@ -6,18 +6,18 @@ There are two mechanisms in AWS Step Functions that enables branching: [Choice S
 
 In this step, we will add input validation to the state machine by leveraging both Error Try/Catches and Choice State. By the end of this step the state machine will look like this:
 
-<img src="images/2-branching-logic-state-machine.png" width="90%">
+<img src="images/2-branching-logic-state-machine.png" width="50%">
 
 ### Step 2A: Add branching to State Machine definition
 
 Consider in our scenario we only support JPEG and PNG formats. The image analysis Lambda function can detect image formats, so we can use a Choice State after the first step to evaluate the output from the metadata extraction and make branching decisions. For other file types the image processing library does not even have an analyzer for, an exception is thrown from the Lambda function. So here we can combine using Choice State and Error Try/Catch. 
 
 1. Go back to the [Step Easy](http://step-easy.s3-website-us-west-2.amazonaws.com/) tool. Because in Step 1D we modified the JSON by adding the **ResultPath** parameter, you can use **Import** button in Step Easy to load the latest definition.
-<details>
-<summary><strong> Expand to see screenshot</strong></summary><p>
- 
- <img src="images/2a-reimport-step-easy.png" width="90%">
-</details>
+	<details>
+	<summary><strong> Expand to see screenshot</strong></summary><p>
+	 
+	<img src="images/2a-reimport-step-easy.png" width="90%">
+	</details>
 
 1. The next step we are going to add to our state machine is the fail state, *NotSupportedImageType*. This step will terminate and mark failure for executions that cannot proceed because the image type is not supported.
 
@@ -26,13 +26,11 @@ Consider in our scenario we only support JPEG and PNG formats. The image analysi
  
 	a. Drag and drop a **Fail** step into the canvas 
 	
-	<img src="images/2a-step-easy-fail-notsupportedimage.png" width="90%">
-
+	<img src="images/2a-step-easy-fail-notsupportedimage.png" width="50%">
 
 	b. Edit the fail state by clicking on the pencil icon. Set the state name, cause and error fields to the values specified on the image below
 	
-	<img src="images/2a-step-easy-fail-notsupportedimagedetails.png" width="90%">
-
+	<img src="images/2a-step-easy-fail-notsupportedimagedetails.png" width="50%">
 
 	</details>
 
@@ -46,7 +44,7 @@ Consider in our scenario we only support JPEG and PNG formats. The image analysi
 	
 	 Click on **Catchers** link on the bottom right corner of the *ExtractImageMetadata* step box. Then click **Add Catcher** and set the Error and Next State fields as referred below.
 	
-	<img src="images/2a-step-easy-fail-notsupportedimagecatchers.png" width="90%">
+	<img src="images/2a-step-easy-fail-notsupportedimagecatchers.png" width="50%">
 	 
 	</details>
 	
@@ -77,7 +75,7 @@ Consider in our scenario we only support JPEG and PNG formats. The image analysi
 	
 	g. Compare your settings with the following image
 
-	<img src="images/2a-step-easy-choice-ImageTypeCheckchoicedetails.png" width="90%">
+	<img src="images/2a-step-easy-choice-ImageTypeCheckchoicedetails.png" width="80%">
 
 	h. Close the pop-up. Connect the *ExtractImageMetadata* state with the *ImageTypeCheck* choice state
 	
