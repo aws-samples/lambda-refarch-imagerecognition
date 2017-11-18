@@ -75,8 +75,8 @@ Consider in our scenario we only support JPEG and PNG formats. The image analysi
 	
 	g. Compare your settings with the following image
 
-	<img src="images/2a-step-easy-choice-ImageTypeCheckchoicedetails.png" width="80%">
-
+	![condition screenshot](images/2a-step-easy-choice-ImageTypeCheckchoicedetails.png)
+	
 	h. Close the pop-up. Connect the *ExtractImageMetadata* state with the *ImageTypeCheck* choice state
 	
 	 
