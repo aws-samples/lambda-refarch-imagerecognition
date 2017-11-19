@@ -181,22 +181,38 @@ This uses a different state machine to sync contents of 2 buckets in the same re
 
 <img src="images/bucket-sync-state-machine.png" width="80%">
 
-For source bucket, please use sfn-workshop-photos.
+For source bucket, please use the following depending on the AWS region you've been using:
 
-TODO: add bucket for different regions
+
+Region | S3 Bucket to copy from
+------|-------
+EU (Ireland) | <span style="font-family:'Courier';"> sfn-image-workshop-bulk-photo-copy-eu-west-1 </span>
+US East (N. Virginia) | <span style="font-family:'Courier';"> sfn-image-workshop-bulk-photo-copy-us-east-1 </span>
+US West (Oregon) | <span style="font-family:'Courier';">sfn-image-workshop-bulk-photo-copy-us-west-2 </span>
 
 Input to the state machine to sync contents would look like this:
 
-````
+```
 {
-  "source": "sfn-workshop-photos",
-  "destination": "<REPLACE_WITH_YOUR_PhotoLandingS3Bucket>"
+  "source": "sfn-image-workshop-bulk-photo-copy-eu-west-1",
+  "destination": "<REPLACE_WITH_YOUR_PhotoLandingS3Bucket>",
+  "prefix": "Incoming/"
+
 }
-````
+```
 
-Explore the web application to see the thumbnails and the labels detected.
 
-TODO: add instructions on which user/album to look at in the web app
+Use `stepfunction` user in the web application to explore the imported images 
+
+<img src="images/bulk-import-user.png" width="60%">
+
+you should see a list of albums:
+
+<img src="images/bulk-import-albumlist.png" width="60%">
+
+Explore the tags, metadata and thumbnails generated: 
+<img src="images/bulk-import-album1.png" width="90%">
+
 
 #### Monitoring and metrics
 
