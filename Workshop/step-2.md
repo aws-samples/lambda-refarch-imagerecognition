@@ -143,7 +143,7 @@ Consider in our scenario we only support JPEG and PNG formats. The image analysi
 	```
 	Also, you will see that the workflow has passed through all the steps till the end:
 	
-	<img src="images/2c-test-choice-test-succeeded.png" width="90%">
+	<img src="images/2c-test-choice-test-succeeded.png" width="50%">
 
 1. Now, let's try it with a different input (*.tiff* image type):
 
@@ -163,7 +163,7 @@ Consider in our scenario we only support JPEG and PNG formats. The image analysi
 	```
 	Hence, the workflow of the execution confirms our mistake:
 	
-	<img src="images/2c-test-choice-test-failed.png" width="90%">
+	<img src="images/2c-test-choice-test-failed.png" width="50%">
 
 1. Test it with a txt file that we have wrongly appended with .jpg suffix:
 
@@ -176,7 +176,7 @@ Consider in our scenario we only support JPEG and PNG formats. The image analysi
 	
 	We expect the *ExtractImageMetadata* lambda function to throw an `ImageIdentifyError`, which will direct the flow to the fail state, without even hitting the **Choice** state
 	
-	<img src="images/2c-test-catch-failed.png" width="90%">
+	<img src="images/2c-test-catch-failed.png" width="50%">
 	
 
 ### Final JSON
