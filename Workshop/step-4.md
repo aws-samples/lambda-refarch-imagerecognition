@@ -23,39 +23,22 @@ Take a look at this documentation if you need help with the syntax:
 
 ### Step 4B: Create an AWS Step Functions state machine to test the result
 
-1.  Go to [AWS Step Functions management console](http://console.aws.amazon.com/states/home). Make sure the AWS Region selection matches the one you have been working with so far.
+1.  Go to [AWS Step Functions management console](http://console.aws.amazon.com/states/home). 
 
-1. Click **Create a State Machine**
-
-1. Type `ImageProcessing-5` for the state machine name
+1. Select the `ImageProcessing` state machine. Click on **Edit state machine**
 
 1. Paste in the JSON from your editor produced in Step 4A
-
-1. Locate the JSON snippet that corresponds to the definition of the `NotSupportedImageType` state. Remove the attribute `"End": true` from it (make sure the JSON document continues to be well-formend by removing the comma character right before the `End` attribute. The JSON of this state should be like this:
-
-	```javascript
-	"NotSupportedImageType": {
-	      "Type": "Fail",
-	      "Cause": "Image type not supported!",
-	      "Error": "FileTypeNotSupported"
-	    },
-
-	```
 
 1. Click on the &#x21ba; icon next to **Visual Workflow** to refresh the visual representation of the state machine:
 
 	<img src="images/4b-step-console-preview.png" width="90%">
 
-1. Click **Create State Machine**.
-
-1. In the pop-up window, select the IAM role automatically suggested you (the name should look like `StatesExecutionRole-{region-name}`).
-
-	![pick IAM role for state machine](./images/1b-pick-state-role.png)
+1. Click **Update and start execution**
 
 
 ### Step 4C: Test the state machine execution
 
-1. Click **New Execution** and use following input you have been using so far:
+1. Use the following input you have been using so far to test the execution
 
 	```JSON
 	{

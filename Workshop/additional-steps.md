@@ -8,7 +8,7 @@ The challenges here are, pick your battle :)
 
 Some errors might require a retry due to throttling of endpoints, timeouts on Lambdas, unexpected exceptions and execution errors. As Werner Vogels, Amazon's CTO once said: "*everything fails, all the time*"!
 
-The challenge here is, by using our documentation about [retries] (http://docs.aws.amazon.com/step-functions/latest/dg/amazon-states-language-errors.html), you should be able to implement retries of each task whenever is needed. A good rule-of-thumb is to specify the set of errors that should not be retried, then set a retry policy to catch all other errors. 
+The challenge here is, by using our documentation about [retries](http://docs.aws.amazon.com/step-functions/latest/dg/amazon-states-language-errors.html), you should be able to implement retries of each task whenever is needed. A good rule-of-thumb is to specify the set of errors that should not be retried, then set a retry policy to catch all other errors. 
 
 > e.g. If the image type is not supported, there is no point on retrying. However, if PersistDDB fails with *"ProvisionedThroughputExceededException"*, we should retry storing the data. You can play with the different backoffs and max attempts in these settings. 
 > 

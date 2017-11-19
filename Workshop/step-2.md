@@ -97,11 +97,11 @@ Consider in our scenario we only support JPEG and PNG formats. The image analysi
 
 
 
-### Step 2B: Create an AWS Step Functions state machine to test the result
+### Step 2B: Update the AWS Step Functions state machine
 
 1. Go to [AWS Step Functions management console](http://console.aws.amazon.com/states/home). Make sure the AWS Region selection matches the one you have been working with so far.
 
-1. On the Dashboard click **Create a State Machine**. Type `ImageProcessing-3` as the state machine name
+1. Select the `ImageProcessing` state machine. Click on **Edit state machine**
 
 1. Scroll down and paste in the JSON generated from Step Easy tool in Step 2A
 
@@ -120,11 +120,7 @@ Consider in our scenario we only support JPEG and PNG formats. The image analysi
 
 	<img src="images/2b-step-console-preview.png" width="90%">
 
-1. Click **Create State Machine** to create the state machine.
-
-1. In the pop-up window, select the IAM role automatically generated for you (the name should look like `StatesExecutionRole-{region-name}`).
-
-	![pick IAM role for state machine](./images/1b-pick-state-role.png)
+1. Click **Update and start execution**
 	
 
 ### Step 2C: Test the state machine execution
