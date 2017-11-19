@@ -17,10 +17,10 @@ The first step requires some extra configuration as it needs CloudTrail to be en
 
 1. Go to [AWS Step Functions management console](http://console.aws.amazon.com/states/home). Make sure the AWS Region selection matches the one you have been working with so far.
 
-1. On the Dashboard locate the last version of your state machine. If you followed instructions on prior steps it should be *ImageProcessing-5*
+1. On the Dashboard locate your state machine. If you followed instructions on prior steps it should be *ImageProcessing*
 
 1. Click on the state machine to go to the detail page. You can locate the ARN (Amazon Resource Name) of the state machine at the end of the URL that should look like:
-	`arn:aws:states:<AWS_REGION>:<AWS_ACCOUNT_ID>:stateMachine:ImageProcessing-5`
+	`arn:aws:states:<AWS_REGION>:<AWS_ACCOUNT_ID>:stateMachine:ImageProcessing`
 
 	<img src="images/5a-state-machine-arn-new.png" width="90%">
 
