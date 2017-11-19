@@ -50,7 +50,7 @@ Take a look at this documentation if you need help with the syntax:
 
 1. Verify that everything came out fine and the workflow succesfully executed all the steps:
 
-	<img src="images/4c-test-choice-test-succeeded.png" width="90%">
+	<img src="images/4c-test-choice-test-succeeded.png" width="50%">
 
 1. You may also want to check what DynamoDB tables and items stored in them look like. Navigate to the [Amazon DynamoDB management console](https://console.aws.amazon.com/dynamodb/home?#tables:). You should see two tables there with names similar to the following ones:
 
