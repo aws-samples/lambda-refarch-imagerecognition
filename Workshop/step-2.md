@@ -118,7 +118,7 @@ Consider in our scenario we only support JPEG and PNG formats. The image analysi
 
 1. You can click on the &#x21ba; icon next to **Visual Workflow** to refresh the visual representation of the state machine:
 
-	<img src="images/2b-step-console-preview.png" width="90%">
+	<img src="images/2b-step-console-update-preview.png" width="90%">
 
 1. Click **Update and start execution**
 	
