@@ -71,7 +71,7 @@ Upload images and see status updates when:
 
 A sample set of extracted image metadata and recognized tags, along with the thumbnail generated in the Step Function execution is displayed for each uploaded image.
 
-<img alt="Pipeline Screenshot" src="./images/web app screenshot.png" width="90%">
+<img alt="Pipeline Screenshot" src="./images/web-app-screenshot.png" width="90%">
 
 
 ### Next step: extra credits 
@@ -79,3 +79,6 @@ A sample set of extracted image metadata and recognized tags, along with the thu
 Now you have built a end-to-end image processing workflow using Step Functions, ready for some fun challenges? 
 
 See the [extra credits](./additional-steps.md) section
+
+If you are ready to clean up resources created for this workshop, see the [cleanup](./clean-up.md) instructions
+

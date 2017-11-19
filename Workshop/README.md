@@ -21,3 +21,4 @@ As can be seen in the diagram below, this workflow processes photos uploaded to 
 * [Step 5: Start execution from an S3 event](step-5.md)
 * [Step 6: Build and Launch the web application](step-6.md)
 * [Extra credit options](additional-steps.md)
+* [Resource clean-up](clean-up.md)
