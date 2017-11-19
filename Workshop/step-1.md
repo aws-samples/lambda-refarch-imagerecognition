@@ -48,7 +48,7 @@ Another option is to use a visual editor tool to generate the JSON, such as [Ste
 
 1.  You might see the Get Started page if you have not used AWS Step Functions before. If that's the case, click **Get Started**, it should lead you to the page to create a new state machine. Otherwise, click the **Create a State Machine** button.
 
-1. Type `ImageProcessing-1` for the state machine name
+1. Type `ImageProcessing` for the state machine name
 
 1. Scroll down until you see the section **Step3: Review your code and visual workflow**.  
 Paste in the JSON exported from Step Easy tool in Step 1A
@@ -89,7 +89,7 @@ Paste in the JSON exported from Step Easy tool in Step 1A
 	Click **Start Execution**
 	
 
-	<img src="images/1c-input-new.png" width="90%">
+	<img src="images/1c-start-new-execution.png" width="90%">
 
 1.  You can now see the state machine execution in action. Explore the different tabs in the Console to see what information is available to you for this execution:
 
@@ -110,13 +110,18 @@ For our specific need we will use the **ResultPath** field. This field defines f
 
 - If the **ResultPath** JSON path expression does not match an item in the state's input, that item is added to the input. The item contains the results of executing the state's task. The expanded input becomes available to the state's output.
 
-1. AWS Step Functions needs to keep track of every state machine versions, since there may be instances of multiple versiones simultaneously. The way the user interface reflects that for the time being is by not allowing you to edit an existing state machine. Instead you will have to create a new one. 
+Now, add a `$.extractedMetadata` as a result path for the step we've added to the state machine.	 
 
-	On the AWS Step Functions management console page click on **Dashboard** to go back to your list of state machines.
+<details>
+<summary><strong> Expand for step-by-step instructions</strong></summary><p>
+
+1. On the AWS Step Functions management console page click on **Dashboard** to go back to your list of state machines.
 	
-1. Select `ImageProcessing-1` and click **Copy to New**
+1. Select the state machine we just created. Click on **Edit state machine**
 
-1. Leave all the defaults, scroll down to the section **Step3: Review your code and visual workflow**, and add the attribute `"ResultPath": "$.extractedMetadata"` to the task. The final JSON should look like the following:
+	<img src="images/1d-edit.png" width="90%">
+
+1. Add the attribute `"ResultPath": "$.extractedMetadata"` to the task. The final JSON should look like the following:
 
 	```javascript
 	{
@@ -132,20 +137,16 @@ For our specific need we will use the **ResultPath** field. This field defines f
 	  }
 	}
 	```
-1. Click **Create State Machine**
+1. Click **Update and start execution**
 
-1. Select the `StatesExecutionRole-{region-name}` execution role
+1. Enter the same JSON input you used on Step 1C-2 (you can find it by going to the execution history of the `ImageProcessing` and copy the JSON from the details>Input plane) and click **Start Execution**
+		
+	<img src="images/1d-updated-new-execution.png" width="90%">
 
-1. Click **Ok**
+</details>
 
-1. Click **New Execution**
+Verify after the change, for new executions the **Output** contains the state input attributes plus an additional field `extractedMetadata` that contains the task ouput, effectively merging both the input and the output
 
-1. Enter the same JSON input you used on Step 1C-2 (you can find it by going to the execution history of the `ImageProcessing-1` and copy the JSON from the details>Input plane) and click **Start Execution**
-	
-	<img src="images/1d-start-execution.png" width="90%">
+<img src="images/1d-output-w-resultpath.png" width="90%">
 
-1. Let it finish and verify that the **Output** contains now the state input attributes plus an additional field `extractedMetadata` that contains the task ouput, effectively merging both the input and the output
-
-	<img src="images/1d-output-w-resultpath.png" width="90%">
-
-1. You are now ready to move on to [Step 2](step-2.md)!
+You are now ready to move on to [Step 2](step-2.md)!
