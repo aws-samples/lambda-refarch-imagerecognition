@@ -10,9 +10,9 @@ Now you acquired some experience with incrementally adding steps to the state ma
 
 Take a look at these documentation if you need help with the syntax:
 
-- [Parallel State] (https://docs.aws.amazon.com/step-functions/latest/dg/amazon-states-language-parallel-state.html)
-- [Task State] (https://docs.aws.amazon.com/step-functions/latest/dg/amazon-states-language-task-state.html)
-- [Amazon States Language Spec] (https://states-language.net/spec.html)
+- [Parallel State](https://docs.aws.amazon.com/step-functions/latest/dg/amazon-states-language-parallel-state.html)
+- [Task State](https://docs.aws.amazon.com/step-functions/latest/dg/amazon-states-language-task-state.html)
+- [Amazon States Language Spec](https://states-language.net/spec.html)
 
 We suggest now to edit the JSON directly, so that links to the documentation referred above are easier to follow.
 
