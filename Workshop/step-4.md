@@ -9,8 +9,8 @@ For this part we will again edit the JSON manually.  Go to your editor of choice
 
 Take a look at this documentation if you need help with the syntax:
 
-- [Task State] (https://docs.aws.amazon.com/step-functions/latest/dg/amazon-states-language-task-state.html)
-- [Amazon States Language Spec] (https://states-language.net/spec.html)
+- [Task State](https://docs.aws.amazon.com/step-functions/latest/dg/amazon-states-language-task-state.html)
+- [Amazon States Language Spec](https://states-language.net/spec.html)
 
 	> To find the ARN of the Lambda function, in the AWS CloudFormation Console, go to the **sfn-workshop-setup** stack and look in the Outputs section for **StoreImageMetadataFunction**
 	>
