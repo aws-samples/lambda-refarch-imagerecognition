@@ -19,18 +19,18 @@ The challenge here is, by using our documentation about [retries](http://docs.aw
 
 Customers will upload their photos within your platform. Some of this content might be considered inappropriate for your application.
 
-**Amazon Rekognition** allows you to flag this content easily with the API call [DetectModerationLabels] (http://docs.aws.amazon.com/rekognition/latest/dg/API_DetectModerationLabels.html).
+**Amazon Rekognition** allows you to flag this content easily with the API call [DetectModerationLabels](http://docs.aws.amazon.com/rekognition/latest/dg/API_DetectModerationLabels.html).
 
 The challenge here is to implement it with a manual approval activity in StepFunctions. You can do it within the *ExtractMetadata* Task or you can implement a subsequent task to moderate these images.
 
 
-> - Refer to this [blog] (https://aws.amazon.com/blogs/compute/implementing-serverless-manual-approval-steps-in-aws-step-functions-and-amazon-api-gateway/) on an example of implementing a manual approval step in Step Functions  
+> - Refer to this [blog](https://aws.amazon.com/blogs/compute/implementing-serverless-manual-approval-steps-in-aws-step-functions-and-amazon-api-gateway/) on an example of implementing a manual approval step in Step Functions  
 > 
 > - Because Rekognition gives you a confidence value from 0-100 on the moderation labels, you can consider using a **Choice State** to automatically reject photos with a high confidence of inappropriate content, and use manual approval for mild suspects.
 >
-> - You need to create a new Lambda function to identify the inappropiate content. You can also find some SDK examples for [Python] (https://boto3.readthedocs.io/en/latest/reference/services/rekognition.html#Rekognition.Client.detect_moderation_labels) or [node.js] (http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/Rekognition.html#detectModerationLabels-property). Choose the one you prefer and implement this task!
+> - You need to create a new Lambda function to identify the inappropiate content. You can also find some SDK examples for [Python](https://boto3.readthedocs.io/en/latest/reference/services/rekognition.html#Rekognition.Client.detect_moderation_labels) or [node.js](http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/Rekognition.html#detectModerationLabels-property). Choose the one you prefer and implement this task!
 > 
-> - Don't forget to add the result in the *ResultPath*. Review previous steps to find more information about how to implement *Choices*, *Tasks* and [here] (https://aws.amazon.com/blogs/compute/implementing-serverless-manual-approval-steps-in-aws-step-functions-and-amazon-api-gateway/) to implement an [activity] (http://docs.aws.amazon.com/step-functions/latest/dg/concepts-activities.html).
+> - Don't forget to add the result in the *ResultPath*. Review previous steps to find more information about how to implement *Choices*, *Tasks* and [here](https://aws.amazon.com/blogs/compute/implementing-serverless-manual-approval-steps-in-aws-step-functions-and-amazon-api-gateway/) to implement an [activity](http://docs.aws.amazon.com/step-functions/latest/dg/concepts-activities.html).
 > 
 > - Test your StateMachine... Carefully!
 > 
@@ -222,7 +222,8 @@ Explore the execution metrics by going to the CloudWatch Metrics console and sea
 
 Did all images copied into your bucket get processed by Step Functions? You can find out by two ways:
 
-1. Go to the metrics for the Lambda trigger function (in the [Lambda console] (https://us-west-2.console.aws.amazon.com/lambda/home?region=us-west-2), search for function name containing ```StartExecution```). Click on the function and go to the **monitoring** tab. Do you see any **Invocation errors**? Check the Lambda logs to see what the error is
+1. Go to the metrics for the Lambda trigger function (in the [Lambda console](https://us-west-2.console.aws.amazon.com/lambda/home?region=us-west-2), search for function name containing ```StartExecution```). Click on the function and go to the **monitoring** tab. Do you see any **Invocation errors**? Check the Lambda logs to see what the error is
 1. Go to the DynamoDB table (look for table name starting with ```sfn-workshop-resources-ImageMetadataDDBTable-```) and look for entries with **errReason** field (or with **executionArn** field equals **ERR**):
 
 <img src="images/dynamo-screenshot.png" width="80%">
+](
