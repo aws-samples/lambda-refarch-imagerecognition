@@ -105,17 +105,6 @@ Consider in our scenario we only support JPEG and PNG formats. The image analysi
 
 1. Scroll down and paste in the JSON generated from Step Easy tool in Step 2A
 
-1. Locate the JSON snippet that corresponds to the definition of the `NotSupportedImageType` state. Remove the attribute `"End": true` from it (make sure the JSON document continues to be well-formend by removing the comma character right before the `End` attribute. The JSON of this state should be like this:
-
-	```javascript
-	"NotSupportedImageType": {
-	      "Type": "Fail",
-	      "Cause": "Image type not supported!",
-	      "Error": "FileTypeNotSupported"
-	    },
-	
-	```
-
 1. You can click on the &#x21ba; icon next to **Visual Workflow** to refresh the visual representation of the state machine:
 
 	<img src="images/2b-step-console-update-preview.png" width="90%">
@@ -221,9 +210,7 @@ If you had issues along the way and your state machine does not work as expected
 		},
 		"Parallel": {
 			"Type": "Pass",
-			"Result": {
-				"result": "This is a placeholder we will replace it with a Task state soon"
-			},
+			"Result": "This is a placeholder we will replace it with a Task state soon",
 			"End": true
 		},
 		"NotSupportedImageType": {
