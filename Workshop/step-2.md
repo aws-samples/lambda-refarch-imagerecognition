@@ -2,7 +2,7 @@
 
 The first step of state machine gives us more information about the image file, which can be used to determine what set of further actions the workflow needs to take, e.g. if the file supplied is a format not supported by our image recognition service, send it to another Lambda function that performs type conversion or simply send an error notification to the customer and terminate the workflow.
 
-There are two mechanisms in AWS Step Functions that enables branching: [Choice State] (https://docs.aws.amazon.com/step-functions/latest/dg/awl-ref-states-choice.html)  and [Error Try/Catches] (https://docs.aws.amazon.com/step-functions/latest/dg/awl-ref-errors.html). Choice State allows choosing the next state based on if/else or case/switch conditions (supports a combination of And Or Not and = > < operators ) on the input data. Error Try/Catches allows choosing the next state depending on the type of error thrown by the current execution.
+There are two mechanisms in AWS Step Functions that enables branching: [Choice State](https://docs.aws.amazon.com/step-functions/latest/dg/awl-ref-states-choice.html)  and [Error Try/Catches](https://docs.aws.amazon.com/step-functions/latest/dg/awl-ref-errors.html). Choice State allows choosing the next state based on if/else or case/switch conditions (supports a combination of And Or Not and = > < operators ) on the input data. Error Try/Catches allows choosing the next state depending on the type of error thrown by the current execution.
 
 In this step, we will add input validation to the state machine by leveraging both Error Try/Catches and Choice State. By the end of this step the state machine will look like this:
 
