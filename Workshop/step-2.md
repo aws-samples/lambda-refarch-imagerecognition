@@ -210,7 +210,9 @@ If you had issues along the way and your state machine does not work as expected
 		},
 		"Parallel": {
 			"Type": "Pass",
-			"Result": "This is a placeholder we will replace it with a Task state soon",
+			"Result": {
+				"message": "This is a placeholder we will replace it with a Parallel state soon"
+			},
 			"End": true
 		},
 		"NotSupportedImageType": {
