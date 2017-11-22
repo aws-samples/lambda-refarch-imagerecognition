@@ -59,13 +59,13 @@ Consider in our scenario we only support JPEG and PNG formats. The image analysi
 	 
 	 b. Edit the the **Choice** by clicking on the pencil icon. Add the State name and Default behavior (the state the choice will transition to by default)
 
-	<img src="images/2a-step-easy-choice-ImageTypeCheckdetails.png" width="90%">
+	<img src="images/2a-step-easy-choice-ImageTypeCheckdetails.png" width="50%">
 
 	This default behavior will route all those images that does not meet the supported image types to the *NotSupportedImageType* fail state.
 
 	c. Click on the "+" icon to add a condition. Now click on the pencil icon show in the picture below to configure the condition.
 
-	<img src="images/2a-step-easy-choice-ImageTypeCheckconfigurecondition.png" width="90%">
+	<img src="images/2a-step-easy-choice-ImageTypeCheckconfigurecondition.png" width="50%">
 
 	d. Click the **Add logical operator** link at the top. Select *Or* from the drop down list.
 	
@@ -75,7 +75,7 @@ Consider in our scenario we only support JPEG and PNG formats. The image analysi
 	
 	g. Compare your settings with the following image
 
-	<img src="images/2a-step-easy-choice-ImageTypeCheckChoicedetails.png" width="80%">
+	<img src="images/2a-step-easy-choice-ImageTypeCheckChoicedetails.png" width="60%">
 
 	h. Close the pop-up. Connect the *ExtractImageMetadata* state with the *ImageTypeCheck* choice state
 	
