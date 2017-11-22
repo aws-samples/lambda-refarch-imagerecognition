@@ -84,7 +84,7 @@ Consider in our scenario we only support JPEG and PNG formats. The image analysi
 	
 	j. Edit it with the details showed on the image below:
 
-	<img src="images/2a-step-easy-Paralelldetails.png" width="90%">
+	<img src="images/2a-step-easy-Paralelldetails.png" width="50%">
 
 	k. Connect the *ImageTypeCheck* choice state to the *Parallel* state.  
 	At the end of this last step, the canvas should look like this one:
