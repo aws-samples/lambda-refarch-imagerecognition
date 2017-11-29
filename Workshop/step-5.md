@@ -44,7 +44,7 @@ The Lambda function now knows what state machine we want it to run. Now we need 
 	
 1. Create a folder and call it *Incoming*
 
-	<img src="images/5b-s3-landing.png" width="70%">
+	<img src="images/5b-s3-incoming-folder.png" width="70%">
 	
 1. Click on the **Properties** tab
 
@@ -61,7 +61,7 @@ The Lambda function now knows what state machine we want it to run. Now we need 
 	- **Send to**: Lambda Function
 	- **Lambda**: sfn-workshop-setup-StartExecution
 
-	> **Note:** the **Prefix** parameter is critical: this limits the event trigger to only trigger processing workflows when an image file lands in the "landing/" prefix. Because the thumbnail generation process uploads the thumbnails to the same S3 bucket, without limiting the prefix, the thumbnail upload will trigger another workflow and causes an infinite loop.  
+	> **Note:** the **Prefix** parameter is critical: this limits the event trigger to only trigger processing workflows when an image file lands in the "Incoming/" prefix. Because the thumbnail generation process uploads the thumbnails to the same S3 bucket, without limiting the prefix, the thumbnail upload will trigger another workflow and causes an infinite loop.  
 	
 	<img src="images/5b-s3-event-configuration.png" width="60%">
 	
@@ -69,7 +69,7 @@ The Lambda function now knows what state machine we want it to run. Now we need 
 
 ### Step 5C: Test the event trigger by uploading a photo to S3
 
-Now you are ready to test your event! Just upload an image within the S3 bucket, landing folder and check the exection in the Step Functions console!
+Now you are ready to test your event! Just upload an image within the S3 bucket into the "Incoming" folder and check the execution in the Step Functions console!
 
 1. On the S3 management console go to the `Incoming/` prefix on the landing bucket and click **Upload**. Select an image with a supported format (JPEG or PNG). Click **Next**
 
