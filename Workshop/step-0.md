@@ -6,6 +6,14 @@ The AWS Step Functions state machine you will create in this workshop coordinate
 
 In this section, you will use a cloudformation template to provision the AWS Lambda functions plus all the resources that those require.
 
+To help you understand what resources are set up in this stage, refer to the diagram below. In this workshop, you will build a Step Functions state machine (greyed out in the middle) to orchestrate the lambda functions that does the processing work:
+<br/>
+
+<img src="images/0-resource-setup.png" width="90%">
+
+<br/>
+<br/>
+
 Region| Code | Launch
 ------|------|-------
 EU (Ireland) | <span style="font-family:'Courier';">eu-west-1</span> | [![Launch Step 0A in eu-west-1](images/cfn-launch-stack.png)](https://console.aws.amazon.com/cloudformation/home?region=eu-west-1#/stacks/new?stackName=sfn-workshop-setup&templateURL=https://s3-eu-west-1.amazonaws.com/sfn-image-workshop-eu-west-1/cloudformation/step0-sam.yaml)
