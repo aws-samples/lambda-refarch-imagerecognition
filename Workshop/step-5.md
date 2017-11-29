@@ -34,7 +34,7 @@ The first step requires some extra configuration as it needs CloudTrail to be en
 
 ### Step 5B: Set up S3 event to trigger StartExecution Lambda function
 
-The Lambda function now knows what state machine we want it to run. Now need to set up the event that will, in turn, trigger the Lambda function. Since we want it to be launched automatically whenever a new object is uploaded to the landing bucket, we need the Lambda funtion to be triggered by an S3 event.
+The Lambda function now knows what state machine we want it to run. Now we need to set up the event that will, in turn, trigger the Lambda function. Since we want it to be launched automatically whenever a new object is uploaded to the landing bucket, we need the Lambda funtion to be triggered by an S3 event.
 
 1. Go to the S3 management console and select the landing bucket:
 
