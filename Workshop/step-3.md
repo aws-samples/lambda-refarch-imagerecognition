@@ -1,6 +1,6 @@
 ## Step 3: Add parallel processing to the workflow
 
-After extracting and checking the metadata, we are now ready to add a few more steps to our state machine: thumb-nailing, image recognition and persisting/indexing the metadata. Thumb-nailing and image recognition does not depend on each other and can happen in parallel, and we can use a [parallel state] (https://docs.aws.amazon.com/step-functions/latest/dg/amazon-states-language-parallel-state.html) in Step Functions.
+After extracting and checking the metadata, we are now ready to add a few more steps to our state machine: thumb-nailing, image recognition and persisting/indexing the metadata. Thumb-nailing and image recognition does not depend on each other and can happen in parallel, and we can use a [parallel state](https://docs.aws.amazon.com/step-functions/latest/dg/amazon-states-language-parallel-state.html) in Step Functions.
 
 <img src="images/3-state-machine-parallel.png" width="60%">
 
