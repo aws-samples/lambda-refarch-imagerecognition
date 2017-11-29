@@ -17,7 +17,6 @@ To help you understand what resources are set up in this stage, refer to the dia
 Region| Code | Launch
 ------|------|-------
 EU (Ireland) | <span style="font-family:'Courier';">eu-west-1</span> | [![Launch Step 0A in eu-west-1](images/cfn-launch-stack.png)](https://console.aws.amazon.com/cloudformation/home?region=eu-west-1#/stacks/new?stackName=sfn-workshop-setup&templateURL=https://s3-eu-west-1.amazonaws.com/sfn-image-workshop-eu-west-1/cloudformation/step0-sam.yaml)
-US East (N. Virginia) | <span style="font-family:'Courier';">us-east-1</span> | [![Launch Step 0A in us-east-1](images/cfn-launch-stack.png)](https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/new?stackName=sfn-workshop-setup&templateURL=https://s3.amazonaws.com/sfn-image-workshop-us-east-1/cloudformation/step0-sam.yaml)
 US West (Oregon) | <span style="font-family:'Courier';">us-west-2</span> | [![Launch Step 0A in us-west-2](images/cfn-launch-stack.png)](https://console.aws.amazon.com/cloudformation/home?region=us-west-2#/stacks/new?stackName=sfn-workshop-setup&templateURL=https://s3-us-west-2.amazonaws.com/sfn-image-workshop-us-west-2/cloudformation/step0-sam.yaml)
 
 <details>
