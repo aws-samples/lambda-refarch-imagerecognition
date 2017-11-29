@@ -13,7 +13,6 @@ In this section, you will use a cloudformation template to package and deploy th
 Region| Code | Launch
 ------|------|-------
 EU (Ireland) | <span style="font-family:'Courier';">eu-west-1</span> | [![Launch Step 0B in eu-west-1](images/cfn-launch-stack.png)](https://console.aws.amazon.com/cloudformation/home?region=eu-west-1#/stacks/new?stackName=sfn-workshop-setup-webapp&templateURL=https://s3-eu-west-1.amazonaws.com/sfn-image-workshop-eu-west-1/cloudformation/step0-webapp.yaml)
-US East (N. Virginia) | <span style="font-family:'Courier';">us-east-1</span> | [![Launch Step 0B in us-east-1](images/cfn-launch-stack.png)](https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/new?stackName=sfn-workshop-setup-webapp&templateURL=https://s3.amazonaws.com/sfn-image-workshop-us-east-1/cloudformation/step0-webapp.yaml)
 US West (Oregon) | <span style="font-family:'Courier';">us-west-2</span> | [![Launch Step 0B in us-west-2](images/cfn-launch-stack.png)](https://console.aws.amazon.com/cloudformation/home?region=us-west-2#/stacks/new?stackName=sfn-workshop-setup-webapp&templateURL=https://s3-us-west-2.amazonaws.com/sfn-image-workshop-us-west-2/cloudformation/step0-webapp.yaml)
 
 #### CloudFormation launch instructions
