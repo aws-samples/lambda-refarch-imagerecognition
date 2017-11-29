@@ -9,7 +9,7 @@ In this section, you will use a cloudformation template to provision the AWS Lam
 To help you understand what resources are set up in this stage, refer to the diagram below. In this workshop, you will build a Step Functions state machine (greyed out in the middle) to orchestrate the lambda functions that does the processing work:
 <br/>
 
-<img src="images/0-resource-setup.png" width="90%">
+<img src="images/0-resource-setup.png" width="65%" height="65%">
 
 <br/>
 <br/>
