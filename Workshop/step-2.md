@@ -47,19 +47,19 @@ Consider in our scenario we only support JPEG and PNG formats. The image analysi
 	Add a **Catch** block to the **ExtractImageMetadata** step:
 	
 	<pre>
-		"ExtractImageMetadata": {
-			"Type": "Task",
-			"Resource": "REPLACE_WITH_YOUR_LAMBDA_ARN",<b>
-			"Catch": [{
-				"ErrorEquals": [
-					"ImageIdentifyError"
-				],
-				"ResultPath": "$.error",
-				"Next": "NotSupportedImageType"
-			}],</b>
-			"ResultPath": "$.extractedMetadata",
-      	   "End": true
-		}
+	    "ExtractImageMetadata": {
+	      "Type": "Task",
+	      "Resource": "REPLACE_WITH_YOUR_LAMBDA_ARN",<b>
+	      "Catch": [{
+	        "ErrorEquals": [
+	          "ImageIdentifyError"
+	        ],
+	        "ResultPath": "$.error",
+	        "Next": "NotSupportedImageType"
+	      }],</b>
+	      "ResultPath": "$.extractedMetadata",
+	       "End": true
+	    }
 	</pre>
 
 	> See this [blog post](https://aws.amazon.com/blogs/compute/automating-aws-lambda-function-error-handling-with-aws-step-functions/) on how to define custom error codes in Lambda functions in different languages. 
@@ -69,22 +69,22 @@ Consider in our scenario we only support JPEG and PNG formats. The image analysi
 	Add a **Choice** state after the **NotSupportedImageType** fail state: 
 
 	```
-		"ImageTypeCheck": {
-			"Type": "Choice",
-			"Choices": [{
-				"Or": [{
-						"Variable": "$.extractedMetadata.format",
-						"StringEquals": "JPEG"
-					},
-					{
-						"Variable": "$.extractedMetadata.format",
-						"StringEquals": "PNG"
-					}
-				],
-				"Next": "Parallel"
-			}],
-			"Default": "NotSupportedImageType"
-	   },
+	  "ImageTypeCheck": {
+	      "Type": "Choice",
+	      "Choices": [{
+	        "Or": [{
+	            "Variable": "$.extractedMetadata.format",
+	            "StringEquals": "JPEG"
+	          },
+	          {
+	            "Variable": "$.extractedMetadata.format",
+	            "StringEquals": "PNG"
+	          }
+	        ],
+	        "Next": "Parallel"
+	      }],
+	      "Default": "NotSupportedImageType"
+	  },
 	```
 	
 	Also, because the **Choice** state should follow the **ExtractImageMetadata** state, update the first state and replace the `"End": true` with a pointer to the choice state as next step: `"Next": "ImageTypeCheck"`:
