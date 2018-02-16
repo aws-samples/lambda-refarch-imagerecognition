@@ -110,15 +110,15 @@ Consider in our scenario we only support JPEG and PNG formats. The image analysi
 	
 1. The Choice state must not be an end state in a Step Functions state machine. Therefore, we need to have a state following the choice state. For now, create a placeholder **Pass** state that will be replaced by a parallel processing step: 
 	
-	```
-		"Parallel": {
-			"Type": "Pass",
-			"Result": {
-				"message": "This is a placeholder we will replace it with a Parallel state soon"
-			},
-			"End": true
-		}
-	```
+	```javascript
+	    "Parallel": {
+	      "Type": "Pass",
+	      "Result": {
+	        "message": "This is a placeholder we will replace it with a Parallel state soon"
+	      },
+	      "End": true
+	    }
+    ```
 	
 
 ### Step 2B: Update the AWS Step Functions state machine
