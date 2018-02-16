@@ -90,18 +90,20 @@ Consider in our scenario we only support JPEG and PNG formats. The image analysi
 	Also, because the **Choice** state should follow the **ExtractImageMetadata** state, update the first state and replace the `"End": true` with a pointer to the choice state as next step: `"Next": "ImageTypeCheck"`:
 
 	<pre>
-		"ExtractImageMetadata": {
-			"Type": "Task",
-			"Resource": "REPLACE_WITH_YOUR_LAMBDA_ARN",
-			"Catch": [{
-				"ErrorEquals": [
-					"ImageIdentifyError"
-				],
-				"ResultPath": "$.error",
-				"Next": "NotSupportedImageType"
-			}],
-			"ResultPath": "$.extractedMetadata",
-      	    <b>"Next": "ImageTypeCheck"</b>
+		"ExtractImageMetadata":{  
+		   "Type":"Task",
+		   "Resource":"REPLACE_WITH_YOUR_LAMBDA_ARN",
+		   "Catch":[  
+		      {  
+		         "ErrorEquals":[  
+		            "ImageIdentifyError"
+		         ],
+		         "ResultPath":"$.error",
+		         "Next":"NotSupportedImageType"
+		      }
+		   ],
+		   "ResultPath":"$.extractedMetadata",
+		   <b>"Next":"ImageTypeCheck"</b>
 		}
 	</pre>
 				
