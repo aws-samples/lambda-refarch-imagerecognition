@@ -108,7 +108,7 @@ Consider in our scenario we only support JPEG and PNG formats. The image analysi
 
 	
 	
-1. The Choice state must not be an end state in a Step Functions state machine. Therefore, we need to have a state following the choice state. For now, create a placeholder **Pass** state that will be replaced by a parallel processing step: 
+1. The Choice state must not be an end state in a Step Functions state machine. Therefore, we need to have a state following the choice state. For now, create a placeholder **Pass** state that will be replaced by a parallel processing step (Note we already have a `Next` pointer to this state from the **ImageTypeCheck** state): 
 	
 	```javascript
 	    "Parallel": {
@@ -120,6 +120,8 @@ Consider in our scenario we only support JPEG and PNG formats. The image analysi
 	    }
     ```
 	
+1. Check your JSON is properly formatted by leveraging a JSON validator and formatter like [this one](https://jsonformatter.curiousconcept.com/)
+
 
 ### Step 2B: Update the AWS Step Functions state machine
 
@@ -199,52 +201,57 @@ If you had issues along the way and your state machine does not work as expected
 <summary><strong> Expand to see JSON definition</strong></summary><p>
 
 ```JSON
-{
-	"StartAt": "ExtractImageMetadata",
-	"Comment": "Image Processing State Machine - step 2 final",
-	"States": {
-		"ExtractImageMetadata": {
-			"Type": "Task",
-			"Resource": "arn:aws:lambda:us-west-2:012345678901:function:sfn-workshop-setup-ExtractMetadata",
-			"Catch": [{
-				"ErrorEquals": [
-					"ImageIdentifyError"
-				],
-				"ResultPath": "$.error",
-				"Next": "NotSupportedImageType"
-			}],
-			"ResultPath": "$.extractedMetadata",
-			"Next": "ImageTypeCheck"
-		},
-		"ImageTypeCheck": {
-			"Type": "Choice",
-			"Choices": [{
-				"Or": [{
-						"Variable": "$.extractedMetadata.format",
-						"StringEquals": "JPEG"
-					},
-					{
-						"Variable": "$.extractedMetadata.format",
-						"StringEquals": "PNG"
-					}
-				],
-				"Next": "Parallel"
-			}],
-			"Default": "NotSupportedImageType"
-		},
-		"NotSupportedImageType": {
-			"Type": "Fail",
-			"Cause": "Image type not supported!",
-			"Error": "FileTypeNotSupported"
-		},
-		"Parallel": {
-			"Type": "Pass",
-			"Result": {
-				"message": "This is a placeholder we will replace it with a Parallel state soon"
-			},
-			"End": true
-		},
-	}
+{  
+   "StartAt":"ExtractImageMetadata",
+   "Comment":"Image Processing State Machine - step 2 final",
+   "States":{  
+      "ExtractImageMetadata":{  
+         "Type":"Task",
+         "Resource":"arn:aws:lambda:us-west-2:012345678901:function:sfn-workshop-setup-ExtractMetadata",
+         "Catch":[  
+            {  
+               "ErrorEquals":[  
+                  "ImageIdentifyError"
+               ],
+               "ResultPath":"$.error",
+               "Next":"NotSupportedImageType"
+            }
+         ],
+         "ResultPath":"$.extractedMetadata",
+         "Next":"ImageTypeCheck"
+      },
+      "NotSupportedImageType":{  
+         "Type":"Fail",
+         "Cause":"Image type not supported!",
+         "Error":"FileTypeNotSupported"
+      },
+      "ImageTypeCheck":{  
+         "Type":"Choice",
+         "Choices":[  
+            {  
+               "Or":[  
+                  {  
+                     "Variable":"$.extractedMetadata.format",
+                     "StringEquals":"JPEG"
+                  },
+                  {  
+                     "Variable":"$.extractedMetadata.format",
+                     "StringEquals":"PNG"
+                  }
+               ],
+               "Next":"Parallel"
+            }
+         ],
+         "Default":"NotSupportedImageType"
+      },
+      "Parallel":{  
+         "Type":"Pass",
+         "Result":{  
+            "message":"This is a placeholder we will replace it with a Parallel state soon"
+         },
+         "End":true
+      }
+   }
 }
 ```
 </details>
