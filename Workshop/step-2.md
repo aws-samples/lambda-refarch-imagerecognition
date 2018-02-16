@@ -12,90 +12,93 @@ In this step, we will add input validation to the state machine by leveraging bo
 
 Consider in our scenario we only support JPEG and PNG formats. The image analysis Lambda function can detect image formats, so we can use a Choice State after the first step to evaluate the output from the metadata extraction and make branching decisions. For other file types the image processing library does not even have an analyzer for, an exception is thrown from the Lambda function. So here we can combine using Choice State and Error Try/Catch. 
 
-1. Go back to the [Step Easy](http://step-easy.s3-website-us-west-2.amazonaws.com/) tool. Because in Step 1D we modified the JSON by adding the **ResultPath** parameter, you can use **Import** button in Step Easy to load the latest definition.
-	<details>
-	<summary><strong> Expand to see screenshot</strong></summary><p>
-	 
-	<img src="images/2a-reimport-step-easy.png" width="90%">
-	</details>
-
-1. The next step we are going to add to our state machine is the fail state, *NotSupportedImageType*. This step will terminate and mark failure for executions that cannot proceed because the image type is not supported.
-
-	<details>
-	<summary><strong> Expand to see detailed instructions</strong></summary><p>
- 
-	a. Drag and drop a **Fail** step into the canvas 
+1. Go back to the text editor that you had the state machine definition. It should look like this:
 	
-	<img src="images/2a-step-easy-fail-notsupportedimage.png" width="50%">
+	```javascript
+	{
+	  "StartAt": "ExtractImageMetadata",
+	  "Comment": "Imgage Processing State Machine",
+	  "States": {
+	    "ExtractImageMetadata": {
+	      "Type": "Task",
+	      "Resource": "REPLACE_WITH_YOUR_LAMBDA_ARN",
+          "ResultPath": "$.extractedMetadata",
+	      "End": true
+	    }
+	  }
+	}
+	```
 
-	b. Edit the fail state by clicking on the pencil icon. Set the state name, cause and error fields to the values specified on the image below
+1. The next step we are going to add to our state machine is the fail state, **NotSupportedImageType**. This step will terminate and mark failure for executions that cannot proceed because the image type is not supported.
 	
-	<img src="images/2a-step-easy-fail-notsupportedimagedetails.png" width="50%">
+	Add a **Fail** state following the **ExtractImageMetadata** state in the state machine definition:
 
-	</details>
+	```
+		,
+	    "NotSupportedImageType": {
+	      "Type": "Fail",
+	      "Cause": "Image type not supported!",
+	      "Error": "FileTypeNotSupported"
+	    },
+	```
 
+1. Next, we add an error try/catch to the **ExtractImageMetadata** step pointing to the fail state. The lambda function is written so that when it encounters a file type (e.g. txt) that it can't parse as an image, it will throw an error of type `ImageIdentifyError`. Using the Error try/catch functionality of Step Functions, we can configure the state machine to transition to **NotSupportedImageType** Fail state when this error happens. 
 
-1. Next, we add an error try/catch to the *ExtractImageMetadata* step pointing to the fail state. The lambda function is written so that when it encounters a file type (e.g. txt) that it can't parse as an image, it will throw an error of type `ImageIdentifyError`. Using the Error try/catch functionality of Step Functions, we can configure the state machine to transition to *NotSupportedImageType* Fail state.
+	Add a **Catch** block to the **ExtractImageMetadata** step:
+	
+	<pre>
+		"ExtractImageMetadata": {
+			"Type": "Task",
+			"Resource": "REPLACE_WITH_YOUR_LAMBDA_ARN",<b>
+			"Catch": [{
+				"ErrorEquals": [
+					"ImageIdentifyError"
+				],
+				"ResultPath": "$.error",
+				"Next": "NotSupportedImageType"
+			}],</b>
+			"ResultPath": "$.extractedMetadata",
+      	   "End": true
+		}
+	</pre>
 
 	> See this [blog post](https://aws.amazon.com/blogs/compute/automating-aws-lambda-function-error-handling-with-aws-step-functions/) on how to define custom error codes in Lambda functions in different languages. 
-	
-	<details>
-	<summary><strong> Expand to see detailed instructions </strong></summary><p>
-	
-	 Click on **Catchers** link on the bottom right corner of the *ExtractImageMetadata* step box. Then click **Add Catcher** and set the Error and Next State fields as referred below.
-	
-	<img src="images/2a-step-easy-fail-notsupportedimagecatchers.png" width="50%">
 	 
-	</details>
-	
-  
 1. To ensure only JPEG and PNG images are allowed to be further processed, we create a Choice state that directs to the *NotSupportedImageType* Fail state when the image format is not JPEG or PNG. 
 
+	Add a **Choice** state after the **NotSupportedImageType** fail state: 
+
+	```
+		"ImageTypeCheck": {
+			"Type": "Choice",
+			"Choices": [{
+				"Or": [{
+						"Variable": "$.extractedMetadata.format",
+						"StringEquals": "JPEG"
+					},
+					{
+						"Variable": "$.extractedMetadata.format",
+						"StringEquals": "PNG"
+					}
+				],
+				"Next": "Parallel"
+			}],
+			"Default": "NotSupportedImageType"
+	   },
+	```
 	
-	<details>
-	<summary><strong> Expand to see detailed instructions </strong></summary><p>
+1. The Choice state must not be an end state in a Step Functions state machine. Therefore, we need to have a state following the choice state. For now, create a placeholder **Pass** state that will be replaced by a parallel processing step: 
 	
-	 a. Drag and drop the **Choice** into the canvas.
-	 
-	 b. Edit the the **Choice** by clicking on the pencil icon. Add the State name and Default behavior (the state the choice will transition to by default)
-
-	<img src="images/2a-step-easy-choice-ImageTypeCheckdetails.png" width="50%">
-
-	This default behavior will route all those images that does not meet the supported image types to the *NotSupportedImageType* fail state.
-
-	c. Click on the "+" icon to add a condition. Now click on the pencil icon show in the picture below to configure the condition.
-
-	<img src="images/2a-step-easy-choice-ImageTypeCheckconfigurecondition.png" width="50%">
-
-	d. Click the **Add logical operator** link at the top. Select *Or* from the drop down list.
+	```
+		"Parallel": {
+			"Type": "Pass",
+			"Result": {
+				"message": "This is a placeholder we will replace it with a Parallel state soon"
+			},
+			"End": true
+		}
+	```
 	
-	e. Click **Add condition**. Set Variable to `$.extractedMetadata.format` Comparison to `StringEquals` and Value to JPEG
-	
-	f. Click **Add condition** again. Set Variable to `$.extractedMetadata.format` Comparison to `StringEquals` and Value to PNG.
-	
-	g. Compare your settings with the following image
-
-	<img src="images/2a-step-easy-choice-ImageTypeCheckChoicedetails.png" width="60%">
-
-	h. Close the pop-up. Connect the *ExtractImageMetadata* state with the *ImageTypeCheck* choice state
-	
-	 
-	i. Drag and drop a **Pass State** into the canvas. This state will be modified later with a **Parallel** state in subsequent steps of this workshop.
-	
-	j. Edit it with the details showed on the image below:
-
-	<img src="images/2a-step-easy-Paralelldetails.png" width="50%">
-
-	k. Connect the *ImageTypeCheck* choice state to the *Parallel* state.  
-	At the end of this last step, the canvas should look like this one:
-
-	<img src="images/2a-step-easy-canvas.png" width="90%">
-	</details>
-
-
-1. Click **Export** in the Step Easy tool to get the output JSON. 
-
-
 
 ### Step 2B: Update the AWS Step Functions state machine
 
@@ -103,7 +106,7 @@ Consider in our scenario we only support JPEG and PNG formats. The image analysi
 
 1. Select the `ImageProcessing` state machine. Click on **Edit state machine**
 
-1. Scroll down and paste in the JSON generated from Step Easy tool in Step 2A
+1. Scroll down and paste in the JSON generated from Step 2A
 
 1. You can click on the &#x21ba; icon next to **Visual Workflow** to refresh the visual representation of the state machine:
 
@@ -208,6 +211,11 @@ If you had issues along the way and your state machine does not work as expected
 			}],
 			"Default": "NotSupportedImageType"
 		},
+		"NotSupportedImageType": {
+			"Type": "Fail",
+			"Cause": "Image type not supported!",
+			"Error": "FileTypeNotSupported"
+		},
 		"Parallel": {
 			"Type": "Pass",
 			"Result": {
@@ -215,11 +223,6 @@ If you had issues along the way and your state machine does not work as expected
 			},
 			"End": true
 		},
-		"NotSupportedImageType": {
-			"Type": "Fail",
-			"Cause": "Image type not supported!",
-			"Error": "FileTypeNotSupported"
-		}
 	}
 }
 ```

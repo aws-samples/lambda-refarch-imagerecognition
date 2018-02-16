@@ -22,25 +22,30 @@ When this state machine is launched, the AWS Step Functions interpreter begins e
 
 When you are constructing a state machine definition by authoring JSON directly, make sure to use [statelint](https://github.com/awslabs/statelint) tool to validate your JSON before creating the state machine. 
 
-Another option is to use a visual editor tool to generate the JSON, such as [Step Easy](http://step-easy.s3-website-us-west-2.amazonaws.com/)
-
-<img src="images/step-easy-intro.png" width="90%">
-
 ### Step 1A: Add AWS Lambda Task state 
 
-1. Open the [Step Easy](http://step-easy.s3-website-us-west-2.amazonaws.com/) tool and name the state machine `Image Processing State Machine`
-	<img src="images/1a-step-easy-name.png" width="90%">
+1. In a text editor of your choice, start a state machine definition in JSON:
 
-1. Drag an AWS Lamdba Task into the canvas and click the edit button. Name the state `ExtractImageMetadata` and paste in the ARN of the lambda function that does metadata extraction 
+	```javascript
+	{
+	  "StartAt": "ExtractImageMetadata",
+	  "Comment": "Imgage Processing State Machine",
+	  "States": {
+	    "ExtractImageMetadata": {
+	      "Type": "Task",
+	      "Resource": "REPLACE_WITH_YOUR_LAMBDA_ARN",
+	      "End": true
+	    }
+	  }
+	}
+	```	
+
+1. In the JSON, replace the `REPLACE_WITH_YOUR_LAMBDA_ARN` string with the ARN of the metadata extraction AWS Lambda function
 	> To find the ARN of the metadata extraction AWS Lambda function, in the AWS CloudFormation Console, go to the **sfn-workshop-setup** stack, look in the Outputs section for **ExtractMetadataLambda**
 	> 
 	> It should look something like `arn:aws:lambda:us-west-2:<YOUR-ACCOUNT-ID>:function:sfn-workshop-setup-ExtractMetadata`
 
-	<img src="images/1a-step-lambda-details.png" width="90%">
 
-1. Draw a connector between the state machine start point and the Lambda Task on the canvas
-
-1. Click **Export** to get the generated JSON of the state machine definition
 
 ### Step 1B: Create an initial AWS Step Functions state machine
 
@@ -51,7 +56,7 @@ Another option is to use a visual editor tool to generate the JSON, such as [Ste
 1. Type `ImageProcessing` for the state machine name
 
 1. Scroll down until you see the section **Step3: Review your code and visual workflow**.  
-Paste in the JSON exported from Step Easy tool in Step 1A
+Paste in the JSON exported from Step 1A
 
 1. You can click on the &#x21ba; icon next to **Visual Workflow** to refresh the visual representation of the state machine:
 
@@ -137,6 +142,9 @@ Now, add a `$.extractedMetadata` as a result path for the step we've added to th
 	  }
 	}
 	```
+	
+1. Also, copy/paste the new definition to your text editor for further work later
+
 1. Click **Update and start execution**
 
 1. Enter the same JSON input you used on Step 1C-2 (you can find it by going to the execution history of the `ImageProcessing` and copy the JSON from the details>Input plane) and click **Start Execution**
