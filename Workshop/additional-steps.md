@@ -226,4 +226,3 @@ Did all images copied into your bucket get processed by Step Functions? You can 
 1. Go to the DynamoDB table (look for table name starting with ```sfn-workshop-resources-ImageMetadataDDBTable-```) and look for entries with **errReason** field (or with **executionArn** field equals **ERR**):
 
 <img src="images/dynamo-screenshot.png" width="80%">
-](
