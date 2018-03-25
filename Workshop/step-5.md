@@ -19,10 +19,9 @@ The first step requires some extra configuration as it needs CloudTrail to be en
 
 1. On the Dashboard locate your state machine. If you followed instructions on prior steps it should be *ImageProcessing*
 
-1. Click on the state machine to go to the detail page. You can locate the ARN (Amazon Resource Name) of the state machine at the end of the URL that should look like:
-	`arn:aws:states:<AWS_REGION>:<AWS_ACCOUNT_ID>:stateMachine:ImageProcessing`
+1. On the upper right corner of the page, find and copy the **State Machine Arn**: 	 
 
-	<img src="images/5a-state-machine-arn-new.png" width="90%">
+	<img src="images/5a-state-machine-arn-newer.png" width="90%">
 
 1. Navigate to the [AWS Lambda management console](https://console.aws.amazon.com/lambda/home) and find the Lambda function with a name that ends with `StartExecution`. That is the one that triggers the state machine. Select it by clicking on the link on its name.
 

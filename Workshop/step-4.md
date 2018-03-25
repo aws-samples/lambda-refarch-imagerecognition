@@ -74,7 +74,7 @@ Take a look at this documentation if you need help with the syntax:
 ```JSON
 {
   "StartAt": "ExtractImageMetadata",
-  "Comment": "New State Machine - Created with StepEasy",
+  "Comment": "Image Processing State Machine",
   "States": {
     "ExtractImageMetadata": {
       "Type": "Task",
@@ -84,7 +84,7 @@ Take a look at this documentation if you need help with the syntax:
           "ErrorEquals": [
             "ImageIdentifyError"
           ],
-          "ResultPath": "",
+          "ResultPath": "$.error",
           "Next": "NotSupportedImageType"
         }
       ],
@@ -120,7 +120,6 @@ Take a look at this documentation if you need help with the syntax:
       "Branches": [
         {
           "StartAt": "DetectLabelsRekognition",
-          "Comment": " - Created with StepEasy",
           "States": {
             "DetectLabelsRekognition": {
               "Type": "Task",
@@ -131,7 +130,6 @@ Take a look at this documentation if you need help with the syntax:
         },
         {
           "StartAt": "Thumbnail",
-          "Comment": " - Created with StepEasy",
           "States": {
             "Thumbnail": {
               "Type": "Task",

@@ -14,7 +14,7 @@ Consider in our scenario we only support JPEG and PNG formats. The image analysi
 
 1. Go back to the text editor that you had the state machine definition. It should look like this:
 	
-	```javascript
+	```JSON
 	{
 	  "StartAt": "ExtractImageMetadata",
 	  "Comment": "Imgage Processing State Machine",
@@ -33,7 +33,7 @@ Consider in our scenario we only support JPEG and PNG formats. The image analysi
 	
 	Add a **Fail** state following the **ExtractImageMetadata** state in the state machine definition:
 
-	```
+	```JSON
 		,
 	    "NotSupportedImageType": {
 	      "Type": "Fail",
@@ -68,7 +68,7 @@ Consider in our scenario we only support JPEG and PNG formats. The image analysi
 
 	Add a **Choice** state after the **NotSupportedImageType** fail state: 
 
-	```
+	```JSON
 	  "ImageTypeCheck": {
 	      "Type": "Choice",
 	      "Choices": [{
@@ -112,7 +112,7 @@ Consider in our scenario we only support JPEG and PNG formats. The image analysi
 	
 1. The Choice state must not be an end state in a Step Functions state machine. Therefore, we need to have a state following the choice state. For now, create a placeholder **Pass** state that will be replaced by a parallel processing step (Note we already have a `Next` pointer to this state from the **ImageTypeCheck** state): 
 	
-	```javascript
+	``````JSON
 	    "Parallel": {
 	      "Type": "Pass",
 	      "Result": {
