@@ -29,7 +29,7 @@ When you are constructing a state machine definition by authoring JSON directly,
 	```javascript
 	{
 	  "StartAt": "ExtractImageMetadata",
-	  "Comment": "Imgage Processing State Machine",
+	  "Comment": "Image Processing State Machine",
 	  "States": {
 	    "ExtractImageMetadata": {
 	      "Type": "Task",
@@ -55,6 +55,10 @@ When you are constructing a state machine definition by authoring JSON directly,
 
 1. Type `ImageProcessing` for the state machine name
 
+1. For **IAM role for your state machine executions**, pick **Create a role for me** and click the checkmark to acknowledge the IAM role will be created:
+
+	![pick IAM role for state machine](./images/1-auto-IAM-role.png)
+
 1. Scroll down until you see the section **Step3: Review your code and visual workflow**.  
 Paste in the JSON exported from Step 1A
 
@@ -64,9 +68,8 @@ Paste in the JSON exported from Step 1A
 
 1. Click **Create State Machine** to create the state machine.
 
-1. In the pop-up window, select the IAM role automatically generated for you (the name should look like `StatesExecutionRole-{region-name}`).
 
-	![pick IAM role for state machine](./images/1b-pick-state-role.png)
+	
 
 ### Step 1C: Test the state machine execution
 
