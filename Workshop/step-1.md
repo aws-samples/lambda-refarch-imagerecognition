@@ -55,12 +55,17 @@ When you are constructing a state machine definition by authoring JSON directly,
 
 1. Type `ImageProcessing` for the state machine name
 
-1. For **IAM role for your state machine executions**, pick **Create a role for me** and click the checkmark to acknowledge the IAM role will be created:
+1. For **IAM role for your state machine executions**, if you already have IAM roles created for Step Functions, select **I will use an existing role**, and select the IAM role that already exists in your account
+	
+	![select IAM role](./images/3-create-statemachine-select-role.png)
+
+	if you do not have any IAM roles created for Step Functions, you can pick **Create a role for me** and click the checkmark to acknowledge the IAM role will be created:
 
 	![pick IAM role for state machine](./images/1-auto-IAM-role.png)
+	
 
 1. Scroll down until you see the section **Step3: Review your code and visual workflow**.  
-Paste in the JSON exported from Step 1A
+	Paste in the JSON exported from Step 1A
 
 1. You can click on the &#x21ba; icon next to **Visual Workflow** to refresh the visual representation of the state machine:
 
@@ -69,7 +74,6 @@ Paste in the JSON exported from Step 1A
 1. Click **Create State Machine** to create the state machine.
 
 
-	
 
 ### Step 1C: Test the state machine execution
 
