@@ -133,7 +133,7 @@ Resources:
         Fn::GetAtt:
         - CustomResourceHelperRole
         - Arn
-      Runtime: nodejs4.3
+      Runtime: nodejs8.10
       Timeout: 200
     Type: AWS::Serverless::Function
   CustomResourceHelperRole:
@@ -186,7 +186,7 @@ Resources:
         Fn::GetAtt:
         - DescribeExecutionFunctionRole
         - Arn
-      Runtime: nodejs4.3
+      Runtime: nodejs8.10
       Timeout: 200
     Type: AWS::Serverless::Function
   DescribeExecutionFunctionRole:
@@ -233,7 +233,7 @@ Resources:
         Fn::GetAtt:
         - BackendProcessingLambdaRole
         - Arn
-      Runtime: nodejs4.3
+      Runtime: nodejs8.10
       Timeout: 200
     Type: AWS::Serverless::Function
   GenerateThumbnailFunction:
@@ -246,7 +246,7 @@ Resources:
         Fn::GetAtt:
         - BackendProcessingLambdaRole
         - Arn
-      Runtime: nodejs4.3
+      Runtime: nodejs8.10
       Timeout: 300
     Type: AWS::Serverless::Function
   ImageMetadataDDBTable:
@@ -295,7 +295,7 @@ Resources:
         Fn::GetAtt:
         - BackendProcessingLambdaRole
         - Arn
-      Runtime: nodejs4.3
+      Runtime: nodejs8.10
       Timeout: 60
     Type: AWS::Serverless::Function
   ImageProcStateMachine:
@@ -405,7 +405,7 @@ Resources:
         Fn::GetAtt:
         - BackendProcessingLambdaRole
         - Arn
-      Runtime: nodejs4.3
+      Runtime: nodejs8.10
       Timeout: 60
     Type: AWS::Serverless::Function
   S3EventTrigger:
@@ -466,7 +466,7 @@ Resources:
         Fn::GetAtt:
         - BackendProcessingLambdaRole
         - Arn
-      Runtime: nodejs4.3
+      Runtime: nodejs8.10
       Timeout: 60
     Type: AWS::Serverless::Function
   TestClientIAMRole:
@@ -545,7 +545,7 @@ Resources:
         Fn::GetAtt:
         - BackendProcessingLambdaRole
         - Arn
-      Runtime: nodejs4.3
+      Runtime: nodejs8.10
       Timeout: 60
     Type: AWS::Serverless::Function
 Transform: AWS::Serverless-2016-10-31

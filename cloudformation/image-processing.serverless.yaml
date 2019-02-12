@@ -189,7 +189,7 @@ Resources:
         Variables:
           IMAGE_METADATA_DDB_TABLE: !Ref ImageMetadataDDBTable
           STATE_MACHINE_ARN: !Ref ImageProcStateMachine
-      Runtime: nodejs4.3
+      Runtime: nodejs8.10
       Timeout: 60
     Type: AWS::Serverless::Function
 
@@ -206,7 +206,7 @@ Resources:
       Timeout: 200
       Role:
         !GetAtt BackendProcessingLambdaRole.Arn
-      Runtime: nodejs4.3
+      Runtime: nodejs8.10
     Type: AWS::Serverless::Function
 
   TransformMetadataFunction:
@@ -219,7 +219,7 @@ Resources:
       Timeout: 60
       Role:
         !GetAtt BackendProcessingLambdaRole.Arn
-      Runtime: nodejs4.3
+      Runtime: nodejs8.10
     Type: AWS::Serverless::Function
 
   StoreImageMetadataFunction:
@@ -232,7 +232,7 @@ Resources:
       Timeout: 60
       Role:
         !GetAtt BackendProcessingLambdaRole.Arn
-      Runtime: nodejs4.3
+      Runtime: nodejs8.10
       Environment:
         Variables:
           IMAGE_METADATA_DDB_TABLE: !Ref ImageMetadataDDBTable
@@ -246,7 +246,7 @@ Resources:
       Timeout: 60
       Role:
         !GetAtt BackendProcessingLambdaRole.Arn
-      Runtime: nodejs4.3
+      Runtime: nodejs8.10
       CodeUri:
         ../lambda-functions/rekognition
     Type: AWS::Serverless::Function
@@ -261,7 +261,7 @@ Resources:
       Timeout: 300
       Role:
         !GetAtt BackendProcessingLambdaRole.Arn
-      Runtime: nodejs4.3
+      Runtime: nodejs8.10
     Type: AWS::Serverless::Function
 
 # ---------------------------------------------------------------------------------------------------------------------
@@ -325,7 +325,7 @@ Resources:
         !GetAtt CustomResourceHelperRole.Arn
       CodeUri:
         ../lambda-functions/create-s3-event-trigger-helper
-      Runtime: nodejs4.3
+      Runtime: nodejs8.10
     Type: AWS::Serverless::Function
 
   S3EventTrigger:
@@ -443,7 +443,7 @@ Resources:
         !GetAtt DescribeExecutionFunctionRole.Arn
       CodeUri:
         ../lambda-functions/state-machine-describe-execution
-      Runtime: nodejs4.3
+      Runtime: nodejs8.10
     Type: AWS::Serverless::Function
 
   TestClientIdentityPool:
