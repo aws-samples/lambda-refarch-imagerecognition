@@ -55,29 +55,37 @@ When you are constructing a state machine definition by authoring JSON directly,
 
 1. Type `ImageProcessing` for the state machine name
 
-1. For **IAM role for your state machine executions**, if you already have IAM roles created for Step Functions, select **I will use an existing role**, and select the IAM role that already exists in your account
-	
-	![select IAM role](./images/3-create-statemachine-select-role.png)
+1. In **State machine definition**, 	paste in the JSON exported from Step 1A
 
-	if you do not have any IAM roles created for Step Functions, you can pick **Create a role for me** and click the checkmark to acknowledge the IAM role will be created:
-
-	![pick IAM role for state machine](./images/1-auto-IAM-role.png)
-	
-
-1. Scroll down until you see the section **Step3: Review your code and visual workflow**.  
-	Paste in the JSON exported from Step 1A
-
-1. You can click on the &#x21ba; icon next to **Visual Workflow** to refresh the visual representation of the state machine:
+  You can click on the &#x21ba; icon on the right hand pane to refresh the visual representation of the state machine:
 
 	<img src="images/1b-step-console-preview.png" width="90%">
 
-1. Click **Create State Machine** to create the state machine.
+1. Click **Next** to configure additional settings in the next page.
 
+1. For **IAM role for executions**, if you already have IAM roles created for Step Functions, select **I will use an existing role**, and select the IAM role that already exists in your account
+	
+	
+	<details>
+	<summary><strong> Expand for screenshot </strong></summary><p>
+
+	![select IAM role](./images/3-create-statemachine-select-role.png)
+	</details>
+
+
+	If you do not have any IAM roles created for Step Functions, you can pick **Create an IAM role for me** and give it a name, for example, `StepFunctionExecutionRoleForImageProcessing`:
+	
+	<details>
+	<summary><strong> Expand for screenshot </strong></summary><p>
+	![create IAM role for state machine](./images/1-auto-IAM-role.png)
+	</details>
+	
+1. Click **Create state machine** to finish the creation
 
 
 ### Step 1C: Test the state machine execution
 
-1. Click the **New execution** button to start a new execution.
+1. Click the **Start execution** button to start a new execution.
 
 1. Here you specify the input data passed into the AWS Step Functions state machine to process.
 
@@ -94,7 +102,7 @@ When you are constructing a state machine definition by authoring JSON directly,
 
 	> The `s3Bucket` and `s3Key` fields tell the image processing workflow the Amazon S3 bucket and key the picture is stored at.
 	   
-	For `s3Bucket` field, look in the **Output** section of the **sfn-workshop-setup** stack for `PhotoRepoS3Bucket`.  
+	For `s3Bucket` field, look in the **Output** section of the **sfn-workshop-setup** CloudFormation stack for `PhotoRepoS3Bucket`.  
 	
 	We recommend you save the test input JSON in a text editor (Sublime, Notepad++, etc.) as we will reuse it in later steps.
 	
@@ -152,12 +160,10 @@ Now, add a `$.extractedMetadata` as a result path for the step we've added to th
 	
 1. Also, copy/paste the new definition to your text editor for further work later
 
-1. Click **Update and start execution**
+1. Click **Save** and click **Save anyway** if the warning pops up. 
 
 1. Enter the same JSON input you used on Step 1C-2 (you can find it by going to the execution history of the `ImageProcessing` and copy the JSON from the details>Input plane) and click **Start Execution**
 		
-	<img src="images/1d-updated-new-execution.png" width="90%">
-
 </details>
 
 Verify after the change, for new executions the **Output** contains the state input attributes plus an additional field `extractedMetadata` that contains the task ouput, effectively merging both the input and the output
