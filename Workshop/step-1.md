@@ -57,7 +57,7 @@ When you are constructing a state machine definition by authoring JSON directly,
 
 1. In **State machine definition**, 	paste in the JSON exported from Step 1A
 
-  You can click on the &#x21ba; icon on the right hand pane to refresh the visual representation of the state machine:
+	You can click on the &#x21ba; icon on the right hand pane to refresh the visual representation of the state machine:
 
 	<img src="images/1b-step-console-preview.png" width="90%">
 
