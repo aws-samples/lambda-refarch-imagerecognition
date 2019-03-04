@@ -168,6 +168,7 @@ Now, add a `$.extractedMetadata` as a result path for the step we've added to th
 		
 </details>
 
+
 Verify after the change, for new executions the **Output** contains the state input attributes plus an additional field `extractedMetadata` that contains the task ouput, effectively merging both the input and the output
 
 <img src="images/1d-output-w-resultpath.png" width="90%">

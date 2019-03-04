@@ -112,7 +112,7 @@ Consider in our scenario we only support JPEG and PNG formats. The image analysi
 	
 1. The Choice state must not be an end state in a Step Functions state machine. Therefore, we need to have a state following the choice state. For now, create a placeholder **Pass** state that will be replaced by a parallel processing step (Note we already have a `Next` pointer to this state from the **ImageTypeCheck** state): 
 	
-	``````JSON
+	```JSON
 	    "Parallel": {
 	      "Type": "Pass",
 	      "Result": {
