@@ -77,7 +77,9 @@ When you are constructing a state machine definition by authoring JSON directly,
 	
 	<details>
 	<summary><strong> Expand for screenshot </strong></summary><p>
+
 	![create IAM role for state machine](./images/1-auto-IAM-role.png)
+	
 	</details>
 	
 1. Click **Create state machine** to finish the creation
