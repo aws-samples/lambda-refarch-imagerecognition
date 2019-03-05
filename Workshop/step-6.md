@@ -44,7 +44,7 @@ Mumbai | <span style="font-family:'Courier';">ap-south-1</span> | [![Launch Step
 1. Go to the [AWS CodePipeline management console](http://console.aws.amazon.com/codepipeline/home). Click on the pipeline identified by `sfn-workshop-pipeline` and verify it finishes succesfully.  
 	<img alt="Pipeline Screenshot" src="./images/0b-code-pipeline.png" width="50%">
 
-1. Go to the [AWS CloudFormation management console](http://console.aws.amazon.com/cloudformation/home). With the stack `sfn-workshop-setup-webapp` selected click on the Outputs tab. The `WebsiteURL` key points at the link to access the **Media Sharing Web Application**
+1. Go to the [AWS CloudFormation management console](http://console.aws.amazon.com/cloudformation/home). With the stack `sfn-workshop-setup-webapp` selected click on the Outputs tab. The `WebsiteURL` key points at the link to access the **Image Sharing demo Web Application**
 
 	![CloudFormation Outputs Screenshot](./images/0b-cfn-outputs.png)
 
