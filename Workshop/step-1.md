@@ -65,13 +65,11 @@ When you are constructing a state machine definition by authoring JSON directly,
 
 1. For **IAM role for executions**, if you already have IAM roles created for Step Functions, select **I will use an existing role**, and select the IAM role that already exists in your account
 
-
 	<details>
 	<summary><strong> Expand for screenshot </strong></summary><p>
 
 	![select IAM role](./images/3-create-statemachine-select-role.png)
 	</details>
-
 
 	If you do not have any IAM roles created for Step Functions, you can pick **Create an IAM role for me** and give it a name, for example, `StepFunctionExecutionRoleForImageProcessing`:
 
@@ -106,12 +104,11 @@ When you are constructing a state machine definition by authoring JSON directly,
 
 	For `s3Bucket` field, look in the **Output** section of the **sfn-workshop-setup** CloudFormation stack for `PhotoRepoS3Bucket`.  
 
-  For `s3key` field, we already uploaded some test images to your bucket (under ```/tests```).  
+	For `s3key` field, we already uploaded some test images to your bucket (under ```/tests```).  
 
 	We recommend you save the test input JSON in a text editor (Sublime, Notepad++, etc.) as we will reuse it in later steps.
 
 	Click **Start Execution**
-
 
 	<img src="images/1c-start-new-execution.png" width="90%">
 
