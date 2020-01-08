@@ -26,18 +26,15 @@ Mumbai | <span style="font-family:'Courier';">ap-south-1</span> | [![Launch Step
 
 1. Click **Next** on the Select Template page.
 
-1. On the Specify Details page, leave all the defaults and click **Next**.
+1. On the ```Specify stack details``` page, leave all the defaults and click **Next**.
 
-1. On the Options page, also leave all the defaults and click **Next**.
+1. On the ```Configure stack options``` page, also leave all the defaults and click **Next**.
 
-1. On the Review page, check the boxes to acknowledge that CloudFormation will create IAM resources and click **Create Change Set**.
-	![Acknowledge IAM Screenshot](./images/0b-cfn-create-change-set.png)
+1. On the ```Review page```, check all the boxes to acknowledge that CloudFormation will create IAM resources and CAPABILITY_AUTO_EXPAND and click **Create Stack**.
 
+	![Acknowledge IAM Screenshot](./images/0a-cfn-create-change-set.png)
 
-1. Wait for the change set to finish computing changes and click **Execute**
-	![Execute Change Set Screenshot](./images/0b-cfn-execute-change-set.png)
-
-1. Wait for the `sfn-workshop-setup-webapp` stack to reach a status of `CREATE_COMPLETE`.
+1. Wait for the `sfn-workshop-setup-webapp` stack to reach a status of `CREATE_COMPLETE` (you might need to click the refresh button to see the stack being created).
 
 	The stack will take a minute of so to complete. As part ot that, it copies the web application sources over to the target bucket and that will trigger the delivery pipleline.
 
@@ -49,13 +46,12 @@ Mumbai | <span style="font-family:'Courier';">ap-south-1</span> | [![Launch Step
 	![CloudFormation Outputs Screenshot](./images/0b-cfn-outputs.png)
 
 1. Click on that link to navigate to the **Media Sharing Web Application**
+
 **Note: Make sure to use Chrome browser to open the web application.**
 
-	![Media Sharing Web Application Screenshot](./images/0b-webapp.png)
+![Media Sharing Web Application Screenshot](./images/0b-webapp.png)
 
 </p></details>
-
-
 
 ### Step 6B: Test the end-to-end workflow using the sample web app
 ##### Login
@@ -78,11 +74,10 @@ A sample set of extracted image metadata and recognized tags, along with the thu
 <img alt="Pipeline Screenshot" src="./images/web-app-screenshot.png" width="90%">
 
 
-### Next step: extra credits 
+### Next step: extra credits
 
-Now you have built a end-to-end image processing workflow using Step Functions, ready for some fun challenges? 
+Now you have built a end-to-end image processing workflow using Step Functions, ready for some fun challenges?
 
 See the [extra credits](./additional-steps.md) section
 
 If you are ready to clean up resources created for this workshop, see the [cleanup](./clean-up.md) instructions
-

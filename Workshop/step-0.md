@@ -27,26 +27,24 @@ Mumbai | <span style="font-family:'Courier';">ap-south-1</span> | [![Launch Step
 
 <details>
 <summary><strong> CloudFormation launch instructions (expand for details) </strong></summary><p>
- 
+
 1. Click the **Launch Stack** link above for the region of your choice.
 
 1. Click **Next** on the Select Template page.
 
-1. On the Specify Details page, leave all the defaults and click **Next**.
+1. On the ```Specify stack details``` page, leave all the defaults and click **Next**.
 
-1. On the Options page, also leave all the defaults and click **Next**.
+1. On the ```Configure stack options``` page, also leave all the defaults and click **Next**.
 
-1. On the Review page, check the boxes to acknowledge that CloudFormation will create IAM resources and click **Create Change Set**.
+1. On the ```Review page```, check all the boxes to acknowledge that CloudFormation will create IAM resources and CAPABILITY_AUTO_EXPAND and click **Create Stack**.
+
 	![Acknowledge IAM Screenshot](./images/0a-cfn-create-change-set.png)
 
-	This template creates a number of IAM roles to grant the Lambda fuctions proper permissions on the resources they have to deal with. In addition to that, the template uses the [AWS Serverless Transform](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/transform-aws-serverless.html) that leverages the [AWS Serverless Application Model](https://github.com/awslabs/serverless-application-model) - SAM - to simplify template authoring for serverless components.
-    
-1. Wait for the change set to finish computing changes and click **Execute**
-	![Execute Change Set Screenshot](./images/0a-cfn-execute-change-set.png)
+	This template creates a number of IAM roles to grant the Lambda fuctions proper permissions on the resources they have to deal with.
 
-1. Wait for the `sfn-workshop-setup` stack to reach a status of `CREATE_COMPLETE` (you might need to click the refresh button to see the stack being created). 
+1. Wait for the `sfn-workshop-setup` stack to reach a status of `CREATE_COMPLETE` (you might need to click the refresh button to see the stack being created).
 </details>
 
-	
+
 ### Next step
 You are now ready to move on to [Step 1](step-1.md)!
