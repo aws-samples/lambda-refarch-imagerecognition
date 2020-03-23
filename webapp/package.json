@@ -27,18 +27,22 @@
     "reflect-metadata": "^0.1.8",
     "rxjs": "5.0.1",
     "systemjs": "0.19.40",
-    "zone.js": "^0.7.4"
+    "zone.js": "^0.7.4",
+    "diff": ">=3.5.0",
+    "set-value": ">=2.0.1",
+    "ecstatic": ">=2.2.2"
   },
   "devDependencies": {
-    "concurrently": "^3.1.0",
-    "lite-server": "^2.2.2",
-    "typescript": "~2.0.10",
+    "@types/node": "^6.0.46",
     "canonical-path": "0.0.2",
-    "http-server": "^0.9.0",
-    "tslint": "^3.15.1",
+    "concurrently": "^3.1.0",
+    "http-server": "^0.12.1",
+    "lite-server": "^2.2.2",
     "lodash": "^4.17.13",
     "rimraf": "^2.5.4",
-    "@types/node": "^6.0.46"
+    "tslint": "^6.1.0",
+    "minimist": ">=1.2.3",
+    "typescript": "~2.0.10"
   },
   "repository": {}
 }
