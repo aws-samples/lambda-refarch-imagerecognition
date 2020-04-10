@@ -1,19 +1,14 @@
-import React, {useState, useEffect} from 'react';
+import React from 'react';
 
-import Amplify, {Auth} from 'aws-amplify';
-import API, {graphqlOperation} from '@aws-amplify/api'
+import Amplify from 'aws-amplify';
 import aws_exports from './aws-exports';
 
 import {withAuthenticator} from 'aws-amplify-react';
-import {Grid, Header, Input, List, Segment} from 'semantic-ui-react'
+import {Grid} from 'semantic-ui-react'
 
 import '@aws-amplify/ui/dist/style.css';
 
 import {BrowserRouter as Router, Route, NavLink} from 'react-router-dom';
-
-import * as queries from './graphql/queries'
-import * as mutations from './graphql/mutations'
-import * as subscriptions from './graphql/subscriptions'
 
 import {NewAlbum, AlbumList} from './components/Album'
 import {AlbumDetails} from "./components/AlbumDetail";

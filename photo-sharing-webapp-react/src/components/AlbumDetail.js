@@ -1,12 +1,9 @@
 import React, {useState, useEffect} from 'react';
 import API, {graphqlOperation} from '@aws-amplify/api'
 
-import {Grid, Header, Form, List, Segment} from 'semantic-ui-react'
-
-import {v4 as uuid} from 'uuid';
+import {Header, Form, Segment} from 'semantic-ui-react'
 
 import * as queries from '../graphql/queries'
-import * as mutations from '../graphql/mutations'
 import * as subscriptions from '../graphql/subscriptions'
 import {Auth} from "aws-amplify";
 import {PhotoList, S3ImageUpload} from "./PhotoList";
@@ -29,6 +26,7 @@ export const AlbumDetails = (props) => {
 
   useEffect(() => {
     fetchNextPhotos()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   useEffect(() => {
@@ -69,8 +67,8 @@ export const AlbumDetails = (props) => {
   return (
     <Segment>
       <Header as='h3'>{album.name}</Header>
-      <S3ImageUpload albumId={album.id} />
-      <PhotoList photos={photos} />
+      <S3ImageUpload albumId={album.id}/>
+      <PhotoList photos={photos}/>
       {
         hasMorePhotos &&
         <Form.Button

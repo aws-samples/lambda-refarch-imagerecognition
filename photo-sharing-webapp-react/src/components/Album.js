@@ -1,9 +1,9 @@
 import React, {useState, useEffect} from 'react';
 import API, {graphqlOperation} from '@aws-amplify/api'
-import Amplify, {Auth} from 'aws-amplify';
+import {Auth} from 'aws-amplify';
 
-import {Grid, Header, Input, List, Segment} from 'semantic-ui-react'
-import {BrowserRouter as Router, Route, NavLink} from 'react-router-dom';
+import {Header, Input, List, Segment} from 'semantic-ui-react'
+import {NavLink} from 'react-router-dom';
 
 import * as queries from '../graphql/queries'
 import * as mutations from '../graphql/mutations'
@@ -40,6 +40,7 @@ export const AlbumList = () => {
       const result = await API.graphql(graphqlOperation(queries.listAlbums, {limit: 999}))
       setAlbums(result.data.listAlbums.items)
     }
+
     fetchData()
   }, [])
 

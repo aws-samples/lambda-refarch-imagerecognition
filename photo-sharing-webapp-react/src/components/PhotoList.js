@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import {S3Image} from 'aws-amplify-react'
 
 import {Divider, Form} from 'semantic-ui-react'
@@ -12,7 +12,7 @@ export const S3ImageUpload = (props) => {
   const [uploading, setUploading] = useState(false)
 
   const uploadFile = async (file) => {
-    const fileName = 'upload/'+uuid();
+    const fileName = 'upload/' + uuid();
     const user = await Auth.currentAuthenticatedUser();
 
     const result = await Storage.vault.put(
@@ -33,7 +33,7 @@ export const S3ImageUpload = (props) => {
     setUploading(true)
 
     let files = [];
-    for (let i=0; i<e.target.files.length; i++) {
+    for (let i = 0; i < e.target.files.length; i++) {
       files.push(e.target.files.item(i));
     }
     await Promise.all(files.map(f => uploadFile(f)));
@@ -47,7 +47,7 @@ export const S3ImageUpload = (props) => {
         onClick={() => document.getElementById('add-image-file-input').click()}
         disabled={uploading}
         icon='file image outline'
-        content={ uploading ? 'Uploading...' : 'Add Images' }
+        content={uploading ? 'Uploading...' : 'Add Images'}
       />
       <input
         id='add-image-file-input'
@@ -55,7 +55,7 @@ export const S3ImageUpload = (props) => {
         accept='image/*'
         multiple
         onChange={onChange}
-        style={{ display: 'none' }}
+        style={{display: 'none'}}
       />
     </div>
   );
