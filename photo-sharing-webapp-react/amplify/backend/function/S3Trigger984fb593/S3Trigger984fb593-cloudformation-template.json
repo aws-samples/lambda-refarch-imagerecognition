@@ -103,7 +103,7 @@
 				"Timeout": "25",
 				"Code": {
 					"S3Bucket": "amplify-photo-share-master-135626-deployment",
-					"S3Key": "amplify-builds/S3Trigger984fb593-414547753676322f3079-build.zip"
+					"S3Key": "amplify-builds/S3Trigger984fb593-57432b302f426737434a-build.zip"
 				}
 			}
 		},
@@ -241,25 +241,9 @@
 						{
 							"Effect": "Allow",
 							"Action": [
-								"s3:PutObject",
-								"s3:GetObject",
-								"s3:ListBucket",
-								"s3:DeleteObject"
+								"s3:GetObject"
 							],
-							"Resource": [
-								{
-									"Fn::Join": [
-										"",
-										[
-											"arn:aws:s3:::",
-											{
-												"Ref": "storagephotostorageBucketName"
-											},
-											"/*"
-										]
-									]
-								}
-							]
+							"Resource": "*"
 						}
 					]
 				}

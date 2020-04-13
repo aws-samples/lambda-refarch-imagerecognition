@@ -15,7 +15,8 @@ const S3 = new AWS.S3({signatureVersion: 'v4'});
 const AUTH_TYPE = require('aws-appsync').AUTH_TYPE;
 const AWSAppSyncClient = require('aws-appsync').default;
 const gql = require('graphql-tag')
-X`X`;
+// const uuidv4 = require('uuid/v4');
+
 let client = new AWSAppSyncClient({
   url: process.env.API_PHOTOSHARE_GRAPHQLAPIENDPOINTOUTPUT,
   region: process.env.REGION,
@@ -26,7 +27,7 @@ let client = new AWSAppSyncClient({
   disableOffline: true
 });
 
-const createPhoto = gql`
+const CREATE_PHOTO_MUTATION = gql`
     mutation CreatePhoto(
         $input: CreatePhotoInput!
         $condition: ModelPhotoConditionInput
@@ -34,18 +35,22 @@ const createPhoto = gql`
         createPhoto(input: $input, condition: $condition) {
             id
             albumId
-            owner
+            uploadTime
             bucket
-            album {
-                id
-                name
-                owner
+            fullsize {
+                key
             }
+            processingInfo {
+                SfnexecutionArn
+                Status
+            }
+            owner
         }
-    }`
+    }
+`
 
 
-const startWorkflow = gql`
+const START_WORKFLOW_MUTATION = gql`
     mutation StartSfnExecution(
         $input: StartSfnExecutionInput!
     ) {
@@ -55,6 +60,26 @@ const startWorkflow = gql`
         }
     }
 `
+
+async function startSfnExecution(bucketName, key) {
+  const sfnInput = {
+    s3Bucket: bucketName,
+    s3Key: key,
+    objectID: key
+  };
+  const startWorkflowInput = {
+    input: JSON.stringify(sfnInput),
+    stateMachineArn: stateMachineArn
+  }
+  const startWorkflowResult = await client.mutate({
+    mutation: START_WORKFLOW_MUTATION,
+    variables: {input: startWorkflowInput},
+    fetchPolicy: 'no-cache'
+  })
+
+  executionArn = startWorkflowResult.data.startSfnExecution.executionArn
+  return executionArn
+}
 
 async function processRecord(record) {
   const bucketName = record.s3.bucket.name;
@@ -71,130 +96,53 @@ async function processRecord(record) {
     return;
   }
 
-
   const photoInfo = await S3.headObject({Bucket: bucketName, Key: key}).promise()
   const metadata = photoInfo.Metadata
+  const uploadTime = photoInfo.LastModified
+
 
   const owner = metadata.owner
   const albumId = metadata.albumid
-  const objectId = uuidv4();
+  const SfnExecutionArn = await startSfnExecution(bucketName, key);
+  console.log(`Sfn started. Execution: ${SfnExecutionArn}`)
 
-  const sfnInput = {
-    s3Bucket: bucketName,
-    s3Key: key,
-    objectID: objectId
-  };
-  const startWorkflowInput = {
-    input: JSON.stringify(sfnInput),
-    stateMachineArn: stateMachineArn
-  }
-  const startWorkflowResult = await client.mutate({
-    mutation: startWorkflow,
-    variables: {input: startWorkflowInput},
-    fetchPolicy: 'no-cache'
-  })
-
-  executionArn = startWorkflowResult
-  console.log(startWorkflowResult)
-
+  // const objectId = uuidv4();
   const item = {
-    id: id,
-    owner: metadata.owner,
-    albumId: metadata.albumid,
+    id: key,
+    owner,
+    albumId,
+    uploadTime,
     bucket: bucketName,
     fullsize: {
       key: sizes.fullsize.key,
+    },
+    processingInfo: {
+      SfnExecutionArn,
+      Status: 'RUNNING'
     }
   }
+  console.log('create photo item: ',JSON.stringify(event, item, 2))
 
+  const result = await client.mutate({
+    mutation: CREATE_PHOTO_MUTATION,
+    variables: { input: item },
+    fetchPolicy: 'no-cache'
+  })
 
+  console.log('result', JSON.stringify(result))
+  return result
 }
 
 exports.handler = async (event, context, callback) => {
   console.log('Received S3 event:', JSON.stringify(event, null, 2));
 
   try {
-    event.Records.forEach(processRecord);
+    for (i in event.Records){
+      await processRecord(event.Records[i])
+    }
     callback(null, {status: 'Photo Processed'});
   } catch (err) {
     console.error(err);
     callback(err);
   }
 };
-
-
-// exports.handler = (event, context, callback) => {
-//
-//   /* start state machine */
-//
-//   /* Store DDB */
-//
-//
-//   const requestId = context.awsRequestId;
-//
-//   console.log("Reading input from event:\n", util.inspect(event, {depth: 5}));
-//   const srcBucket = event.Records[0].s3.bucket.name;
-//   const s3key = event.Records[0].s3.object.key;
-//   // the s3key has a "Incoming/" prefix
-//   const objectID = s3key.substring(s3key.indexOf("/") + 1);
-//
-//   const input = {
-//     s3Bucket: srcBucket,
-//     s3Key: s3key,
-//     objectID: objectID
-//   };
-//
-//   const dynamoItem = {
-//     imageID: objectID,
-//     s3key: s3key,
-//   };
-//
-//   const initialItemPutPromise = docClient.put({
-//     TableName: tableName,
-//     Item: dynamoItem,
-//     ConditionExpression: 'attribute_not_exists (imageID)'
-//   }).promise();
-//
-//   const stateMachineExecutionParams = {
-//     stateMachineArn: stateMachineArn,
-//     input: JSON.stringify(input),
-//     name: requestId
-//   };
-//
-//   const executionArnPromise = new Promise((resolve, reject) => {
-//     initialItemPutPromise.then(data => {
-//       stepfunctions.startExecution(stateMachineExecutionParams)
-//         .promise()
-//         .then(function (data) {
-//           resolve(data.executionArn);
-//         })
-//         .catch(function (err) {
-//           reject(err);
-//         });
-//     }).catch(err => {
-//       reject(err);
-//     })
-//   })
-//
-//   executionArnPromise.then(arn => {
-//     var ddbparams = {
-//       TableName: tableName,
-//       Key: {
-//         'imageID': objectID
-//       },
-//       UpdateExpression: "SET executionArn = :arn",
-//       ExpressionAttributeValues: {
-//         ":arn": arn
-//       },
-//       ConditionExpression: 'attribute_exists (imageID)'
-//     };
-//
-//     docClient.update(ddbparams).promise().then(function (data) {
-//       callback(null, arn);
-//     }).catch(function (err) {
-//       callback(err);
-//     });
-//   }).catch(err => {
-//     callback(err);
-//   })
-// };
