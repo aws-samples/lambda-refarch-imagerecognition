@@ -1,6 +1,9 @@
 type Album
 @model
-@auth(rules: [{allow: owner}]) {
+@auth(rules: [
+    {allow: owner},
+    {allow: private, provider: iam}
+]) {
     id: ID!
     name: String!
     photos: [Photo] @connection(keyName: "byAlbumUploadTime", fields: ["id"])
@@ -9,24 +12,33 @@ type Album
 type Photo
 @model
 @key(name: "byAlbumUploadTime", fields: ["albumId", "uploadTime"], queryField: "listPhotosByAlbumUploadTime")
-@auth(rules: [{allow: owner}]) {
+@auth(rules: [
+    {allow: owner},
+    {allow: private, provider: iam}
+]) {
     id: ID!
     albumId: ID!
     uploadTime: AWSDateTime!
     album: Album @connection(fields: ["albumId"])
     bucket: String!
-    fullsize: PhotoS3Info!
-    thumbnail: PhotoS3Info!
+    fullsize: PhotoS3Info
+    thumbnail: PhotoS3Info
+    processingInfo: ProcessingInfo
+}
+
+type ProcessingInfo {
+    SfnExecutionArn: String
+    Status: Status
 }
 
 type PhotoS3Info {
     key: String!
-    width: Int!
-    height: Int!
+    width: Int
+    height: Int
 }
 
 type Mutation {
-    startSfnExecution(input: StartSfnExecutionInput!): StartSfnExecutionResult
+    startSfnExecution(input: StartSfnExecutionInput!): StartSfnExecutionResult @aws_iam
 }
 
 type Query {
@@ -37,7 +49,7 @@ input checkSfnStatusInput{
     executionArn: String!
 }
 
-type SfnStatusResult{
+type SfnStatusResult {
     startDate: Float,
     stopDate: Float,
     status: Status
@@ -56,7 +68,7 @@ input StartSfnExecutionInput {
     stateMachineArn: String!
 }
 
-type StartSfnExecutionResult {
+type StartSfnExecutionResult @aws_iam{
     executionArn: String!
     startDate: Float
 }
