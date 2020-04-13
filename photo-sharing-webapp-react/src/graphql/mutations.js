@@ -1,6 +1,14 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
+export const startSfnExecution = /* GraphQL */ `
+  mutation StartSfnExecution($input: StartSfnExecutionInput!) {
+    startSfnExecution(input: $input) {
+      executionArn
+      startDate
+    }
+  }
+`;
 export const createAlbum = /* GraphQL */ `
   mutation CreateAlbum(
     $input: CreateAlbumInput!
@@ -13,6 +21,7 @@ export const createAlbum = /* GraphQL */ `
         items {
           id
           albumId
+          uploadTime
           bucket
           owner
         }
@@ -34,6 +43,7 @@ export const updateAlbum = /* GraphQL */ `
         items {
           id
           albumId
+          uploadTime
           bucket
           owner
         }
@@ -55,6 +65,7 @@ export const deleteAlbum = /* GraphQL */ `
         items {
           id
           albumId
+          uploadTime
           bucket
           owner
         }
@@ -72,6 +83,7 @@ export const createPhoto = /* GraphQL */ `
     createPhoto(input: $input, condition: $condition) {
       id
       albumId
+      uploadTime
       album {
         id
         name
@@ -103,6 +115,7 @@ export const updatePhoto = /* GraphQL */ `
     updatePhoto(input: $input, condition: $condition) {
       id
       albumId
+      uploadTime
       album {
         id
         name
@@ -134,6 +147,7 @@ export const deletePhoto = /* GraphQL */ `
     deletePhoto(input: $input, condition: $condition) {
       id
       albumId
+      uploadTime
       album {
         id
         name

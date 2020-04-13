@@ -10,6 +10,7 @@ export const onCreateAlbum = /* GraphQL */ `
         items {
           id
           albumId
+          uploadTime
           bucket
           owner
         }
@@ -28,6 +29,7 @@ export const onUpdateAlbum = /* GraphQL */ `
         items {
           id
           albumId
+          uploadTime
           bucket
           owner
         }
@@ -46,6 +48,7 @@ export const onDeleteAlbum = /* GraphQL */ `
         items {
           id
           albumId
+          uploadTime
           bucket
           owner
         }
@@ -60,6 +63,7 @@ export const onCreatePhoto = /* GraphQL */ `
     onCreatePhoto(owner: $owner) {
       id
       albumId
+      uploadTime
       album {
         id
         name
@@ -88,6 +92,7 @@ export const onUpdatePhoto = /* GraphQL */ `
     onUpdatePhoto(owner: $owner) {
       id
       albumId
+      uploadTime
       album {
         id
         name
@@ -116,6 +121,7 @@ export const onDeletePhoto = /* GraphQL */ `
     onDeletePhoto(owner: $owner) {
       id
       albumId
+      uploadTime
       album {
         id
         name
