@@ -1,5 +1,5 @@
 projects:
-  photoalbums:
+  photoshare:
     schemaPath: src/graphql/schema.json
     includes:
       - src/graphql/**/*.js
@@ -10,3 +10,6 @@ projects:
         codeGenTarget: javascript
         generatedFileName: ''
         docsFilePath: src/graphql
+extensions:
+  amplify:
+    version: 3
