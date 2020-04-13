@@ -10,25 +10,6 @@ export const checkSfnStatus = /* GraphQL */ `
     }
   }
 `;
-export const getAlbum = /* GraphQL */ `
-  query GetAlbum($id: ID!) {
-    getAlbum(id: $id) {
-      id
-      name
-      photos {
-        items {
-          id
-          albumId
-          uploadTime
-          bucket
-          owner
-        }
-        nextToken
-      }
-      owner
-    }
-  }
-`;
 export const listAlbums = /* GraphQL */ `
   query ListAlbums(
     $filter: ModelAlbumFilterInput
@@ -39,12 +20,31 @@ export const listAlbums = /* GraphQL */ `
       items {
         id
         name
+        owner
         photos {
           nextToken
         }
-        owner
       }
       nextToken
+    }
+  }
+`;
+export const getAlbum = /* GraphQL */ `
+  query GetAlbum($id: ID!) {
+    getAlbum(id: $id) {
+      id
+      name
+      owner
+      photos {
+        items {
+          id
+          albumId
+          uploadTime
+          bucket
+          owner
+        }
+        nextToken
+      }
     }
   }
 `;
@@ -54,14 +54,6 @@ export const getPhoto = /* GraphQL */ `
       id
       albumId
       uploadTime
-      album {
-        id
-        name
-        photos {
-          nextToken
-        }
-        owner
-      }
       bucket
       fullsize {
         key
@@ -72,6 +64,18 @@ export const getPhoto = /* GraphQL */ `
         key
         width
         height
+      }
+      processingInfo {
+        SfnExecutionArn
+        Status
+      }
+      album {
+        id
+        name
+        owner
+        photos {
+          nextToken
+        }
       }
       owner
     }
@@ -88,11 +92,6 @@ export const listPhotos = /* GraphQL */ `
         id
         albumId
         uploadTime
-        album {
-          id
-          name
-          owner
-        }
         bucket
         fullsize {
           key
@@ -103,6 +102,15 @@ export const listPhotos = /* GraphQL */ `
           key
           width
           height
+        }
+        processingInfo {
+          SfnExecutionArn
+          Status
+        }
+        album {
+          id
+          name
+          owner
         }
         owner
       }
@@ -131,11 +139,6 @@ export const listPhotosByAlbumUploadTime = /* GraphQL */ `
         id
         albumId
         uploadTime
-        album {
-          id
-          name
-          owner
-        }
         bucket
         fullsize {
           key
@@ -146,6 +149,15 @@ export const listPhotosByAlbumUploadTime = /* GraphQL */ `
           key
           width
           height
+        }
+        processingInfo {
+          SfnExecutionArn
+          Status
+        }
+        album {
+          id
+          name
+          owner
         }
         owner
       }
