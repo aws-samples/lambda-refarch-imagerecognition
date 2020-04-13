@@ -41,7 +41,7 @@ const CREATE_PHOTO_MUTATION = gql`
                 key
             }
             processingInfo {
-                SfnexecutionArn
+                SfnExecutionArn
                 Status
             }
             owner
@@ -114,14 +114,14 @@ async function processRecord(record) {
     uploadTime,
     bucket: bucketName,
     fullsize: {
-      key: sizes.fullsize.key,
+      key: key,
     },
     processingInfo: {
       SfnExecutionArn,
       Status: 'RUNNING'
     }
   }
-  console.log('create photo item: ',JSON.stringify(event, item, 2))
+  console.log('create photo item: ',JSON.stringify( item, null, 2))
 
   const result = await client.mutate({
     mutation: CREATE_PHOTO_MUTATION,
@@ -137,7 +137,7 @@ exports.handler = async (event, context, callback) => {
   console.log('Received S3 event:', JSON.stringify(event, null, 2));
 
   try {
-    for (i in event.Records){
+    for (let i in event.Records){
       await processRecord(event.Records[i])
     }
     callback(null, {status: 'Photo Processed'});
