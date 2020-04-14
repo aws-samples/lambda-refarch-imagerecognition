@@ -57,10 +57,10 @@ export const AlbumDetails = (props) => {
       nextToken: nextPhotosToken
     }
     if (!queryArgs.nextToken) delete queryArgs.nextToken
-    const results = await API.graphql(graphqlOperation(queries.listPhotosByAlbum, queryArgs))
-    setPhotos(p => p.concat(results.data.listPhotosByAlbum.items))
-    setNextPhotosToken(results.data.listPhotosByAlbum.nextToken)
-    setHasMorePhotos(results.data.listPhotosByAlbum.items.length === FETCH_LIMIT)
+    const results = await API.graphql(graphqlOperation(queries.listPhotosByAlbumUploadTime, queryArgs))
+    setPhotos(p => p.concat(results.data.listPhotosByAlbumUploadTime.items))
+    setNextPhotosToken(results.data.listPhotosByAlbumUploadTime.nextToken)
+    setHasMorePhotos(results.data.listPhotosByAlbumUploadTime.items.length === FETCH_LIMIT)
     setFetchingPhotos(false)
   }
 

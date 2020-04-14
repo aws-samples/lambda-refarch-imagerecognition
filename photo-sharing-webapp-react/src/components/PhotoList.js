@@ -12,7 +12,7 @@ export const S3ImageUpload = (props) => {
   const [uploading, setUploading] = useState(false)
 
   const uploadFile = async (file) => {
-    const fileName = 'upload/' + uuid();
+    const fileName = 'uploads/' + uuid() + '.' + file.name.split('.').pop();
     const user = await Auth.currentAuthenticatedUser();
 
     const result = await Storage.vault.put(

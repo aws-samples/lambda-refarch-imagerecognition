@@ -5,6 +5,7 @@
   "dependencies": {
     "@aws-amplify/api": "^3.1.6",
     "@aws-amplify/storage": "^3.1.6",
+    "@aws-amplify/ui-react": "^0.2.2",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.5.0",
     "@testing-library/user-event": "^7.2.1",
@@ -14,6 +15,7 @@
     "react-dom": "^16.13.1",
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.4.1",
+    "semantic-ui-react": "^0.88.2",
     "uuid": "^7.0.3"
   },
   "scripts": {
