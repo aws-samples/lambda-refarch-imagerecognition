@@ -23,12 +23,39 @@ type Photo
     bucket: String!
     fullsize: PhotoS3Info
     thumbnail: PhotoS3Info
-    processingInfo: ProcessingInfo
+    format: String
+    exifMake: String
+    exitModel: String
+    SfnExecutionArn: String
+    ProcessingStatus: Status
+    geoLocation: GeoCoordinates
 }
 
-type ProcessingInfo {
-    SfnExecutionArn: String
-    Status: Status
+enum GeoCoordinateDirection{
+    N,
+    W,
+    S,
+    E
+}
+
+type GeoCoordinates {
+    Latitude: Latitude!
+    Longtitude: Longtitude!
+}
+
+type Latitude{
+    D: Float!
+    M: Float!
+    S: Float!
+    Direction: GeoCoordinateDirection!
+}
+
+type Longtitude{
+    D: Float!
+    M: Float!
+    S: Float!
+    Direction: GeoCoordinateDirection!
+
 }
 
 type PhotoS3Info {

@@ -41,6 +41,11 @@ export const getAlbum = /* GraphQL */ `
           albumId
           uploadTime
           bucket
+          format
+          exifMake
+          exitModel
+          SfnExecutionArn
+          ProcessingStatus
           owner
         }
         nextToken
@@ -65,9 +70,24 @@ export const getPhoto = /* GraphQL */ `
         width
         height
       }
-      processingInfo {
-        SfnExecutionArn
-        Status
+      format
+      exifMake
+      exitModel
+      SfnExecutionArn
+      ProcessingStatus
+      geoLocation {
+        Latitude {
+          D
+          M
+          S
+          Direction
+        }
+        Longtitude {
+          D
+          M
+          S
+          Direction
+        }
       }
       album {
         id
@@ -103,10 +123,11 @@ export const listPhotos = /* GraphQL */ `
           width
           height
         }
-        processingInfo {
-          SfnExecutionArn
-          Status
-        }
+        format
+        exifMake
+        exitModel
+        SfnExecutionArn
+        ProcessingStatus
         album {
           id
           name
@@ -150,10 +171,11 @@ export const listPhotosByAlbumUploadTime = /* GraphQL */ `
           width
           height
         }
-        processingInfo {
-          SfnExecutionArn
-          Status
-        }
+        format
+        exifMake
+        exitModel
+        SfnExecutionArn
+        ProcessingStatus
         album {
           id
           name

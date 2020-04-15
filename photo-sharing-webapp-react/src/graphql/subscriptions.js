@@ -13,6 +13,11 @@ export const onCreateAlbum = /* GraphQL */ `
           albumId
           uploadTime
           bucket
+          format
+          exifMake
+          exitModel
+          SfnExecutionArn
+          ProcessingStatus
           owner
         }
         nextToken
@@ -32,6 +37,11 @@ export const onUpdateAlbum = /* GraphQL */ `
           albumId
           uploadTime
           bucket
+          format
+          exifMake
+          exitModel
+          SfnExecutionArn
+          ProcessingStatus
           owner
         }
         nextToken
@@ -51,6 +61,11 @@ export const onDeleteAlbum = /* GraphQL */ `
           albumId
           uploadTime
           bucket
+          format
+          exifMake
+          exitModel
+          SfnExecutionArn
+          ProcessingStatus
           owner
         }
         nextToken
@@ -75,9 +90,24 @@ export const onCreatePhoto = /* GraphQL */ `
         width
         height
       }
-      processingInfo {
-        SfnExecutionArn
-        Status
+      format
+      exifMake
+      exitModel
+      SfnExecutionArn
+      ProcessingStatus
+      geoLocation {
+        Latitude {
+          D
+          M
+          S
+          Direction
+        }
+        Longtitude {
+          D
+          M
+          S
+          Direction
+        }
       }
       album {
         id
@@ -108,9 +138,24 @@ export const onUpdatePhoto = /* GraphQL */ `
         width
         height
       }
-      processingInfo {
-        SfnExecutionArn
-        Status
+      format
+      exifMake
+      exitModel
+      SfnExecutionArn
+      ProcessingStatus
+      geoLocation {
+        Latitude {
+          D
+          M
+          S
+          Direction
+        }
+        Longtitude {
+          D
+          M
+          S
+          Direction
+        }
       }
       album {
         id
@@ -141,9 +186,24 @@ export const onDeletePhoto = /* GraphQL */ `
         width
         height
       }
-      processingInfo {
-        SfnExecutionArn
-        Status
+      format
+      exifMake
+      exitModel
+      SfnExecutionArn
+      ProcessingStatus
+      geoLocation {
+        Latitude {
+          D
+          M
+          S
+          Direction
+        }
+        Longtitude {
+          D
+          M
+          S
+          Direction
+        }
       }
       album {
         id
