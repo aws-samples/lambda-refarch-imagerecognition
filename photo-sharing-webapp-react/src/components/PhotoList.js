@@ -85,7 +85,6 @@ export const PhotoList = React.memo(props => {
   const PhotoItems = (props) => {
     const photoItem = (photo) => {
       if (photo.ProcessingStatus === "SUCCEEDED") {
-
         const DetectedLabels = () => {
           if (photo.objectDetected) {
             return photo.objectDetected.map((tag) => (
@@ -97,7 +96,6 @@ export const PhotoList = React.memo(props => {
             return null;
           }
         }
-
         const GeoLocation = () => {
           if (photo.geoLocation) {
             const geo = photo.geoLocation

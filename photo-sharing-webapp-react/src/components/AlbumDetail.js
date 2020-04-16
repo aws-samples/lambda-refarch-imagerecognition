@@ -59,12 +59,13 @@ export const AlbumDetails = (props) => {
           const photo = data.value.data.onUpdatePhoto
           if (photo.albumId !== props.id) return
           setPhotos(p => {
-            for (let i in p){
-              if (p[i].id === photo.id){
-                p[i] = photo
+            let newPhotos = p.slice()
+            for (let i in newPhotos){
+              if (newPhotos[i].id === photo.id){
+                newPhotos[i] = photo
               }
             }
-            return p
+            return newPhotos
           })
         }
       })
