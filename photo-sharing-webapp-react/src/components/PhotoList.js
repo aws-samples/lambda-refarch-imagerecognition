@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {S3Image} from 'aws-amplify-react'
 
-import {Divider, Form} from 'semantic-ui-react'
+import {Card, Icon, Label, Divider, Form} from 'semantic-ui-react'
 
 import {v4 as uuid} from 'uuid';
 
@@ -62,19 +62,74 @@ export const S3ImageUpload = (props) => {
 }
 
 export const PhotoList = React.memo(props => {
+
   const PhotoItems = (props) => {
-    return props.photos.map(photo =>
-      <S3Image
-        key={photo.thumbnail.key}
-        imgKey={'resized/' + photo.thumbnail.key.replace(/.+resized\//, '')}
-        level="private"
-        style={{display: 'inline-block', 'paddingRight': '5px'}}
-      />);
+    const photoItem = (photo) => {
+      if (photo.ProcessingStatus == "SUCCEEDED") {
+
+        const DetectedLabels = () => {
+          if (photo.objectDetected) {
+            return photo.objectDetected.map((tag) => (
+              <Label basic color='orange' key={tag}>
+                {tag}
+              </Label>
+            ))
+          } else {
+            return null;
+          }
+        }
+
+        return (
+          <Card>
+            <Card.Content textAlign="center">
+              <S3Image
+                key={photo.id}
+                imgKey={'resized/' + photo.thumbnail.key.replace(/.+resized\//, '')}
+                level="private"
+                // style={{display: 'inline-block', 'paddingRight': '5px'}}
+              />
+            </Card.Content>
+            <Card.Content>
+              <Card.Meta>
+                <span className='date'>Uploaded: {new Date(photo.uploadTime).toLocaleString()}</span>
+              </Card.Meta>
+              <Card.Description>
+                <p><b>Image size: </b>{photo.fullsize.width} x {photo.fullsize.height}</p>
+                <p><b>Detected labels:</b></p>
+                <DetectedLabels/>
+              </Card.Description>
+            </Card.Content>
+          </Card>
+        )
+      } else {
+        return (<Card>
+          Processing...
+
+        </Card>)
+      }
+      // if (photo.ProcessingStatus == "RUNNING") {
+      //   return <div>Processing...</div>
+      // } if (photo.ProcessingStatus == "SUCCEEDED") {
+      //   return (<S3Image
+      //     key={photo.thumbnail.key}
+      //     imgKey={'resized/' + photo.thumbnail.key.replace(/.+resized\//, '')}
+      //     level="private"
+      //     style={{display: 'inline-block', 'paddingRight': '5px'}}
+      //   />);
+      //
+      // }
+
+    }
+
+    return props.photos.map(photoItem);
   };
 
   return (
     <div>
       <Divider hidden/>
-      <PhotoItems photos={props.photos}/>
+      <Card.Group>
+
+        <PhotoItems photos={props.photos}/>
+      </Card.Group>
     </div>)
 })

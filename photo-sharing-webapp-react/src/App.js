@@ -22,7 +22,7 @@ function App() {
       <Menu inverted attached>
         <Menu.Item
           name='home'>
-          <NavLink to='/'>Photo Albums</NavLink>
+          <NavLink to='/'>Albums</NavLink>
         </Menu.Item>
         <Menu.Menu position='right'>
           <Menu.Item>
