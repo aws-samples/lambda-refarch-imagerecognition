@@ -5,8 +5,8 @@
     "javascript": {
         "framework": "react",
         "config": {
-            "SourceDir": "src",
-            "DistributionDir": "build",
+            "SourceDir": "src/react-frontend/src",
+            "DistributionDir": "src/react-frontend/build",
             "BuildCommand": "npm run-script build",
             "StartCommand": "npm run-script start"
         }
