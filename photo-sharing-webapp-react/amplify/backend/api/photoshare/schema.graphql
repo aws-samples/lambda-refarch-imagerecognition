@@ -30,7 +30,7 @@ type Photo
     exitModel: String
     SfnExecutionArn: String
     ProcessingStatus: Status
-    objectDetected: [String!]
+    objectDetected: [String]
     geoLocation: GeoCoordinates
 }
 
@@ -41,19 +41,19 @@ enum GeoCoordinateDirection{
     E
 }
 
-type GeoCoordinates {
+type GeoCoordinates @aws_iam @aws_cognito_user_pools{
     Latitude: Latitude!
     Longtitude: Longtitude!
 }
 
-type Latitude{
+type Latitude @aws_iam @aws_cognito_user_pools{
     D: Float!
     M: Float!
     S: Float!
     Direction: GeoCoordinateDirection!
 }
 
-type Longtitude{
+type Longtitude @aws_iam @aws_cognito_user_pools{
     D: Float!
     M: Float!
     S: Float!
@@ -61,7 +61,7 @@ type Longtitude{
 
 }
 
-type PhotoS3Info {
+type PhotoS3Info @aws_iam @aws_cognito_user_pools{
     key: String!
     width: Int
     height: Int
@@ -86,6 +86,7 @@ type SfnStatusResult {
 }
 
 enum Status {
+    PENDING
     RUNNING
     SUCCEEDED
     FAILED

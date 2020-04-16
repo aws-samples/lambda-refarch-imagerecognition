@@ -7,7 +7,6 @@ var apiPhotoshareGraphQLAPIEndpointOutput = process.env.API_PHOTOSHARE_GRAPHQLAP
 var storagePhotostorageBucketName = process.env.STORAGE_PHOTOSTORAGE_BUCKETNAME
 
 Amplify Params - DO NOT EDIT */
-// require('es6-promise').polyfill();
 require('dotenv').config();
 require('isomorphic-fetch');
 const AWS = require('aws-sdk');
@@ -40,13 +39,30 @@ const CREATE_PHOTO_MUTATION = gql`
             albumId
             uploadTime
             bucket
+            owner
             fullsize {
                 key
             }
-            processingInfo {
-                SfnExecutionArn
-                Status
-            }
+            SfnExecutionArn
+            ProcessingStatus
+
+        }
+    }
+`
+
+const UPDATE_PHOTO_MUTATION = gql`
+    mutation UpdatePhoto(
+        $input: UpdatePhotoInput!
+        $condition: ModelPhotoConditionInput
+    ) {
+        updatePhoto(input: $input, condition: $condition) {
+            id
+            albumId
+            owner
+            uploadTime
+            bucket
+            SfnExecutionArn
+            ProcessingStatus
         }
     }
 `
@@ -63,11 +79,11 @@ const START_WORKFLOW_MUTATION = gql`
     }
 `
 
-async function startSfnExecution(bucketName, key) {
+async function startSfnExecution(bucketName, key, id) {
   const sfnInput = {
     s3Bucket: bucketName,
     s3Key: key,
-    objectID: key
+    objectID: id
   };
   const startWorkflowInput = {
     input: JSON.stringify(sfnInput),
@@ -83,49 +99,49 @@ async function startSfnExecution(bucketName, key) {
   return executionArn
 }
 
-
 async function processRecord(record) {
   const bucketName = record.s3.bucket.name;
   const key = decodeURIComponent(record.s3.object.key.replace(/\+/g, " "));
-
+  const id = key.split('/').pop().split(".")[0]
   console.log('processRecord', JSON.stringify(record))
 
-  if (record.eventName !== "ObjectCreated:Put") {
-    console.log('Is not a new file');
-    return;
-  }
   if (!key.includes('upload')) {
     console.log('Does not look like an upload from user');
     return;
   }
 
-  const photoInfo = await S3.headObject({Bucket: bucketName, Key: key}).promise()
-  const metadata = photoInfo.Metadata
-  const uploadTime = photoInfo.LastModified
-
-  const albumId = metadata.albumid
-  const SfnExecutionArn = await startSfnExecution(bucketName, key);
+  // const photoInfo = await S3.headObject({Bucket: bucketName, Key: key}).promise()
+  // const metadata = photoInfo.Metadata
+  // const uploadTime = photoInfo.LastModified
+  //
+  // const albumId = metadata.albumid
+  // const owner = metadata.owner
+  const SfnExecutionArn = await startSfnExecution(bucketName, key, id);
   console.log(`Sfn started. Execution: ${SfnExecutionArn}`)
 
-  // const objectId = uuidv4();
+  // const item = {
+  //   id: key,
+  //   albumId,
+  //   owner,
+  //   uploadTime,
+  //   bucket: bucketName,
+  //   fullsize: {
+  //     key: key,
+  //   },
+  //   SfnExecutionArn,
+  //   ProcessingStatus: 'RUNNING'
+  // }
+  // console.log('update photo item: ', JSON.stringify(item, null, 2))
   const item = {
-    id: key,
-    albumId,
-    uploadTime,
-    bucket: bucketName,
-    fullsize: {
-      key: key,
-    },
-    processingInfo: {
-      SfnExecutionArn,
-      Status: 'RUNNING'
-    }
+    id,
+    SfnExecutionArn,
+    ProcessingStatus: 'RUNNING'
   }
-  console.log('create photo item: ',JSON.stringify( item, null, 2))
+  console.log('update photo item: ', JSON.stringify(item, null, 2))
 
   const result = await client.mutate({
-    mutation: CREATE_PHOTO_MUTATION,
-    variables: { input: item },
+    mutation: UPDATE_PHOTO_MUTATION,
+    variables: {input: item},
     fetchPolicy: 'no-cache'
   })
 
@@ -137,7 +153,7 @@ exports.handler = async (event, context, callback) => {
   console.log('Received S3 event:', JSON.stringify(event, null, 2));
 
   try {
-    for (let i in event.Records){
+    for (let i in event.Records) {
       await processRecord(event.Records[i])
     }
     callback(null, {status: 'Photo Processed'});

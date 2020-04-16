@@ -15,10 +15,6 @@
 		"apiphotoshareGraphQLAPIEndpointOutput": {
 			"Type": "String",
 			"Default": "apiphotoshareGraphQLAPIEndpointOutput"
-		},
-		"storagephotostorageBucketName": {
-			"Type": "String",
-			"Default": "storagephotostorageBucketName"
 		}
 	},
 	"Conditions": {
@@ -87,9 +83,6 @@
 						},
 						"API_PHOTOSHARE_GRAPHQLAPIENDPOINTOUTPUT": {
 							"Ref": "apiphotoshareGraphQLAPIEndpointOutput"
-						},
-						"STORAGE_PHOTOSTORAGE_BUCKETNAME": {
-							"Ref": "storagephotostorageBucketName"
 						}
 					}
 				},
@@ -101,9 +94,10 @@
 				},
 				"Runtime": "nodejs12.x",
 				"Timeout": "25",
+				"ReservedConcurrentExecutions": "10",
 				"Code": {
 					"S3Bucket": "amplify-photo-share-master-135626-deployment",
-					"S3Key": "amplify-builds/S3Trigger984fb593-57432b302f426737434a-build.zip"
+					"S3Key": "amplify-builds/S3Trigger984fb593-496a303951647859434e-build.zip"
 				}
 			}
 		},
@@ -241,7 +235,8 @@
 						{
 							"Effect": "Allow",
 							"Action": [
-								"s3:GetObject"
+								"s3:GetObject",
+								"s3:ListBucket"
 							],
 							"Resource": "*"
 						}
