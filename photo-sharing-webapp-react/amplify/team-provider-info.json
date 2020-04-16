@@ -1,0 +1,20 @@
+{
+    "master": {
+        "awscloudformation": {
+            "AuthRoleName": "amplify-photo-share-master-135626-authRole",
+            "UnauthRoleArn": "arn:aws:iam::735324722473:role/amplify-photo-share-master-135626-unauthRole",
+            "AuthRoleArn": "arn:aws:iam::735324722473:role/amplify-photo-share-master-135626-authRole",
+            "Region": "us-east-1",
+            "DeploymentBucketName": "amplify-photo-share-master-135626-deployment",
+            "UnauthRoleName": "amplify-photo-share-master-135626-unauthRole",
+            "StackName": "amplify-photo-share-master-135626",
+            "StackId": "arn:aws:cloudformation:us-east-1:735324722473:stack/amplify-photo-share-master-135626/45aaa8d0-79c2-11ea-89ca-12a417a66525",
+            "AmplifyAppId": "d3r0ie34bj4aa8"
+        },
+        "categories": {
+            "auth": {
+                "photoshareb143529b": {}
+            }
+        }
+    }
+}
