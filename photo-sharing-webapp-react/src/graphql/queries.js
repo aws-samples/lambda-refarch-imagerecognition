@@ -39,6 +39,7 @@ export const getAlbum = /* GraphQL */ `
         items {
           id
           albumId
+          owner
           uploadTime
           bucket
           format
@@ -46,7 +47,7 @@ export const getAlbum = /* GraphQL */ `
           exitModel
           SfnExecutionArn
           ProcessingStatus
-          owner
+          objectDetected
         }
         nextToken
       }
@@ -58,6 +59,7 @@ export const getPhoto = /* GraphQL */ `
     getPhoto(id: $id) {
       id
       albumId
+      owner
       uploadTime
       bucket
       fullsize {
@@ -75,6 +77,7 @@ export const getPhoto = /* GraphQL */ `
       exitModel
       SfnExecutionArn
       ProcessingStatus
+      objectDetected
       geoLocation {
         Latitude {
           D
@@ -97,7 +100,6 @@ export const getPhoto = /* GraphQL */ `
           nextToken
         }
       }
-      owner
     }
   }
 `;
@@ -111,6 +113,7 @@ export const listPhotos = /* GraphQL */ `
       items {
         id
         albumId
+        owner
         uploadTime
         bucket
         fullsize {
@@ -128,12 +131,12 @@ export const listPhotos = /* GraphQL */ `
         exitModel
         SfnExecutionArn
         ProcessingStatus
+        objectDetected
         album {
           id
           name
           owner
         }
-        owner
       }
       nextToken
     }
@@ -159,6 +162,7 @@ export const listPhotosByAlbumUploadTime = /* GraphQL */ `
       items {
         id
         albumId
+        owner
         uploadTime
         bucket
         fullsize {
@@ -176,12 +180,12 @@ export const listPhotosByAlbumUploadTime = /* GraphQL */ `
         exitModel
         SfnExecutionArn
         ProcessingStatus
+        objectDetected
         album {
           id
           name
           owner
         }
-        owner
       }
       nextToken
     }

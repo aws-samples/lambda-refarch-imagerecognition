@@ -22,6 +22,7 @@ export const createAlbum = /* GraphQL */ `
         items {
           id
           albumId
+          owner
           uploadTime
           bucket
           format
@@ -29,7 +30,7 @@ export const createAlbum = /* GraphQL */ `
           exitModel
           SfnExecutionArn
           ProcessingStatus
-          owner
+          objectDetected
         }
         nextToken
       }
@@ -49,6 +50,7 @@ export const updateAlbum = /* GraphQL */ `
         items {
           id
           albumId
+          owner
           uploadTime
           bucket
           format
@@ -56,7 +58,7 @@ export const updateAlbum = /* GraphQL */ `
           exitModel
           SfnExecutionArn
           ProcessingStatus
-          owner
+          objectDetected
         }
         nextToken
       }
@@ -76,6 +78,7 @@ export const deleteAlbum = /* GraphQL */ `
         items {
           id
           albumId
+          owner
           uploadTime
           bucket
           format
@@ -83,7 +86,7 @@ export const deleteAlbum = /* GraphQL */ `
           exitModel
           SfnExecutionArn
           ProcessingStatus
-          owner
+          objectDetected
         }
         nextToken
       }
@@ -98,6 +101,7 @@ export const createPhoto = /* GraphQL */ `
     createPhoto(input: $input, condition: $condition) {
       id
       albumId
+      owner
       uploadTime
       bucket
       fullsize {
@@ -115,6 +119,7 @@ export const createPhoto = /* GraphQL */ `
       exitModel
       SfnExecutionArn
       ProcessingStatus
+      objectDetected
       geoLocation {
         Latitude {
           D
@@ -137,7 +142,6 @@ export const createPhoto = /* GraphQL */ `
           nextToken
         }
       }
-      owner
     }
   }
 `;
@@ -149,6 +153,7 @@ export const updatePhoto = /* GraphQL */ `
     updatePhoto(input: $input, condition: $condition) {
       id
       albumId
+      owner
       uploadTime
       bucket
       fullsize {
@@ -166,6 +171,7 @@ export const updatePhoto = /* GraphQL */ `
       exitModel
       SfnExecutionArn
       ProcessingStatus
+      objectDetected
       geoLocation {
         Latitude {
           D
@@ -188,7 +194,6 @@ export const updatePhoto = /* GraphQL */ `
           nextToken
         }
       }
-      owner
     }
   }
 `;
@@ -200,6 +205,7 @@ export const deletePhoto = /* GraphQL */ `
     deletePhoto(input: $input, condition: $condition) {
       id
       albumId
+      owner
       uploadTime
       bucket
       fullsize {
@@ -217,6 +223,7 @@ export const deletePhoto = /* GraphQL */ `
       exitModel
       SfnExecutionArn
       ProcessingStatus
+      objectDetected
       geoLocation {
         Latitude {
           D
@@ -239,7 +246,6 @@ export const deletePhoto = /* GraphQL */ `
           nextToken
         }
       }
-      owner
     }
   }
 `;
