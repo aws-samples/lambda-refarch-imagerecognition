@@ -1,32 +1,51 @@
 import React, {useState} from 'react';
 import {S3Image} from 'aws-amplify-react'
 
-import {Card, Icon, Label, Divider, Form} from 'semantic-ui-react'
+import {Card, Label, Divider, Form, Dimmer, Loader} from 'semantic-ui-react'
 
 import {v4 as uuid} from 'uuid';
-
+import * as mutations from '../graphql/mutations'
+import AWSConfig from '../aws-exports'
 import {Auth} from "aws-amplify";
 import Storage from '@aws-amplify/storage'
+import API, {graphqlOperation} from "@aws-amplify/api";
+import * as queries from "../graphql/queries";
 
 export const S3ImageUpload = (props) => {
   const [uploading, setUploading] = useState(false)
 
   const uploadFile = async (file) => {
-    const fileName = 'uploads/' + uuid() + '.' + file.name.split('.').pop();
+    const imageId = uuid();
+    const fileName = 'uploads/' + imageId + '.' + file.name.split('.').pop();
     const user = await Auth.currentAuthenticatedUser();
 
-    const result = await Storage.vault.put(
-      fileName,
-      file,
-      {
-        metadata: {
-          albumid: props.albumId,
-          owner: user.username,
-        }
-      }
-    );
+    let createPhotoArg = {
+      id: imageId,
+      albumId: props.albumId,
+      owner: user.username,
+      uploadTime: new Date(),
+      bucket: AWSConfig.aws_user_files_s3_bucket,
+      ProcessingStatus: 'PENDING'
+    }
 
-    console.log('Uploaded file: ', result);
+    await API.graphql(graphqlOperation(mutations.createPhoto, {"input": createPhotoArg}))
+
+    try {
+      const result = await Storage.vault.put(
+        fileName,
+        file,
+        {
+          metadata: {
+            albumid: props.albumId,
+            owner: user.username,
+          }
+        }
+      );
+
+      console.log(`Uploaded ${file.name} to ${fileName}: `, result);
+    } catch (e) {
+      console.log('Failed to upload to s3.')
+    }
   }
 
   const onChange = async (e) => {
@@ -65,7 +84,7 @@ export const PhotoList = React.memo(props => {
 
   const PhotoItems = (props) => {
     const photoItem = (photo) => {
-      if (photo.ProcessingStatus == "SUCCEEDED") {
+      if (photo.ProcessingStatus === "SUCCEEDED") {
 
         const DetectedLabels = () => {
           if (photo.objectDetected) {
@@ -76,6 +95,20 @@ export const PhotoList = React.memo(props => {
             ))
           } else {
             return null;
+          }
+        }
+
+        const GeoLocation = () => {
+          if (photo.geoLocation) {
+            const geo = photo.geoLocation
+            return (
+              <p><strong>Geolocation:</strong>&nbsp;
+                {geo.Latitude.D}°{Math.round(geo.Latitude.M)}'{Math.round(geo.Latitude.S)}"{geo.Latitude.Direction} &nbsp;
+                {geo.Longtitude.D}°{Math.round(geo.Longtitude.M)}'{Math.round(geo.Longtitude.S)}"{geo.Longtitude.Direction}
+              </p>
+            )
+          } else {
+            return null
           }
         }
 
@@ -94,16 +127,21 @@ export const PhotoList = React.memo(props => {
                 <span className='date'>Uploaded: {new Date(photo.uploadTime).toLocaleString()}</span>
               </Card.Meta>
               <Card.Description>
-                <p><b>Image size: </b>{photo.fullsize.width} x {photo.fullsize.height}</p>
                 <p><b>Detected labels:</b></p>
                 <DetectedLabels/>
+                <p><b>Image size: </b>{photo.fullsize.width} x {photo.fullsize.height}</p>
+                <GeoLocation/>
+                {(photo.exifMake || photo.exitModel) &&
+                <p><strong>Device: </strong>{photo.exifMake} {photo.exitModel} </p>}
               </Card.Description>
             </Card.Content>
           </Card>
         )
-      } else {
+      } else if (photo.ProcessingStatus === "RUNNING" || photo.ProcessingStatus === "PENDING") {
         return (<Card>
-          Processing...
+          <Dimmer active>
+            <Loader> Processing </Loader>
+          </Dimmer>
 
         </Card>)
       }
@@ -121,15 +159,14 @@ export const PhotoList = React.memo(props => {
 
     }
 
-    return props.photos.map(photoItem);
+    return (<Card.Group> {props.photos.map(photoItem)}</Card.Group>);
   };
 
   return (
     <div>
       <Divider hidden/>
-      <Card.Group>
 
-        <PhotoItems photos={props.photos}/>
-      </Card.Group>
+
+      <PhotoItems photos={props.photos}/>
     </div>)
 })

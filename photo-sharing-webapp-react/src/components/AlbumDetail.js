@@ -48,6 +48,32 @@ export const AlbumDetails = (props) => {
     return () => subscription.unsubscribe()
   }, [props.id])
 
+  useEffect(() => {
+    let subscription
+
+    async function setupSubscription() {
+      const user = await Auth.currentAuthenticatedUser()
+      subscription = API.graphql(graphqlOperation(subscriptions.onUpdatePhoto,
+        {owner: user.username})).subscribe({
+        next: (data) => {
+          const photo = data.value.data.onUpdatePhoto
+          if (photo.albumId !== props.id) return
+          setPhotos(p => {
+            for (let i in p){
+              if (p[i].id === photo.id){
+                p[i] = photo
+              }
+            }
+            return p
+          })
+        }
+      })
+    }
+
+    setupSubscription();
+    return () => subscription.unsubscribe()
+  }, [props.id])
+
   const fetchNextPhotos = async () => {
     const FETCH_LIMIT = 20
     setFetchingPhotos(true)

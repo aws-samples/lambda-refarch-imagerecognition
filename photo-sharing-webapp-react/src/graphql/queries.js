@@ -181,10 +181,19 @@ export const listPhotosByAlbumUploadTime = /* GraphQL */ `
         SfnExecutionArn
         ProcessingStatus
         objectDetected
-        album {
-          id
-          name
-          owner
+        geoLocation {
+          Latitude {
+            D
+            M
+            S
+            Direction
+          }
+          Longtitude {
+            D
+            M
+            S
+            Direction
+          }
         }
       }
       nextToken

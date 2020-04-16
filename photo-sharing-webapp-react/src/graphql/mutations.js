@@ -134,14 +134,6 @@ export const createPhoto = /* GraphQL */ `
           Direction
         }
       }
-      album {
-        id
-        name
-        owner
-        photos {
-          nextToken
-        }
-      }
     }
   }
 `;
@@ -186,14 +178,6 @@ export const updatePhoto = /* GraphQL */ `
           Direction
         }
       }
-      album {
-        id
-        name
-        owner
-        photos {
-          nextToken
-        }
-      }
     }
   }
 `;
@@ -236,14 +220,6 @@ export const deletePhoto = /* GraphQL */ `
           M
           S
           Direction
-        }
-      }
-      album {
-        id
-        name
-        owner
-        photos {
-          nextToken
         }
       }
     }
