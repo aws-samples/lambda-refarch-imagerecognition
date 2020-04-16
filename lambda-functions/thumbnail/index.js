@@ -48,9 +48,10 @@ async function generateThumbnail(s3Bucket, srcKey, width, height, format) {
  */
 exports.handler = async (event, context, callback) => {
   try {
+    console.log("Reading input from event:\n", util.inspect(event, {depth: 5}));
     const s3Bucket = event.s3Bucket;
     // Object key may have spaces or unicode non-ASCII characters.
-    const srcKey = decodeURIComponent(event.s3Key.replace(/\+/g, " "));
+    const srcKey = event.s3Key;
 
     const size = event.extractedMetadata.dimensions;
     const scalingFactor = Math.min(
