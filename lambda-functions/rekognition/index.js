@@ -8,7 +8,7 @@ const rekognition = new AWS.Rekognition();
  * @param context
  * @param callback
  */
-exports.handler = (event, context, callback) => {
+exports.handler = async (event, context, callback) => {
     console.log("Reading input from event:\n", util.inspect(event, {depth: 5}));
 
     const srcBucket = event.s3Bucket;
@@ -26,10 +26,11 @@ exports.handler = (event, context, callback) => {
         MinConfidence: 60
     };
 
-    rekognition.detectLabels(params).promise().then(function (data) {
-        callback(null, data.Labels);
-    }).catch(function (err) {
+    try {
+        const result = await rekognition.detectLabels(params).promise();
+        callback(null, result.Labels);
+    } catch (err) {
         callback(err);
-    });
+    }
 
 };
