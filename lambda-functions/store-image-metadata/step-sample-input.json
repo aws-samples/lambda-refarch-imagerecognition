@@ -1,7 +1,7 @@
 {
-  "s3Bucket": "refarch-photorepos3bucket-xvqjajtk05bo",
-  "s3Key": "Incoming/0990309876941-bob/ba-IMG_20160706_094820.jpg",
-  "objectID": "0990309876941-bob/ba-IMG_20160706_094820.jpg",
+  "s3Bucket": "photo-sharee7fa5f1b25be4c63a81417becda53512master-master",
+  "s3Key": "private/us-east-1:4f182a97-9165-46d8-a6de-f29b16927761/uploads/1d0e9d92-b444-4ed2-a4e8-e1ee6071bf2a.png",
+  "objectID": "private/us-east-1:4f182a97-9165-46d8-a6de-f29b16927761/uploads/1d0e9d92-b444-4ed2-a4e8-e1ee6071bf2a.png",
   "extractedMetadata": {
     "creationTime": "2016:07:06 09:48:21",
     "geo": {
@@ -21,55 +21,70 @@
     "exifMake": "LGE",
     "exifModel": "Nexus 5X",
     "dimensions": {
-      "width": 4032,
-      "height": 3024
+      "width": 1402,
+      "height": 783
     },
-    "fileSize": "2.136MB",
-    "format": "JPEG"
+    "fileSize": "88504B",
+    "format": "PNG"
   },
   "parallelResults": [
     [
       {
-        "Name": "Palm Tree",
-        "Confidence": 99.21247100830078
+        "Name": "Word",
+        "Confidence": 96.80172729492188,
+        "Instances": [],
+        "Parents": []
       },
       {
-        "Name": "Plant",
-        "Confidence": 99.21247100830078
+        "Name": "Text",
+        "Confidence": 96.48905944824219,
+        "Instances": [],
+        "Parents": []
       },
       {
-        "Name": "Tree",
-        "Confidence": 99.21247100830078
+        "Name": "File",
+        "Confidence": 77.9222183227539,
+        "Instances": [],
+        "Parents": []
       },
       {
-        "Name": "Agavaceae",
-        "Confidence": 96.6033935546875
+        "Name": "Scoreboard",
+        "Confidence": 74.76708984375,
+        "Instances": [
+          {
+            "BoundingBox": {
+              "Width": 0.9764256477355957,
+              "Height": 0.8571417331695557,
+              "Left": 0.014487230218946934,
+              "Top": 0.06307414174079895
+            },
+            "Confidence": 74.76708984375
+          }
+        ],
+        "Parents": []
       },
       {
-        "Name": "Aloe",
-        "Confidence": 96.2696762084961
+        "Name": "Webpage",
+        "Confidence": 70.3815689086914,
+        "Instances": [],
+        "Parents": [
+          {
+            "Name": "File"
+          }
+        ]
       },
       {
-        "Name": "Beach",
-        "Confidence": 94.15129089355469
-      },
-      {
-        "Name": "Coast",
-        "Confidence": 94.15129089355469
-      },
-      {
-        "Name": "Outdoors",
-        "Confidence": 94.15129089355469
-      },
-      {
-        "Name": "Sea",
-        "Confidence": 94.15129089355469
-      },
-      {
-        "Name": "Water",
-        "Confidence": 94.15129089355469
+        "Name": "Symbol",
+        "Confidence": 64.35458374023438,
+        "Instances": [],
+        "Parents": []
       }
     ],
-    "Thumbnail/0990309876941-bob/ba-IMG_20160706_094820.jpg"
+    {
+      "width": 250,
+      "height": 139.62196861626248,
+      "s3key": "resized/private/us-east-1:4f182a97-9165-46d8-a6de-f29b16927761/uploads/1d0e9d92-b444-4ed2-a4e8-e1ee6071bf2a.png",
+      "s3Bucket": "photo-sharee7fa5f1b25be4c63a81417becda53512master-master"
+    }
   ]
 }
