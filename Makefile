@@ -33,6 +33,7 @@ deploy: ##=> Deploy services
       PhotoRepoS3Bucket=${PHOTO_BUCKET} \
       GraphQLEndPoint=${APPSYNC_URL} \
       GraphQLAPIId=${GRAPHQL_API_ID} \
+      Stage=${AWS_BRANCH} \
       --no-fail-on-empty-changeset
 
 #############

@@ -26,6 +26,9 @@ Parameters:
   GraphQLAPIId:
     Description: graph QL API ID
     Type: String
+  Stage:
+    Type: String
+    Description: Environment stage or git branch
 
 Resources:
   # ---------------------------------------------------------------------------------------------------------------------
@@ -136,7 +139,7 @@ Resources:
   ImageProcStateMachine:
     Type: "AWS::StepFunctions::StateMachine"
     Properties:
-      StateMachineName: 'PhotoProcessingWorkflow'
+      StateMachineName: !Sub PhotoProcessingWorkflow-${Stage}
       DefinitionString:
         !Sub |-
         ##{{STATEMACHINE_DEF}}

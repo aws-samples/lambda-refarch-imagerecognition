@@ -29,27 +29,6 @@ let client = new AWSAppSyncClient({
   disableOffline: true
 });
 
-const CREATE_PHOTO_MUTATION = gql`
-    mutation CreatePhoto(
-        $input: CreatePhotoInput!
-        $condition: ModelPhotoConditionInput
-    ) {
-        createPhoto(input: $input, condition: $condition) {
-            id
-            albumId
-            uploadTime
-            bucket
-            owner
-            fullsize {
-                key
-            }
-            SfnExecutionArn
-            ProcessingStatus
-
-        }
-    }
-`
-
 const UPDATE_PHOTO_MUTATION = gql`
     mutation UpdatePhoto(
         $input: UpdatePhotoInput!
@@ -110,28 +89,9 @@ async function processRecord(record) {
     return;
   }
 
-  // const photoInfo = await S3.headObject({Bucket: bucketName, Key: key}).promise()
-  // const metadata = photoInfo.Metadata
-  // const uploadTime = photoInfo.LastModified
-  //
-  // const albumId = metadata.albumid
-  // const owner = metadata.owner
   const SfnExecutionArn = await startSfnExecution(bucketName, key, id);
   console.log(`Sfn started. Execution: ${SfnExecutionArn}`)
 
-  // const item = {
-  //   id: key,
-  //   albumId,
-  //   owner,
-  //   uploadTime,
-  //   bucket: bucketName,
-  //   fullsize: {
-  //     key: key,
-  //   },
-  //   SfnExecutionArn,
-  //   ProcessingStatus: 'RUNNING'
-  // }
-  // console.log('update photo item: ', JSON.stringify(item, null, 2))
   const item = {
     id,
     SfnExecutionArn,
