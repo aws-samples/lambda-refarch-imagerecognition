@@ -66,7 +66,7 @@ Consider in our scenario we only support JPEG and PNG formats. The image analysi
 	 
 1. To ensure only JPEG and PNG images are allowed to be further processed, we create a Choice state that directs to the *NotSupportedImageType* Fail state when the image format is not JPEG or PNG. 
 
-	Add a **Choice** state after the **NotSupportedImageType** fail state: 
+	Add a **Choice** state after the **NotSupportedImageType** fail state (Note that after adding this block there will be a syntax error on one of the lines due to a missing state. This will get resolved after completing the next step): 
 
 	```JSON
 	  "ImageTypeCheck": {
@@ -112,7 +112,7 @@ Consider in our scenario we only support JPEG and PNG formats. The image analysi
 	
 1. The Choice state must not be an end state in a Step Functions state machine. Therefore, we need to have a state following the choice state. For now, create a placeholder **Pass** state that will be replaced by a parallel processing step (Note we already have a `Next` pointer to this state from the **ImageTypeCheck** state): 
 	
-	``````JSON
+	```JSON
 	    "Parallel": {
 	      "Type": "Pass",
 	      "Result": {

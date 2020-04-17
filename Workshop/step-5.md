@@ -19,7 +19,7 @@ The first step requires some extra configuration as it needs CloudTrail to be en
 
 1. On the Dashboard locate your state machine. If you followed instructions on prior steps it should be *ImageProcessing*
 
-1. On the upper right corner of the page, find and copy the **State Machine Arn**: 	 
+1. On the **Details** box, find and copy the **ARN**: 
 
 	<img src="images/5a-state-machine-arn-newer.png" width="90%">
 
@@ -55,7 +55,7 @@ The Lambda function now knows what state machine we want it to run. Now we need 
 
 1. Enter the following parameters:  
 	- **Name**: ExecuteStateMachine
-	- **Events**: ObjectCreate(All)
+	- **Events**: All object create events
 	- **Prefix**: Incoming/
 	- **Send to**: Lambda Function
 	- **Lambda**: sfn-workshop-setup-StartExecution
@@ -75,7 +75,7 @@ Now you are ready to test your event! Just upload an image within the S3 bucket 
 
 1. Click **Next** and **Upload**  
 
-1. Verify that the state machine is triggered and it executes successfully. Verify the thumbnail and data stored in DynamoDB.
+1. Verify that the state machine is triggered and it executes successfully. Verify the metadata of the new image processed is stored in DynamoDB.
 	
 	<img src="images/5c-state-machine-execution.png" width="90%">
 

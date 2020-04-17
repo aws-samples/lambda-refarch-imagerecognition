@@ -189,13 +189,20 @@ Resources:
         Variables:
           IMAGE_METADATA_DDB_TABLE: !Ref ImageMetadataDDBTable
           STATE_MACHINE_ARN: !Ref ImageProcStateMachine
-      Runtime: nodejs4.3
+      Runtime: nodejs12.x
       Timeout: 60
     Type: AWS::Serverless::Function
 
 # ---------------------------------------------------------------------------------------------------------------------
 # This group of Lambda functions below make up the Step Functions state machine to execute the image processing workflow
 # ---------------------------------------------------------------------------------------------------------------------
+  ImageMagick:
+    Type: AWS::Serverless::Application
+    Properties:
+      Location:
+        ApplicationId: arn:aws:serverlessrepo:us-east-1:145266761615:applications/image-magick-lambda-layer
+        SemanticVersion: 1.0.0
+
   ExtractImageMetadataFunction:
     Properties:
       CodeUri:
@@ -206,7 +213,9 @@ Resources:
       Timeout: 200
       Role:
         !GetAtt BackendProcessingLambdaRole.Arn
-      Runtime: nodejs4.3
+      Runtime: nodejs12.x
+      Layers:
+        - !GetAtt ImageMagick.Outputs.LayerVersion
     Type: AWS::Serverless::Function
 
   TransformMetadataFunction:
@@ -219,7 +228,7 @@ Resources:
       Timeout: 60
       Role:
         !GetAtt BackendProcessingLambdaRole.Arn
-      Runtime: nodejs4.3
+      Runtime: nodejs12.x
     Type: AWS::Serverless::Function
 
   StoreImageMetadataFunction:
@@ -232,7 +241,7 @@ Resources:
       Timeout: 60
       Role:
         !GetAtt BackendProcessingLambdaRole.Arn
-      Runtime: nodejs4.3
+      Runtime: nodejs12.x
       Environment:
         Variables:
           IMAGE_METADATA_DDB_TABLE: !Ref ImageMetadataDDBTable
@@ -246,7 +255,7 @@ Resources:
       Timeout: 60
       Role:
         !GetAtt BackendProcessingLambdaRole.Arn
-      Runtime: nodejs4.3
+      Runtime: nodejs12.x
       CodeUri:
         ../lambda-functions/rekognition
     Type: AWS::Serverless::Function
@@ -261,7 +270,9 @@ Resources:
       Timeout: 300
       Role:
         !GetAtt BackendProcessingLambdaRole.Arn
-      Runtime: nodejs4.3
+      Runtime: nodejs12.x
+      Layers:
+        - !GetAtt ImageMagick.Outputs.LayerVersion
     Type: AWS::Serverless::Function
 
 # ---------------------------------------------------------------------------------------------------------------------
@@ -325,7 +336,7 @@ Resources:
         !GetAtt CustomResourceHelperRole.Arn
       CodeUri:
         ../lambda-functions/create-s3-event-trigger-helper
-      Runtime: nodejs4.3
+      Runtime: nodejs12.x
     Type: AWS::Serverless::Function
 
   S3EventTrigger:
@@ -379,15 +390,11 @@ Resources:
     Type: "AWS::StepFunctions::StateMachine"
     Properties:
       DefinitionString:
-        !Sub
-          - |-
+        !Sub |-
           ##{{STATEMACHINE_DEF}}
-          - {ExtractImageMetadataLambdaArn: !GetAtt ExtractImageMetadataFunction.Arn,
-             TransformMetadataLambdaArn: !GetAtt TransformMetadataFunction.Arn,
-            StoreImageMetadataLambdaArn: !GetAtt StoreImageMetadataFunction.Arn,
-            RekognitionLambdaArn: !GetAtt RekognitionFunction.Arn,
-            GenerateThumbnailLambdaArn: !GetAtt GenerateThumbnailFunction.Arn}
       RoleArn: !GetAtt StateMachineRole.Arn
+
+
 
 # ---------------------------------------------------------------------------------------------------------------------
 # Used by the frontend test web app to query status of a Step Function state machine execution.
@@ -443,7 +450,7 @@ Resources:
         !GetAtt DescribeExecutionFunctionRole.Arn
       CodeUri:
         ../lambda-functions/state-machine-describe-execution
-      Runtime: nodejs4.3
+      Runtime: nodejs12.x
     Type: AWS::Serverless::Function
 
   TestClientIdentityPool:

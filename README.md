@@ -27,18 +27,25 @@ You can use the test web app to upload images and see the result of the image re
  
 #### Option 1: Launch the CloudFormation Template in US West - Oregon (us-west-2) 
 The backend infrastructure can be deployed in US West - Oregon (us-west-2) using the provided CloudFormation template.
+
 Click **Launch Stack** to launch the template in the US West - Oregon (us-west-2) region in your account:
 
-[![Launch Lambda IoT Backend into Oregon with CloudFormation](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/images/cloudformation-launch-stack-button.png)](https://console.aws.amazon.com/cloudformation/home?region=us-west-2#/stacks/new?stackName=photo-sharing-backend&templateURL=https://s3-us-west-2.amazonaws.com/media-sharing-refarch/cloudformation/image-processing-v3.output.yaml)
+[![Launch Lambda Backend into Oregon with CloudFormation](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/images/cloudformation-launch-stack-button.png)](https://console.aws.amazon.com/cloudformation/home?region=us-west-2#/stacks/new?stackName=photo-sharing-backend&templateURL=https://s3-us-west-2.amazonaws.com/media-sharing-refarch/cloudformation/image-processing-v3-node12.output.yaml)
 
-(In the last page of the wizard, make sure to:
+> In the last page of the wizard, make sure to click the checkboxes to accept:
+> 
+> * I acknowledge that AWS CloudFormation might create IAM resources.
+> * I acknowledge that AWS CloudFormation might create IAM resources with custom names.
+> * I acknowledge that AWS CloudFormation might require the following capability: `CAPABILITY_AUTO_EXPAND`
+> 
+> before clicking **"Create stack"**
 
-1. Click the checkboxes to give AWS CloudFormation permission to **"create IAM resources"** and **"create IAM resources with custom names"**
-2. Follow the instructions to **"Create Change Set"** 
-3. Click **"Execute"**
-)
 
 #### Option 2: Launch the CloudFormation Template in a different region than US West - Oregon (us-west-2) 
+
+<details>
+<summary><strong> Expand for instructions </strong></summary><p>
+
 
 If you would like to deploy the template to a different region (must be a region that supports **Amazon Rekognition** and **AWS Step Functions**, e.g. US East (N.Virginia) or EU (Ireland), you need a S3 bucket in the target region, and then package the Lambda functions into that S3 bucket by using the `aws cloudformation package` utility.
 
@@ -71,6 +78,9 @@ Last, deploy the stack with the resulting yaml (`image-processing.output.yaml `)
 aws cloudformation deploy --region $REGION --template-file image-processing.output.yaml --stack-name photo-sharing-backend --capabilities CAPABILITY_IAM
 ```
 
+</details>
+
+
 ## Testing the example
 You can use the test web app to see the backend working in action. 
 
@@ -99,7 +109,7 @@ In a terminal, go to the `webapp` folder, then type
 npm install
 npm start
 ```
-This compiles the application, starts a local server, and opens a browser that loads the test web application.
+This compiles the application, starts a local server, and opens a browser that loads the test web application (this app has been tested on **Chrome** browser only) 
  
 #### Using the web app
 ##### Login

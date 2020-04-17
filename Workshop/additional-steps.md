@@ -2,7 +2,7 @@
 
 Now that you have created an application with StepFunctions and a web application to interact with it, it's time to earn a few extra credits!
 
-The challenges here are, pick your battle :)
+The challenges are here, pick your battle :)
 
 ### Step A: Implement retries within the state-machine, not in the code.
 
@@ -12,7 +12,7 @@ The challenge here is, by using our documentation about [retries](http://docs.aw
 
 > e.g. If the image type is not supported, there is no point on retrying. However, if PersistDDB fails with *"ProvisionedThroughputExceededException"*, we should retry storing the data. You can play with the different backoffs and max attempts in these settings. 
 > 
-> You can test your retry policies by simulating different errors. For example, the extract image metadata lambda function can take a few seconds to run for a large image. You can go to the lambda console and change the extract image metadata function timeout to 1 second and pass an image greater than 2MB into the state machine and verify the retries kick in. 
+> You can test your retry policies by simulating different errors. For example, the extract image metadata Lambda function can take a few seconds to run for a large image. You can go to the Lambda console and change the extract image metadata function timeout to 1 second and pass an image greater than 2MB into the state machine and verify the retries kick in. 
 
 
 ### Step B: Manual approval for suspected inappropriate content
@@ -222,7 +222,7 @@ Explore the execution metrics by going to the CloudWatch Metrics console and sea
 
 Did all images copied into your bucket get processed by Step Functions? You can find out by two ways:
 
-1. Go to the metrics for the Lambda trigger function (in the [Lambda console](https://us-west-2.console.aws.amazon.com/lambda/home?region=us-west-2), search for function name containing ```StartExecution```). Click on the function and go to the **monitoring** tab. Do you see any **Invocation errors**? Check the Lambda logs to see what the error is
+1. Go to the metrics for the Lambda trigger function (in the [Lambda console](https://us-west-2.console.aws.amazon.com/lambda/home?region=us-west-2), search for function name containing ```StartExecution```). Click on the function and go to the **monitoring** tab. Do you see any **Invocation errors**? Check the Lambda logs to see what the error is.
 1. Go to the DynamoDB table (look for table name starting with ```sfn-workshop-resources-ImageMetadataDDBTable-```) and look for entries with **errReason** field (or with **executionArn** field equals **ERR**):
 
 <img src="images/dynamo-screenshot.png" width="80%">
