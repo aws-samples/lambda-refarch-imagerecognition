@@ -17,6 +17,7 @@ deploy: ##=> Deploy services
 
 	cd lambda-functions/thumbnail && npm install && \
 	cd ../extract-image-metadata && npm install && \
+	cd ../store-image-metadata && npm install && \
 	cd ../../cloudformation/ && \
     python inject_state_machine_cfn.py \
       -s ${STATE_MACHINE_JSON} \
