@@ -4,13 +4,11 @@ var environment = process.env.ENV
 var region = process.env.REGION
 var apiPhotoshareGraphQLAPIIdOutput = process.env.API_PHOTOSHARE_GRAPHQLAPIIDOUTPUT
 var apiPhotoshareGraphQLAPIEndpointOutput = process.env.API_PHOTOSHARE_GRAPHQLAPIENDPOINTOUTPUT
-var storagePhotostorageBucketName = process.env.STORAGE_PHOTOSTORAGE_BUCKETNAME
 
 Amplify Params - DO NOT EDIT */
 require('dotenv').config();
 require('isomorphic-fetch');
 const AWS = require('aws-sdk');
-const S3 = new AWS.S3({signatureVersion: 'v4'});
 const AUTH_TYPE = require('aws-appsync').AUTH_TYPE;
 const AWSAppSyncClient = require('aws-appsync').default;
 const gql = require('graphql-tag')
