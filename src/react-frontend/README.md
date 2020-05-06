@@ -1,4 +1,4 @@
-This project was built on react and bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This project was built on React and on top of https://github.com/aws-samples/amplify-photo-gallery-workshop
 
 
 ## Running locally

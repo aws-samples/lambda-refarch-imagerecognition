@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {S3Image} from 'aws-amplify-react'
 
-import {Card, Label, Divider, Form, Dimmer, Loader} from 'semantic-ui-react'
+import {Card, Label, Divider, Form, Dimmer, Loader, Message} from 'semantic-ui-react'
 
 import {v4 as uuid} from 'uuid';
 import * as mutations from '../graphql/mutations'
@@ -9,10 +9,52 @@ import AWSConfig from '../aws-exports'
 import {Auth} from "aws-amplify";
 import Storage from '@aws-amplify/storage'
 import API, {graphqlOperation} from "@aws-amplify/api";
-import * as queries from "../graphql/queries";
 
 export const S3ImageUpload = (props) => {
   const [uploading, setUploading] = useState(false)
+  const [statuses, setStatuses] = useState({})
+
+  const ProcessingStatus = (props) => {
+    setStatuses(prevState => {
+      for (let id in props.processingStatuses) {
+        if (id in prevState) {
+          prevState[id]['status'] = props.processingStatuses[id]['status']
+          prevState[id]['sfnArn'] = props.processingStatuses[id]['sfnArn']
+        }
+      }
+      return prevState
+    });
+
+    let sfnExecutionLink = ((sfnArn) => {
+      if (sfnArn) {
+        let arnComponets = sfnArn.split(":")
+        let awsRegion = arnComponets[3]
+        let executionId = arnComponets[arnComponets.length-1]
+        let consoleUrl = `https://console.aws.amazon.com/states/home?region=${awsRegion}#/executions/details/${sfnArn}`
+        return (
+          <span>Step Function execution: <a href={consoleUrl} target="_blank" >  {executionId}</a></span>
+        )
+      } else {
+        return null
+      }
+    })
+    return (Object.keys(statuses).map((fileId) => {
+        let status = statuses[fileId]
+        return (<Message positive>
+            {/*<Message.Header>{filename}</Message.Header>*/}
+            <p>
+              <b>{status.filename}</b>
+              {(status.status === 'PENDING' && ' uploading to S3.')}
+              {((status.status === 'UPLOADED' || status.status === 'RUNNING') && ' uploaded. Processing... ')}
+              {(status.status === 'SUCCEEDED' && ' successfully processed. ')}
+              {sfnExecutionLink(status.sfnArn)}
+            </p>
+
+          </Message>
+        )
+      }
+    ))
+  }
 
   const uploadFile = async (file) => {
     const imageId = uuid();
@@ -30,17 +72,32 @@ export const S3ImageUpload = (props) => {
 
     await API.graphql(graphqlOperation(mutations.createPhoto, {"input": createPhotoArg}))
 
+    setStatuses(prevStatus => {
+      prevStatus[imageId] = {
+        'filename': file.name,
+        'status': 'PENDING'
+      }
+      return prevStatus
+    })
+
     try {
       const result = await Storage.vault.put(
         fileName,
         file,
         {
           metadata: {
+            // Discovered that Amplify has bug that doesn't persist this metadata when multipart upload is used
+            // https://github.com/aws-amplify/amplify-js/issues/5432
             albumid: props.albumId,
             owner: user.username,
           }
         }
       );
+
+      setStatuses(prevStatus => {
+        prevStatus[imageId]['status'] = 'UPLOADED';
+        return prevStatus
+      })
 
       console.log(`Uploaded ${file.name} to ${fileName}: `, result);
     } catch (e) {
@@ -48,13 +105,15 @@ export const S3ImageUpload = (props) => {
     }
   }
 
-  const onChange = async (e) => {
+  const onFileSelectionChange = async (e) => {
     setUploading(true)
 
     let files = [];
     for (let i = 0; i < e.target.files.length; i++) {
       files.push(e.target.files.item(i));
     }
+    setStatuses({})
+    props.clearStatus()
     await Promise.all(files.map(f => uploadFile(f)));
 
     setUploading(false)
@@ -73,9 +132,10 @@ export const S3ImageUpload = (props) => {
         type="file"
         accept='image/*'
         multiple
-        onChange={onChange}
+        onChange={onFileSelectionChange}
         style={{display: 'none'}}
       />
+      <ProcessingStatus processingStatuses={props.processingStatuses}/>
     </div>
   );
 }
@@ -111,7 +171,7 @@ export const PhotoList = React.memo(props => {
         }
 
         return (
-          <Card>
+          <Card key={photo.id}>
             <Card.Content textAlign="center">
               <S3Image
                 key={photo.id}
@@ -140,21 +200,8 @@ export const PhotoList = React.memo(props => {
           <Dimmer active>
             <Loader> Processing </Loader>
           </Dimmer>
-
         </Card>)
       }
-      // if (photo.ProcessingStatus == "RUNNING") {
-      //   return <div>Processing...</div>
-      // } if (photo.ProcessingStatus == "SUCCEEDED") {
-      //   return (<S3Image
-      //     key={photo.thumbnail.key}
-      //     imgKey={'resized/' + photo.thumbnail.key.replace(/.+resized\//, '')}
-      //     level="private"
-      //     style={{display: 'inline-block', 'paddingRight': '5px'}}
-      //   />);
-      //
-      // }
-
     }
 
     return (<Card.Group> {props.photos.map(photoItem)}</Card.Group>);
@@ -163,8 +210,6 @@ export const PhotoList = React.memo(props => {
   return (
     <div>
       <Divider hidden/>
-
-
       <PhotoItems photos={props.photos}/>
     </div>)
 })

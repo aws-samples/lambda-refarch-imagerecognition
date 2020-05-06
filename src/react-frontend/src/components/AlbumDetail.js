@@ -14,6 +14,7 @@ export const AlbumDetails = (props) => {
   const [hasMorePhotos, setHasMorePhotos] = useState(true)
   const [fetchingPhotos, setFetchingPhotos] = useState(false)
   const [nextPhotosToken, setNextPhotosToken] = useState(null)
+  const [processingStatuses, setProcessingStatuses] = useState({})
 
   useEffect(() => {
     const loadAlbumInfo = async () => {
@@ -40,6 +41,15 @@ export const AlbumDetails = (props) => {
           const photo = data.value.data.onCreatePhoto
           if (photo.albumId !== props.id) return
           setPhotos(p => p.concat([photo]))
+
+          setProcessingStatuses((prevState => {
+            prevState[photo.id] = {
+              'status': photo.ProcessingStatus,
+              'sfnArn': photo.SfnExecutionArn
+            }
+            return prevState
+          }))
+
         }
       })
     }
@@ -60,11 +70,18 @@ export const AlbumDetails = (props) => {
           if (photo.albumId !== props.id) return
           setPhotos(p => {
             let newPhotos = p.slice()
-            for (let i in newPhotos){
-              if (newPhotos[i].id === photo.id){
+            for (let i in newPhotos) {
+              if (newPhotos[i].id === photo.id) {
                 newPhotos[i] = photo
               }
             }
+            setProcessingStatuses((prevState => {
+              prevState[photo.id] = {
+                'status': photo.ProcessingStatus,
+                'sfnArn': photo.SfnExecutionArn
+              }
+              return prevState
+            }))
             return newPhotos
           })
         }
@@ -94,7 +111,9 @@ export const AlbumDetails = (props) => {
   return (
     <Segment>
       <Header as='h3'>{album.name}</Header>
-      <S3ImageUpload albumId={album.id}/>
+      <S3ImageUpload albumId={album.id}
+                     clearStatus={() => setProcessingStatuses({})}
+                     processingStatuses={processingStatuses}/>
       <PhotoList photos={photos}/>
       {
         hasMorePhotos &&
