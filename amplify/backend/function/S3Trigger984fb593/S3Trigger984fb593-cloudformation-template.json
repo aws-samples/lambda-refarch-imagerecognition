@@ -84,7 +84,7 @@
                 "ReservedConcurrentExecutions": "10",
                 "Code": {
                     "S3Bucket": "amplify-photo-share-master-135626-deployment",
-                    "S3Key": "amplify-builds/S3Trigger984fb593-496a303951647859434e-build.zip"
+                    "S3Key": "amplify-builds/S3Trigger984fb593-6b33644d457a4b74304a-build.zip"
                 }
             }
         },
@@ -176,7 +176,7 @@
             ],
             "Type": "AWS::IAM::Policy",
             "Properties": {
-                "PolicyName": "amplify-lambda-execution-policy",
+                "PolicyName": "amplify-lambda-appsync-invoke",
                 "Roles": [
                     {
                         "Ref": "LambdaExecutionRole"
@@ -189,7 +189,7 @@
                             "Effect": "Allow",
                             "Action": [
                                 "appsync:GraphQL"
-                            ],
+]                            ],
                             "Resource": [
                                 {
                                     "Fn::Join": [

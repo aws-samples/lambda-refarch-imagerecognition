@@ -1,4 +1,9 @@
 /* Amplify Params - DO NOT EDIT
+	API_PHOTOSHARE_GRAPHQLAPIENDPOINTOUTPUT
+	API_PHOTOSHARE_GRAPHQLAPIIDOUTPUT
+	ENV
+	REGION
+Amplify Params - DO NOT EDIT *//* Amplify Params - DO NOT EDIT
 You can access the following resource attributes as environment variables from your Lambda function
 var environment = process.env.ENV
 var region = process.env.REGION
