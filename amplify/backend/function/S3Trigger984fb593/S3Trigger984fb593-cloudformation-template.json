@@ -189,7 +189,7 @@
                             "Effect": "Allow",
                             "Action": [
                                 "appsync:GraphQL"
-]                            ],
+							],
                             "Resource": [
                                 {
                                     "Fn::Join": [
