@@ -32,7 +32,7 @@ export const S3ImageUpload = (props) => {
         let executionId = arnComponets[arnComponets.length-1]
         let consoleUrl = `https://console.aws.amazon.com/states/home?region=${awsRegion}#/executions/details/${sfnArn}`
         return (
-          <span>Step Function execution: <a href={consoleUrl} target="_blank" >  {executionId}</a></span>
+          <span>Step Function execution: <a href={consoleUrl} target="_blank" rel="noopener noreferrer" >  {executionId}</a></span>
         )
       } else {
         return null
