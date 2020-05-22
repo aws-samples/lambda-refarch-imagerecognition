@@ -8,7 +8,7 @@ import React from 'react';
 import Amplify from 'aws-amplify';
 import aws_exports from './aws-exports';
 
-import {AmplifyAuthenticator, AmplifySignOut} from '@aws-amplify/ui-react';
+import {AmplifyAuthenticator, AmplifySignOut, AmplifySignUp} from '@aws-amplify/ui-react';
 import {Grid, Menu, Header} from 'semantic-ui-react'
 
 import '@aws-amplify/ui/dist/style.css';
@@ -23,6 +23,31 @@ Amplify.configure(aws_exports);
 function App() {
   return (
     <AmplifyAuthenticator>
+      <AmplifySignUp
+        slot="sign-up"
+        formFields={[
+          {
+            type: "username",
+            label: "Username *",
+            placeholder: "Username",
+            required: true,
+          },
+          {
+            type: "email",
+            label: "Email *",
+            placeholder: "Email",
+            required: true,
+          },
+          {
+            type: "password",
+            label: "Password *",
+            placeholder: "Password",
+            required: true,
+          },
+        ]}
+
+      ></AmplifySignUp>
+
       <Router>
         <Menu inverted attached>
           <Menu.Item
