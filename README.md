@@ -27,12 +27,14 @@ Follow these instructions to deploy the application (both backend and frontend):
 1. If you don't have an IAM Service Role, create one
 1. Amplify Console will forked this repository in your GitHub account.
 1. Within your new app in Amplify Console, wait for deployment to complete (this may take a while)
-1. Once the deployment is complete 
+1. Once the deployment is complete, you can test out the application! 
 
-If you want to 
-1. Choose **Backend environments**, and select the environment you see
-7) Under **Edit backend**, copy the `amplify pull` command displayed
-8) Within your forked repository locally, run the command you copied and follow the instructions
+If you want to make changes to the code locally: 
+
+1. Clone the repo in your Github account that Amplify created 
+1. In the Amplify console, choose **Backend environments**, and select the environment you see
+1. Under **Edit backend**, copy the `amplify pull` command displayed
+1. Within your forked repository locally, run the command you copied and follow the instructions
     - This command synchronizes what's deployed to your local Amplify environment
 
 ### Using the test web app
