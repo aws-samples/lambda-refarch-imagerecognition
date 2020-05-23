@@ -1,0 +1,105 @@
+type Album
+@model
+@auth(rules: [
+    {allow: owner},
+    {allow: private, provider: iam}
+]) {
+    id: ID!
+    name: String!
+    owner: String
+    photos: [Photo] @connection(keyName: "byAlbumUploadTime", fields: ["id"])
+}
+
+type Photo
+@model
+@key(name: "byAlbumUploadTime", fields: ["albumId", "uploadTime"], queryField: "listPhotosByAlbumUploadTime")
+@auth(rules: [
+    {allow: owner},
+    {allow: private, provider: iam}
+]) {
+    id: ID!
+    albumId: ID!
+    owner: String
+    uploadTime: AWSDateTime!
+    album: Album @connection(fields: ["albumId"])
+    bucket: String!
+    fullsize: PhotoS3Info
+    thumbnail: PhotoS3Info
+    format: String
+    exifMake: String
+    exitModel: String
+    SfnExecutionArn: String
+    ProcessingStatus: Status
+    objectDetected: [String]
+    geoLocation: GeoCoordinates
+}
+
+enum GeoCoordinateDirection{
+    N,
+    W,
+    S,
+    E
+}
+
+type GeoCoordinates @aws_iam @aws_cognito_user_pools{
+    Latitude: Latitude!
+    Longtitude: Longtitude!
+}
+
+type Latitude @aws_iam @aws_cognito_user_pools{
+    D: Float!
+    M: Float!
+    S: Float!
+    Direction: GeoCoordinateDirection!
+}
+
+type Longtitude @aws_iam @aws_cognito_user_pools{
+    D: Float!
+    M: Float!
+    S: Float!
+    Direction: GeoCoordinateDirection!
+
+}
+
+type PhotoS3Info @aws_iam @aws_cognito_user_pools{
+    key: String!
+    width: Int
+    height: Int
+}
+
+type Mutation {
+    startSfnExecution(input: StartSfnExecutionInput!): StartSfnExecutionResult @aws_iam
+}
+
+type Query {
+    checkSfnStatus(input: checkSfnStatusInput!): SfnStatusResult
+}
+
+input checkSfnStatusInput{
+    executionArn: String!
+}
+
+type SfnStatusResult {
+    startDate: Float,
+    stopDate: Float,
+    status: Status
+}
+
+enum Status {
+    PENDING
+    RUNNING
+    SUCCEEDED
+    FAILED
+    TIMED_OUT
+    ABORTED
+}
+
+input StartSfnExecutionInput {
+    input: String!
+    stateMachineArn: String!
+}
+
+type StartSfnExecutionResult @aws_iam{
+    executionArn: String!
+    startDate: Float
+}

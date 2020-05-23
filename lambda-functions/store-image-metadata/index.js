@@ -1,92 +1,120 @@
 // dependencies
+require('isomorphic-fetch');
 const AWS = require('aws-sdk');
+const AUTH_TYPE = require('aws-appsync').AUTH_TYPE;
+const AWSAppSyncClient = require('aws-appsync').default;
+const gql = require('graphql-tag')
 const util = require('util');
 
-const tableName = process.env.IMAGE_METADATA_DDB_TABLE;
-// get reference to S3 client
-const s3 = new AWS.S3();
-const docClient = new AWS.DynamoDB.DocumentClient({
-    region: process.env.AWS_REGION
+let client = new AWSAppSyncClient({
+  url: process.env.GRAPHQL_API_ENDPOINT,
+  region: process.env.AWS_REGION,
+  auth: {
+    type: AUTH_TYPE.AWS_IAM,
+    credentials: AWS.config.credentials
+  },
+  disableOffline: true
 });
 
-exports.handler = (event, context, callback) => {
-    console.log("Reading input from event:\n", util.inspect(event, {depth: 5}));
-    const srcBucket = event.s3Bucket;
-    // Object key may have spaces or unicode non-ASCII characters.
-    const srcKey = decodeURIComponent(event.s3Key.replace(/\+/g, " "));
-
-    const s3ObjectParams = {
-        Bucket: srcBucket,
-        Key: srcKey
-    };
-
-    const s3ObjectMetadataPromise = s3.headObject(s3ObjectParams).promise();
-
-    s3ObjectMetadataPromise.then((s3ObjectMetadata) => {
-        const fileUploadTimeStamp = Math.floor(Date.parse(s3ObjectMetadata.LastModified) / 1000);
-        console.log(util.inspect(s3ObjectMetadata, {depth: 5}));
-
-        var UpdateExpression = 'SET uploadTime = :uploadTime, ' +
-            'imageFormat = :format, dimensions = :dimensions, ' +
-            'fileSize = :fileSize, userID = :userID, ' +
-            'albumID = :albumID';
-
-        var ExpressionAttributeValues = {
-            ":uploadTime": fileUploadTimeStamp,
-            ":format": event.extractedMetadata.format,
-            ":dimensions": event.extractedMetadata.dimensions,
-            ":fileSize": event.extractedMetadata.fileSize,
-            ":userID": s3ObjectMetadata.Metadata.userid,
-            ":albumID": s3ObjectMetadata.Metadata.albumid
-        };
-
-        if (event.extractedMetadata.geo) {
-            UpdateExpression += ", latitude = :latitude"
-            ExpressionAttributeValues[":latitude"] = event.extractedMetadata.geo.latitude;
-            UpdateExpression += ", longitude = :longitude"
-            ExpressionAttributeValues[":longitude"] = event.extractedMetadata.geo.longitude;
+const UPDATE_PHOTO = gql`
+    mutation UpdatePhoto(
+        $input: UpdatePhotoInput!
+        $condition: ModelPhotoConditionInput
+    ) {
+        updatePhoto(input: $input, condition: $condition) {
+            id
+            albumId
+            uploadTime
+            bucket
+            fullsize {
+                key
+                width
+                height
+            }
+            thumbnail {
+                key
+                width
+                height
+            }
+            format
+            exifMake
+            exitModel
+            objectDetected
+            SfnExecutionArn
+            ProcessingStatus
+            geoLocation {
+                Latitude {
+                    D
+                    M
+                    S
+                    Direction
+                }
+                Longtitude {
+                    D
+                    M
+                    S
+                    Direction
+                }
+            }
+            owner
         }
+    }
+`;
 
-        if (event.extractedMetadata.exifMake) {
-            UpdateExpression += ", exifMake = :exifMake"
-            ExpressionAttributeValues[":exifMake"] = event.extractedMetadata.exifMake;
-        }
-        if (event.extractedMetadata.exifModel) {
-            UpdateExpression += ", exifModel = :exifModel"
-            ExpressionAttributeValues[":exifModel"] = event.extractedMetadata.exifModel;
-        }
 
-        if (event.parallelResults[0]) {
-            const labels = event.parallelResults[0];
-            var tags = labels.map((data) => {
-                return data["Name"];
-            });
-            UpdateExpression += ", tags = :tags"
-            ExpressionAttributeValues[":tags"] = tags;
-        }
+exports.handler = async (event, context, callback) => {
+  console.log("Reading input from event:\n", util.inspect(event, {depth: 5}));
+  const id = event.objectID
+  let extractedMetadata = event.extractedMetadata;
+  const fullsize = {
+    key: event.s3Key,
+    width: extractedMetadata.dimensions.width,
+    height: extractedMetadata.dimensions.height
+  }
 
-        if (event.parallelResults[1]) {
-            UpdateExpression += ", thumbnail = :thumbnail"
-            ExpressionAttributeValues[":thumbnail"] = event.parallelResults[1];
-        }
+  const updateInput = {
+    id,
+    fullsize,
+    format: extractedMetadata.format,
+    exifMake: extractedMetadata.exifMake || null,
+    exitModel: extractedMetadata.exifModel || null,
+    ProcessingStatus: "SUCCEEDED"
 
-        console.log("UpdateExpression", UpdateExpression);
-        console.log("ExpressionAttributeValues", ExpressionAttributeValues);
+  }
+  const thumbnailInfo = event.parallelResults[1];
 
-        var ddbparams = {
-            TableName: tableName,
-            Key: {
-                'imageID': event.objectID
-            },
-            UpdateExpression: UpdateExpression,
-            ExpressionAttributeValues: ExpressionAttributeValues,
-            ConditionExpression: 'attribute_exists (imageID)'
-        };
+  if (thumbnailInfo) {
+    updateInput['thumbnail'] = {
+      key: thumbnailInfo.s3key,
+      width: Math.round(thumbnailInfo.width),
+      height: Math.round(thumbnailInfo.height)
+    }
+  }
 
-        docClient.update(ddbparams).promise().then(function (data) {
-            callback(null, data);
-        }).catch(function (err) {
-            callback(err);
-        });
-    })
+  if (event.parallelResults[0]) {
+    const labels = event.parallelResults[0];
+    let tags = []
+    for (let i in labels) {
+      tags.push(labels[i]["Name"])
+    }
+    updateInput["objectDetected"] = tags
+  }
+
+
+  if (event.extractedMetadata.geo) {
+    updateInput['geoLocation'] = {
+      Latitude: event.extractedMetadata.geo.latitude,
+      Longtitude: event.extractedMetadata.geo.longitude
+    }
+  }
+
+  console.log(JSON.stringify(updateInput, null, 2));
+
+  const result = await client.mutate({
+    mutation: UPDATE_PHOTO,
+    variables: {input: updateInput},
+    fetchPolicy: 'no-cache'
+  })
+
+  return {"Status": "Success"}
 }

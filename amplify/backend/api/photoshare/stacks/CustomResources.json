@@ -1,0 +1,221 @@
+{
+	"AWSTemplateFormatVersion": "2010-09-09",
+	"Description": "An auto-generated nested stack.",
+	"Metadata": {},
+	"Parameters": {
+		"AppSyncApiId": {
+			"Type": "String",
+			"Description": "The id of the AppSync API associated with this project."
+		},
+		"AppSyncApiName": {
+			"Type": "String",
+			"Description": "The name of the AppSync API",
+			"Default": "AppSyncSimpleTransform"
+		},
+		"env": {
+			"Type": "String",
+			"Description": "The environment name. e.g. Dev, Test, or Production",
+			"Default": "NONE"
+		},
+		"S3DeploymentBucket": {
+			"Type": "String",
+			"Description": "The S3 bucket containing all deployment assets for the project."
+		},
+		"S3DeploymentRootKey": {
+			"Type": "String",
+			"Description": "An S3 key relative to the S3DeploymentBucket that points to the root\nof the deployment directory."
+		}
+	},
+	"Resources": {
+		"EmptyResource": {
+			"Type": "Custom::EmptyResource",
+			"Condition": "AlwaysFalse"
+		},
+		"StartSfnResolver": {
+			"Type": "AWS::AppSync::Resolver",
+			"Properties": {
+				"ApiId": {
+					"Ref": "AppSyncApiId"
+				},
+				"DataSourceName": {
+					"Fn::GetAtt": [
+						"SfnProxyDataSource",
+						"Name"
+					]
+				},
+				"TypeName": "Mutation",
+				"FieldName": "startSfnExecution",
+				"RequestMappingTemplateS3Location": {
+					"Fn::Sub": [
+						"s3://${S3DeploymentBucket}/${S3DeploymentRootKey}/resolvers/Mutation.startSfnExecution.req.vtl",
+						{
+							"S3DeploymentBucket": {
+								"Ref": "S3DeploymentBucket"
+							},
+							"S3DeploymentRootKey": {
+								"Ref": "S3DeploymentRootKey"
+							}
+						}
+					]
+				},
+				"ResponseMappingTemplateS3Location": {
+					"Fn::Sub": [
+						"s3://${S3DeploymentBucket}/${S3DeploymentRootKey}/resolvers/Mutation.startSfnExecution.res.vtl",
+						{
+							"S3DeploymentBucket": {
+								"Ref": "S3DeploymentBucket"
+							},
+							"S3DeploymentRootKey": {
+								"Ref": "S3DeploymentRootKey"
+							}
+						}
+					]
+				}
+			}
+		},
+		"SfnStatusResolver": {
+			"Type": "AWS::AppSync::Resolver",
+			"Properties": {
+				"ApiId": {
+					"Ref": "AppSyncApiId"
+				},
+				"DataSourceName": {
+					"Fn::GetAtt": [
+						"SfnProxyDataSource",
+						"Name"
+					]
+				},
+				"TypeName": "Query",
+				"FieldName": "checkSfnStatus",
+				"RequestMappingTemplateS3Location": {
+					"Fn::Sub": [
+						"s3://${S3DeploymentBucket}/${S3DeploymentRootKey}/resolvers/Query.checkSfnStatus.req.vtl",
+						{
+							"S3DeploymentBucket": {
+								"Ref": "S3DeploymentBucket"
+							},
+							"S3DeploymentRootKey": {
+								"Ref": "S3DeploymentRootKey"
+							}
+						}
+					]
+				},
+				"ResponseMappingTemplateS3Location": {
+					"Fn::Sub": [
+						"s3://${S3DeploymentBucket}/${S3DeploymentRootKey}/resolvers/Query.checkSfnStatus.res.vtl",
+						{
+							"S3DeploymentBucket": {
+								"Ref": "S3DeploymentBucket"
+							},
+							"S3DeploymentRootKey": {
+								"Ref": "S3DeploymentRootKey"
+							}
+						}
+					]
+				}
+			}
+		},
+		"SfnProxyDataSource": {
+			"Type": "AWS::AppSync::DataSource",
+			"Properties": {
+				"ApiId": {
+					"Ref": "AppSyncApiId"
+				},
+				"Name": "SfnProxy",
+				"Description": "HTTP proxy for Step Function Service",
+				"Type": "HTTP",
+				"ServiceRoleArn": {
+					"Fn::GetAtt": [
+						"SfnProxyDataSourceRole",
+						"Arn"
+					]
+				},
+				"HttpConfig": {
+					"Endpoint": {
+						"Fn::Sub": "https://states.${AWS::Region}.amazonaws.com/"
+					},
+					"AuthorizationConfig": {
+						"AuthorizationType": "AWS_IAM",
+						"AwsIamConfig": {
+							"SigningRegion": {
+								"Fn::Sub": "${AWS::Region}"
+							},
+							"SigningServiceName": "states"
+						}
+					}
+				}
+			}
+		},
+		"SfnProxyDataSourceRole": {
+			"Type": "AWS::IAM::Role",
+			"Properties": {
+				"RoleName": {
+					"Fn::Sub": [
+						"SfnProxyDataSourceRole-${env}",
+						{
+							"env": {
+								"Ref": "env"
+							}
+						}
+					]
+				},
+				"AssumeRolePolicyDocument": {
+					"Version": "2012-10-17",
+					"Statement": [
+						{
+							"Effect": "Allow",
+							"Principal": {
+								"Service": "appsync.amazonaws.com"
+							},
+							"Action": "sts:AssumeRole"
+						}
+					]
+				},
+				"Policies": [
+					{
+						"PolicyName": "Sfn",
+						"PolicyDocument": {
+							"Version": "2012-10-17",
+							"Statement": [
+								{
+									"Effect": "Allow",
+									"Action": [
+										"states:StartExecution",
+										"states:DescribeExecution"
+									],
+									"Resource": "*"
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	},
+	"Conditions": {
+		"HasEnvironmentParameter": {
+			"Fn::Not": [
+				{
+					"Fn::Equals": [
+						{
+							"Ref": "env"
+						},
+						"NONE"
+					]
+				}
+			]
+		},
+		"AlwaysFalse": {
+			"Fn::Equals": [
+				"true",
+				"false"
+			]
+		}
+	},
+	"Outputs": {
+		"EmptyOutput": {
+			"Description": "An empty output. You may delete this if you have at least one resource above.",
+			"Value": ""
+		}
+	}
+}
