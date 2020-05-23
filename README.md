@@ -21,7 +21,7 @@ This repository contains sample code for all the Lambda functions depicted in th
 ### How to deploy
 Follow these instructions to deploy the application (both backend and frontend):
 
-[![One-click deployment](https://oneclick.amplifyapp.com/button.svg)](https://console.aws.amazon.com/amplify/home#/deploy?repo=https://github.com/aws-samples/lambda-refarch-imagerecognition)
+[![One-click deployment](https://oneclick.amplifyapp.com/button.svg)](https://console.aws.amazon.com/amplify/home#/deploy?repo=https://github.com/angelarw/lambda-refarch-imagerecognition)
 
 1. Use **1-click deployment** button above
 1. If you don't have an IAM Service Role, create one
