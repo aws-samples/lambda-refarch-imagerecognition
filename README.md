@@ -47,7 +47,9 @@ You can use the test web app to upload images and explore the image recognition 
 1. Go to the URL of the Amplify app that was deployed 
 1. In the login page, click on "**Create account**"
 1. Register an account by following the sign up instructions
-   <img src="images/app-signup-screenshot.png" alt="sign up" width="50%">
+
+    <img src="images/app-signup-screenshot.png" alt="sign up" width="50%">
+
 1. After confirming the account, sign in 
 
 ##### Album list
