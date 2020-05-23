@@ -39,7 +39,7 @@ If you want to make changes to the code locally:
 
 ### Using the test web app
 
-You can use the test web app to upload images and see the result of the image recognition and processing workflow. 
+You can use the test web app to upload images and explore the image recognition and processing workflow. 
 ![screenshot for instruction](images/app-screenshot.png)
 
 #### Sign up and log in
@@ -47,15 +47,14 @@ You can use the test web app to upload images and see the result of the image re
 1. Go to the URL of the Amplify app that was deployed 
 1. In the login page, click on "**Create account**"
 1. Register an account by following the sign up instructions
-     
-    <img src="images/app-signup-screenshot.png" alt="sign up" width="50%">
-1. After confirming the account, sign in to the 
+   <img src="images/app-signup-screenshot.png" alt="sign up" width="50%">
+1. After confirming the account, sign in 
 
 ##### Album list
 
 1. create albums using the "Add a new album" 
-
     ![album screenshot](images/app-create-album.png)
+1. You may need to referresh 
 
 ##### Photo gallery
 
@@ -63,7 +62,8 @@ You can use the test web app to upload images and see the result of the image re
 1. Upload a photo
     ![](images/example-processing.png)
 1. You can follow the Step Functions execution link to review the details of the workflow execution 
-    Below is the diagram of the state machine being executed every time a new image is uploaded (you can explore this in the Step Functions [Console](https://console.aws.amazon.com/states/home)):
+    Below is the diagram of the state machine being executed every time a new image is uploaded 
+    (you can explore this in the Step Functions [Console](https://console.aws.amazon.com/states/home)):
     <img src="images/step-function-execution.png" alt="state machine diagram" width="50%">
 1. When the processing finishes, the photo and extracted information is added to the display
     ![](images/example-analyzed.png) 
@@ -71,7 +71,8 @@ You can use the test web app to upload images and see the result of the image re
 ## Cleaning Up the Application Resources
 
 To remove all resources created by this example, do the following:
-
+1. Go to [AWS CloudFormation console](https://console.aws.amazon.com/cloudformation/home), delete the 2 stacks with name "amplify-photoshare-" 
+1. Go to the [AWS Amplify console](https://console.aws.amazon.com/amplify/home) and delete the app.
 
 ## License
 

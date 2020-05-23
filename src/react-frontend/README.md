@@ -11,7 +11,7 @@ If you followed [the deployment instructions](../../README.md), you should have 
 
 1. Open up your deployed App in Amplify Console by running `amplify console`
 2. At the bottom of the page under **Edit your backend**, copy and run the `amplify pull` command
-    - e.g. `amplify pull --appId d34s789vnlqyw4 --envName twitch`
+    - e.g. `amplify pull --appId d34s789vnlqyw4 --envName master`
 
 > NOTE: **Aws-exports** is a configuration file for AWS Amplify library containing Cognito User Pools, AppSync  API, and what authentication mechanism it should use along with its region.
 
