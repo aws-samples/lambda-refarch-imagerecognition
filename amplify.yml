@@ -8,6 +8,9 @@ backend:
     build:
       commands:
         - "# Execute Amplify CLI with the helper script"
+        - echo "AWS Branch: ${AWS_BRANCH}"
+        - echo "User Branch: ${USER_BRANCH}"
+        - envCache --get stackInfo
         - amplifyPush -e $AWS_BRANCH --simple
         ##
         # Extract Environment data
