@@ -60,7 +60,7 @@
 							"Ref": "env"
 						},
 						"STATE_MACHINE_ARN": {
-							"Fn::Sub": "arn:aws:states:${AWS::Region}:${AWS::AccountId}:stateMachine:${SfnStateMachineName}-${env}"
+							"Fn::Sub": "arn:aws:states:${AWS::Region}:${AWS::AccountId}:stateMachine:${SfnStateMachineName}-master"
 						},
 						"REGION": {
 							"Ref": "AWS::Region"
@@ -83,7 +83,7 @@
 				"Timeout": "25",
 				"ReservedConcurrentExecutions": "10",
 				"Code": {
-					"S3Bucket": "amplify-photoshare-react-140857-deployment",
+					"S3Bucket": "amplify-photoshare-master-183417-deployment",
 					"S3Key": "amplify-builds/S3Trigger984fb593-4a786c424331774d6135-build.zip"
 				}
 			}
