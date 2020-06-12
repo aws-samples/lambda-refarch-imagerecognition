@@ -111,6 +111,27 @@ npm start
 ```
 This compiles the application, starts a local server, and opens a browser that loads the test web application (this app has been tested on **Chrome** browser only) 
  
+
+<details>
+<summary><strong> Note: AWS Cloud9 Users </strong></summary><p>
+If you're running the local web app via AWS Cloud9, due to [limitations on exposed ports for previewing an application](https://docs.aws.amazon.com/cloud9/latest/user-guide/app-preview.html#app-preview-preview-app),
+you'll have to change the port the application starts on and disable the Browsersync UI that is bundled with `lite-server`. 
+
+1. Create `bs-config.json` in `/webapp/`. (Same directory as `tsconfig.json`)
+2. Paste the following and save: 
+```
+{
+  "port": 8080,
+  "ui": false
+}
+```
+
+Then proceed as usual with `npm start`. This will ensure our web app runs on port `8080` instead of the default
+`3000` and be exposed to the Preview functionality on AWS Cloud9. 
+
+</details>
+ 
+ 
 #### Using the web app
 ##### Login
 Pick any username to log in (This is a test app to showcase the backend so it's not using real user authentication. In an actual app, you can use Amazon Cognito to manage user sign-up and login.)
