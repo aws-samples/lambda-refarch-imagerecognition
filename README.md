@@ -23,7 +23,7 @@ Follow these instructions to deploy the application (both backend and frontend):
 
 [![One-click deployment](https://oneclick.amplifyapp.com/button.svg)](https://console.aws.amazon.com/amplify/home#/deploy?repo=https://github.com/aws-samples/lambda-refarch-imagerecognition)
  
-1. Use **1-click deployment** button above. Amplify Console will forked this repository in your GitHub account, and deploy the backend and frontend application.
+1. Use **1-click deployment** button above. Amplify Console will fork this repository in your GitHub account, and deploy the backend and frontend application.
     - Note: If you forked and changed the repository first, you can use the Amplify console and select "**Connect App**" to connect to your forked repo. 
 1. For IAM Service Role, create one if you don't have one or select an existing role. (This is required because the Amplify Console needs permissions to deploy backend resources on your behalf. More [info](https://docs.aws.amazon.com/amplify/latest/userguide/how-to-service-role-amplify-console.html))
     ![amplify console select role or create new role](images/amplify-select-role.png)
@@ -37,6 +37,8 @@ If you want to make changes to the code locally:
 1. Under **Edit backend**, copy the `amplify pull --appId <your app id> --envName <your env name>` command displayed
     - If you don't see this command and instead see `amplify init --appId`, try refreshing the backend environment tab after waiting a few minutes (cloudformation could still be provisioning resources)
 1. Within your forked repository locally, run the command you copied and follow the instructions
+
+ ```
     - This command synchronizes what's deployed to your local Amplify environment
     - Do you want to use an AWS profile: Yes
     - default
@@ -48,6 +50,7 @@ If you want to make changes to the code locally:
     - Build Command:  npm.cmd run-script build  
     - Start Command: npm.cmd run-script start
     - Do you plan on modifying this backend? (Yes)
+ ```
  
 If at anytime you want to change these options. Look into `amplify/.config/project-config.json` and make your changes there.
 
