@@ -25,6 +25,8 @@ Follow these instructions to deploy the application (both backend and frontend):
 
 1. Use **1-click deployment** button above
 1. If you don't have an IAM Service Role, create one
+    ![screenshot for instruction](images/amplify-select-role.png)
+
 1. Amplify Console will forked this repository in your GitHub account.
 1. Within your new app in Amplify Console, wait for deployment to complete (this may take a while)
 1. Once the deployment is complete, you can test out the application! 
