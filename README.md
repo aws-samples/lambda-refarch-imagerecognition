@@ -8,8 +8,8 @@ This repository contains sample code for all the Lambda functions depicted in th
 
 ### Walkthrough of the architecture
 1. An image is uploaded to the `PhotoRepo` S3 bucket under the `private/{userid}/uploads` prefix
-2. The S3 upload event triggers the `S3Trigger` Lambda function, which kicks off an execution of the `ImageProcStateMachine` state machine in AWS Step Functions, passing in the S3 bucket and object key as input parameters.
-3. The `ImageProcStateMachine` state machine has the following sub-steps:
+2. The S3 upload event triggers the `S3Trigger` Lambda function, which kicks off an execution of the `ImageProcStateMachine` in AWS Step Functions, passing in the S3 bucket and object key as input parameters.
+3. The `ImageProcStateMachine` has the following sub-steps:
   * Read the file from S3 and extract image metadata (format, EXIF data, size, etc.)
   * Based on output from previous step, validate if the file uploaded is a supported file format (png or jpg). If not, throw `NotSupportedImageType` error and end execution.
   * Store the extracted metadata in the `ImageMetadata` DynamoDB table
