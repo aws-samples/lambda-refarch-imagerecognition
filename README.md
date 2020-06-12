@@ -68,6 +68,7 @@ You can use the test web app to upload images and explore the image recognition 
 1. You can follow the Step Functions execution link to review the details of the workflow execution 
     Below is the diagram of the state machine being executed every time a new image is uploaded 
     (you can explore this in the Step Functions [Console](https://console.aws.amazon.com/states/home)):
+    
     <img src="images/step-function-execution.png" alt="state machine diagram" width="50%">
 1. When the processing finishes, the photo and extracted information is added to the display
     ![screenshot of the photo sharing app: displaying photo metadata extracted from the processing pipeline](images/example-analyzed.png) 
