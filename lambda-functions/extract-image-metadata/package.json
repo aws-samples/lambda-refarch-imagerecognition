@@ -1,5 +1,6 @@
 {
   "name": "extract-image-metadata",
+  "version": "1.0.0",
   "description": "Extracts EXIF, size, format, etc. info from an image",
   "author": "Angela Wang",
   "license": "Apache-2.0",

@@ -4,7 +4,7 @@
   "States": {
     "ExtractImageMetadata": {
       "Type": "Task",
-      "Resource": "${ExtractImageMetadataFunction.Arn}",
+      "Resource": "${ExtractImageMetadataFunction}",
       "InputPath": "$",
       "ResultPath": "$.extractedMetadata",
       "Next": "ImageTypeCheck",
@@ -54,7 +54,7 @@
     },
     "TransformMetadata": {
       "Type": "Task",
-      "Resource": "${TransformMetadataFunction.Arn}",
+      "Resource": "${TransformMetadataFunction}",
       "InputPath": "$.extractedMetadata",
       "ResultPath": "$.extractedMetadata",
       "Retry": [
@@ -82,7 +82,7 @@
           "States": {
             "Rekognition": {
               "Type": "Task",
-              "Resource": "${RekognitionFunction.Arn}",
+              "Resource": "${RekognitionFunction}",
               "Retry": [
                 {
                   "ErrorEquals": [
@@ -102,7 +102,7 @@
           "States": {
             "Thumbnail": {
               "Type": "Task",
-              "Resource": "${GenerateThumbnailFunction.Arn}",
+              "Resource": "${GenerateThumbnailFunction}",
               "Retry": [
                 {
                   "ErrorEquals": [
@@ -123,7 +123,7 @@
     },
     "StoreImageMetadata": {
       "Type": "Task",
-      "Resource": "${StoreImageMetadataFunction.Arn}",
+      "Resource": "${StoreImageMetadataFunction}",
       "InputPath": "$",
       "ResultPath": "$.storeResult",
       "Retry": [
