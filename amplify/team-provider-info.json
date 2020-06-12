@@ -1,15 +1,2 @@
 {
-    "react": {
-        "awscloudformation": {
-            "AuthRoleName": "amplify-photoshare-react-140857-authRole",
-            "UnauthRoleArn": "arn:aws:iam::947146424102:role/amplify-photoshare-react-140857-unauthRole",
-            "AuthRoleArn": "arn:aws:iam::947146424102:role/amplify-photoshare-react-140857-authRole",
-            "Region": "us-east-1",
-            "DeploymentBucketName": "amplify-photoshare-react-140857-deployment",
-            "UnauthRoleName": "amplify-photoshare-react-140857-unauthRole",
-            "StackName": "amplify-photoshare-react-140857",
-            "StackId": "arn:aws:cloudformation:us-east-1:947146424102:stack/amplify-photoshare-react-140857/75d6d850-9135-11ea-a212-1214c28caebf",
-            "AmplifyAppId": "d1259qbdarqls0"
-        }
-    }
 }

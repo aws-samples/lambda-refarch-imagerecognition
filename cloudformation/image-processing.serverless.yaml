@@ -112,38 +112,29 @@ Resources:
   # ---------------------------------------------------------------------------------------------------------------------
   # Step functions State Machine
   # ---------------------------------------------------------------------------------------------------------------------
-  StateMachineRole:
-    Type: "AWS::IAM::Role"
-    Properties:
-      AssumeRolePolicyDocument:
-        Version: "2012-10-17"
-        Statement:
-          - Effect: "Allow"
-            Principal:
-              Service:
-                !Sub states.${AWS::Region}.amazonaws.com
-            Action:
-              - "sts:AssumeRole"
-      Path: "/MediaSharingRefarch/"
-      Policies:
-        - PolicyName: "InvokeLambda"
-          PolicyDocument:
-            Version: "2012-10-17"
-            Statement:
-              - Sid: "InvokeLambda"
-                Effect: "Allow"
-                Action:
-                  - "lambda:InvokeFunction"
-                Resource: "*"
 
   ImageProcStateMachine:
-    Type: "AWS::StepFunctions::StateMachine"
+    Type: "AWS::Serverless::StateMachine"
     Properties:
-      StateMachineName: !Sub PhotoProcessingWorkflow-${Stage}
-      DefinitionString:
-        !Sub |-
-        ##{{STATEMACHINE_DEF}}
-      RoleArn: !GetAtt StateMachineRole.Arn
+      Name: !Sub PhotoProcessingWorkflow-${Stage}
+      DefinitionUri: state-machine.asl.json
+      DefinitionSubstitutions:
+        ExtractImageMetadataFunction: !GetAtt ExtractImageMetadataFunction.Arn
+        TransformMetadataFunction: !GetAtt TransformMetadataFunction.Arn
+        GenerateThumbnailFunction: !GetAtt GenerateThumbnailFunction.Arn
+        RekognitionFunction: !GetAtt RekognitionFunction.Arn
+        StoreImageMetadataFunction: !GetAtt StoreImageMetadataFunction.Arn
+      Policies: # Find out more about SAM policy templates: https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-policy-templates.html
+        - LambdaInvokePolicy:
+            FunctionName: !Ref GenerateThumbnailFunction
+        - LambdaInvokePolicy:
+            FunctionName: !Ref RekognitionFunction
+        - LambdaInvokePolicy:
+            FunctionName: !Ref ExtractImageMetadataFunction
+        - LambdaInvokePolicy:
+            FunctionName: !Ref StoreImageMetadataFunction
+        - LambdaInvokePolicy:
+            FunctionName: !Ref TransformMetadataFunction
 
 
 Outputs:
