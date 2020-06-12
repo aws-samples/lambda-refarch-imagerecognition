@@ -82,7 +82,6 @@ When you are constructing a state machine definition by authoring JSON directly,
 
 1. Click **Create state machine** to finish the creation
 
-
 ### Step 1C: Test the state machine execution
 
 1. Click the **Start execution** button to start a new execution.
@@ -173,3 +172,4 @@ Verify after the change, for new executions the **Output** contains the state in
 <img src="images/1d-output-w-resultpath.png" width="90%">
 
 You are now ready to move on to [Step 2](step-2.md)!
+

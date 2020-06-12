@@ -1,0 +1,45 @@
+version: 0.1
+backend:
+  phases:
+    preBuild:
+      commands:
+        - npm install -g @aws-amplify/cli@latest
+        - make init # install OS packages  and dev tools (awscli, sam-cli, linters, etc.)
+    build:
+      commands:
+        - "# Execute Amplify CLI with the helper script"
+        - amplifyPush -e $AWS_BRANCH --simple
+        ##
+        # Extract Environment data
+        ##
+        - export STACK_NAME=$(jq -r '.providers.awscloudformation.StackName' ./amplify/#current-cloud-backend/amplify-meta.json)
+        - export DEPLOYMENT_BUCKET_NAME=$(jq -r '.providers.awscloudformation.DeploymentBucketName' ./amplify/#current-cloud-backend/amplify-meta.json)
+        - export AWS_DEFAULT_REGION=$(jq -r '.providers.awscloudformation.Region' amplify/#current-cloud-backend/amplify-meta.json)
+        - export GRAPHQL_API_ID=$(jq -r '.api[(.api | keys)[0]].output.GraphQLAPIIdOutput' ./amplify/#current-cloud-backend/amplify-meta.json)
+        - export APPSYNC_URL=$(jq -r '.api[(.api | keys)[0]].output.GraphQLAPIEndpointOutput' ./amplify/#current-cloud-backend/amplify-meta.json)
+        - export GRAPHQL_API_ID=$(jq -r '.api[(.api | keys)[0]].output.GraphQLAPIIdOutput' ./amplify/#current-cloud-backend/amplify-meta.json)
+        - export COGNITO_USER_POOL_ID=$(jq -r '.auth[(.auth | keys)[0]].output.UserPoolId' ./amplify/#current-cloud-backend/amplify-meta.json)
+        - export COGNITO_USER_POOL_ARN=$(aws cognito-idp describe-user-pool --user-pool-id ${COGNITO_USER_POOL_ID} --query 'UserPool.Arn' --output text)
+        - export COGNITO_USER_POOL_CLIENT_ID=$(jq -r '.auth[(.auth | keys)[0]].output.AppClientIDWeb' ./amplify/#current-cloud-backend/amplify-meta.json)
+        - export PHOTO_BUCKET=$(jq -r '.storage[(.storage | keys)[0]].output.BucketName' ./amplify/#current-cloud-backend/amplify-meta.json)
+        ##
+        # Deploy SAM based back-end
+        ##
+        - make deploy
+frontend:
+  phases:
+    preBuild:
+      commands:
+        - cd src/react-frontend
+        - npm install
+    build:
+      commands:
+        - npm run build
+  artifacts:
+    baseDirectory: src/react-frontend/build
+    files:
+      - "**/*"
+  cache:
+    paths:
+      - node_modules/**/*
+      - src/react-frontend/node_modules/**/*

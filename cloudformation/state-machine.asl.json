@@ -1,0 +1,142 @@
+{
+  "Comment": "Image Processing workflow",
+  "StartAt": "ExtractImageMetadata",
+  "States": {
+    "ExtractImageMetadata": {
+      "Type": "Task",
+      "Resource": "${ExtractImageMetadataFunction}",
+      "InputPath": "$",
+      "ResultPath": "$.extractedMetadata",
+      "Next": "ImageTypeCheck",
+      "Catch": [
+        {
+          "ErrorEquals": [
+            "ImageIdentifyError"
+          ],
+          "Next": "NotSupportedImageType"
+        }
+      ],
+      "Retry": [
+        {
+          "ErrorEquals": [
+            "ImageIdentifyError"
+          ],
+          "MaxAttempts": 0
+        },
+        {
+          "ErrorEquals": [
+            "States.ALL"
+          ],
+          "IntervalSeconds": 1,
+          "MaxAttempts": 2,
+          "BackoffRate": 1.5
+        }
+      ]
+    },
+    "ImageTypeCheck": {
+      "Type": "Choice",
+      "Choices": [
+        {
+          "Or": [
+            {
+              "Variable": "$.extractedMetadata.format",
+              "StringEquals": "JPEG"
+            },
+            {
+              "Variable": "$.extractedMetadata.format",
+              "StringEquals": "PNG"
+            }
+          ],
+          "Next": "TransformMetadata"
+        }
+      ],
+      "Default": "NotSupportedImageType"
+    },
+    "TransformMetadata": {
+      "Type": "Task",
+      "Resource": "${TransformMetadataFunction}",
+      "InputPath": "$.extractedMetadata",
+      "ResultPath": "$.extractedMetadata",
+      "Retry": [
+        {
+          "ErrorEquals": [
+            "States.ALL"
+          ],
+          "IntervalSeconds": 1,
+          "MaxAttempts": 2,
+          "BackoffRate": 1.5
+        }
+      ],
+      "Next": "ParallelProcessing"
+    },
+    "NotSupportedImageType": {
+      "Type": "Fail",
+      "Cause": "Image type not supported!",
+      "Error": "FileTypeNotSupported"
+    },
+    "ParallelProcessing": {
+      "Type": "Parallel",
+      "Branches": [
+        {
+          "StartAt": "Rekognition",
+          "States": {
+            "Rekognition": {
+              "Type": "Task",
+              "Resource": "${RekognitionFunction}",
+              "Retry": [
+                {
+                  "ErrorEquals": [
+                    "States.ALL"
+                  ],
+                  "IntervalSeconds": 1,
+                  "MaxAttempts": 2,
+                  "BackoffRate": 1.5
+                }
+              ],
+              "End": true
+            }
+          }
+        },
+        {
+          "StartAt": "Thumbnail",
+          "States": {
+            "Thumbnail": {
+              "Type": "Task",
+              "Resource": "${GenerateThumbnailFunction}",
+              "Retry": [
+                {
+                  "ErrorEquals": [
+                    "States.ALL"
+                  ],
+                  "IntervalSeconds": 1,
+                  "MaxAttempts": 2,
+                  "BackoffRate": 1.5
+                }
+              ],
+              "End": true
+            }
+          }
+        }
+      ],
+      "ResultPath": "$.parallelResults",
+      "Next": "StoreImageMetadata"
+    },
+    "StoreImageMetadata": {
+      "Type": "Task",
+      "Resource": "${StoreImageMetadataFunction}",
+      "InputPath": "$",
+      "ResultPath": "$.storeResult",
+      "Retry": [
+        {
+          "ErrorEquals": [
+            "States.ALL"
+          ],
+          "IntervalSeconds": 1,
+          "MaxAttempts": 2,
+          "BackoffRate": 1.5
+        }
+      ],
+      "End": true
+    }
+  }
+}

@@ -1,8 +1,8 @@
 {
   "name": "generate-thumbnail",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "dependencies": {
-    "gm": "1.23.0"
+    "gm": "^1.23.1"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

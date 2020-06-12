@@ -1,0 +1,65 @@
+{
+    "auth": {
+        "photoshareb143529b": {
+            "service": "Cognito",
+            "providerPlugin": "awscloudformation",
+            "dependsOn": [],
+            "customAuth": false
+        }
+    },
+    "api": {
+        "photoshare": {
+            "service": "AppSync",
+            "providerPlugin": "awscloudformation",
+            "output": {
+                "authConfig": {
+                    "additionalAuthenticationProviders": [
+                        {
+                            "authenticationType": "AWS_IAM"
+                        }
+                    ],
+                    "defaultAuthentication": {
+                        "authenticationType": "AMAZON_COGNITO_USER_POOLS",
+                        "userPoolConfig": {
+                            "userPoolId": "authphotoshareb143529b"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "function": {
+        "S3Trigger984fb593": {
+            "service": "Lambda",
+            "providerPlugin": "awscloudformation",
+            "build": true,
+            "dependsOn": [
+                {
+                    "category": "api",
+                    "resourceName": "photoshare",
+                    "attributes": [
+                        "GraphQLAPIIdOutput",
+                        "GraphQLAPIEndpointOutput"
+                    ]
+                }
+            ]
+        }
+    },
+    "storage": {
+        "photostorage": {
+            "service": "S3",
+            "providerPlugin": "awscloudformation",
+            "dependsOn": [
+                {
+                    "category": "function",
+                    "resourceName": "S3Trigger984fb593",
+                    "attributes": [
+                        "Name",
+                        "Arn",
+                        "LambdaExecutionRole"
+                    ]
+                }
+            ]
+        }
+    }
+}

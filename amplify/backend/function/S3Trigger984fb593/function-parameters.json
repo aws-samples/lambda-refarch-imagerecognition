@@ -1,0 +1,12 @@
+{
+    "permissions": {
+        "api": {
+            "photoshare": [
+                "create",
+                "read",
+                "update",
+                "delete"
+            ]
+        }
+    }
+}

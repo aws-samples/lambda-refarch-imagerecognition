@@ -1,0 +1,12 @@
+{
+  "name": "S3TriggerPhotoProcessor",
+  "version": "1.0.0",
+  "description": "Photo uploads trigger that kicks off the Step Functions workflow",
+  "main": "index.js",
+  "dependencies": {
+    "aws-appsync": "^3.0.2",
+    "dotenv": "^8.2.0",
+    "graphql-tag": "^2.10.1",
+    "isomorphic-fetch": "^2.2.1"
+  }
+}
