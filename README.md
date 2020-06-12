@@ -24,7 +24,7 @@ Follow these instructions to deploy the application (both backend and frontend):
 [![One-click deployment](https://oneclick.amplifyapp.com/button.svg)](https://console.aws.amazon.com/amplify/home#/deploy?repo=https://github.com/angelarw/lambda-refarch-imagerecognition)
 
 1. Use **1-click deployment** button above
-1. For IAM Service Role, create one if you don't have one or select an existing role. 
+1. For IAM Service Role, create one if you don't have one or select an existing role. (This is required because the Amplify Console needs permissions to deploy backend resources on your behalf. More [info](https://docs.aws.amazon.com/amplify/latest/userguide/how-to-service-role-amplify-console.html))
     ![amplify console select role or create new role](images/amplify-select-role.png)
 
 1. Amplify Console will forked this repository in your GitHub account.
