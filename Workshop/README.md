@@ -1,4 +1,10 @@
-# Workshop: Serverless Image Processing Workflow with AWS Step Functions 
+
+# This workshop is not actively maintained. 
+
+Refer to https://image-processing.serverlessworkshops.io/ for an active serverless workshop using Step Functions to address image processing use case 
+Below is kept for archiving purposes only
+
+# [archived] Workshop: Serverless Image Processing Workflow with AWS Step Functions 
 
 In this workshop, you will learn to build a serverless image processing workflow step-by-step using AWS Step Functions.
 
