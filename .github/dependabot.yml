@@ -1,0 +1,34 @@
+version: 2
+updates:
+  - package-ecosystem: "npm"
+    directory: "src/react-frontend"
+    schedule:
+      interval: "daily"
+      
+  - package-ecosystem: "npm"
+    directory: "lambda-functions/extract-image-metadata"
+    schedule:
+      interval: "daily"
+      
+  - package-ecosystem: "npm"
+    directory: "lambda-functions/rekognition"
+    schedule:
+      interval: "daily"
+
+
+  - package-ecosystem: "npm"
+    directory: "lambda-functions/store-image-metadata"
+    schedule:
+      interval: "daily"
+
+
+  - package-ecosystem: "npm"
+    directory: "lambda-functions/thumbnail"
+    schedule:
+      interval: "daily"
+
+
+  - package-ecosystem: "npm"
+    directory: "lambda-functions/transform-metadata"
+    schedule:
+      interval: "daily"
