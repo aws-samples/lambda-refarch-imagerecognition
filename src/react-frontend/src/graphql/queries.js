@@ -21,6 +21,8 @@ export const listAlbums = /* GraphQL */ `
         id
         name
         owner
+        createdAt
+        updatedAt
         photos {
           nextToken
         }
@@ -35,6 +37,8 @@ export const getAlbum = /* GraphQL */ `
       id
       name
       owner
+      createdAt
+      updatedAt
       photos {
         items {
           id
@@ -48,6 +52,8 @@ export const getAlbum = /* GraphQL */ `
           SfnExecutionArn
           ProcessingStatus
           objectDetected
+          createdAt
+          updatedAt
         }
         nextToken
       }
@@ -92,10 +98,14 @@ export const getPhoto = /* GraphQL */ `
           Direction
         }
       }
+      createdAt
+      updatedAt
       album {
         id
         name
         owner
+        createdAt
+        updatedAt
         photos {
           nextToken
         }
@@ -132,10 +142,14 @@ export const listPhotos = /* GraphQL */ `
         SfnExecutionArn
         ProcessingStatus
         objectDetected
+        createdAt
+        updatedAt
         album {
           id
           name
           owner
+          createdAt
+          updatedAt
         }
       }
       nextToken
@@ -181,19 +195,14 @@ export const listPhotosByAlbumUploadTime = /* GraphQL */ `
         SfnExecutionArn
         ProcessingStatus
         objectDetected
-        geoLocation {
-          Latitude {
-            D
-            M
-            S
-            Direction
-          }
-          Longtitude {
-            D
-            M
-            S
-            Direction
-          }
+        createdAt
+        updatedAt
+        album {
+          id
+          name
+          owner
+          createdAt
+          updatedAt
         }
       }
       nextToken

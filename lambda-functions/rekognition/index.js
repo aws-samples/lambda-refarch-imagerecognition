@@ -9,28 +9,28 @@ const rekognition = new AWS.Rekognition();
  * @param callback
  */
 exports.handler = async (event, context, callback) => {
-    console.log("Reading input from event:\n", util.inspect(event, {depth: 5}));
+	console.log("Reading input from event:\n", util.inspect(event, { depth: 5 }));
 
-    const srcBucket = event.s3Bucket;
-    // Object key may have spaces or unicode non-ASCII characters.
-    const srcKey = decodeURIComponent(event.s3Key.replace(/\+/g, " "));
+	const srcBucket = event.s3Bucket;
+	// Object key may have spaces or unicode non-ASCII characters.
+	const srcKey = decodeURIComponent(event.s3Key.replace(/\+/g, " "));
 
-    var params = {
-        Image: {
-            S3Object: {
-                Bucket: srcBucket,
-                Name: srcKey
-            }
-        },
-        MaxLabels: 10,
-        MinConfidence: 60
-    };
+	var params = {
+		Image: {
+			S3Object: {
+				Bucket: srcBucket,
+				Name: srcKey
+			}
+		},
+		MaxLabels: 10,
+		MinConfidence: 60
+	};
 
-    try {
-        const result = await rekognition.detectLabels(params).promise();
-        callback(null, result.Labels);
-    } catch (err) {
-        callback(err);
-    }
+	try {
+		const result = await rekognition.detectLabels(params).promise();
+		callback(null, result.Labels);
+	} catch (err) {
+		callback(err);
+	}
 
 };
