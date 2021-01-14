@@ -2,11 +2,13 @@
 // this is an auto generated file. This will be overwritten
 
 export const onCreateAlbum = /* GraphQL */ `
-  subscription OnCreateAlbum($owner: String!) {
+  subscription OnCreateAlbum($owner: String) {
     onCreateAlbum(owner: $owner) {
       id
       name
       owner
+      createdAt
+      updatedAt
       photos {
         items {
           id
@@ -20,6 +22,8 @@ export const onCreateAlbum = /* GraphQL */ `
           SfnExecutionArn
           ProcessingStatus
           objectDetected
+          createdAt
+          updatedAt
         }
         nextToken
       }
@@ -27,11 +31,13 @@ export const onCreateAlbum = /* GraphQL */ `
   }
 `;
 export const onUpdateAlbum = /* GraphQL */ `
-  subscription OnUpdateAlbum($owner: String!) {
+  subscription OnUpdateAlbum($owner: String) {
     onUpdateAlbum(owner: $owner) {
       id
       name
       owner
+      createdAt
+      updatedAt
       photos {
         items {
           id
@@ -45,6 +51,8 @@ export const onUpdateAlbum = /* GraphQL */ `
           SfnExecutionArn
           ProcessingStatus
           objectDetected
+          createdAt
+          updatedAt
         }
         nextToken
       }
@@ -52,11 +60,13 @@ export const onUpdateAlbum = /* GraphQL */ `
   }
 `;
 export const onDeleteAlbum = /* GraphQL */ `
-  subscription OnDeleteAlbum($owner: String!) {
+  subscription OnDeleteAlbum($owner: String) {
     onDeleteAlbum(owner: $owner) {
       id
       name
       owner
+      createdAt
+      updatedAt
       photos {
         items {
           id
@@ -70,6 +80,8 @@ export const onDeleteAlbum = /* GraphQL */ `
           SfnExecutionArn
           ProcessingStatus
           objectDetected
+          createdAt
+          updatedAt
         }
         nextToken
       }
@@ -77,7 +89,7 @@ export const onDeleteAlbum = /* GraphQL */ `
   }
 `;
 export const onCreatePhoto = /* GraphQL */ `
-  subscription OnCreatePhoto($owner: String!) {
+  subscription OnCreatePhoto($owner: String) {
     onCreatePhoto(owner: $owner) {
       id
       albumId
@@ -114,10 +126,14 @@ export const onCreatePhoto = /* GraphQL */ `
           Direction
         }
       }
+      createdAt
+      updatedAt
       album {
         id
         name
         owner
+        createdAt
+        updatedAt
         photos {
           nextToken
         }
@@ -126,7 +142,7 @@ export const onCreatePhoto = /* GraphQL */ `
   }
 `;
 export const onUpdatePhoto = /* GraphQL */ `
-  subscription OnUpdatePhoto($owner: String!) {
+  subscription OnUpdatePhoto($owner: String) {
     onUpdatePhoto(owner: $owner) {
       id
       albumId
@@ -163,10 +179,14 @@ export const onUpdatePhoto = /* GraphQL */ `
           Direction
         }
       }
+      createdAt
+      updatedAt
       album {
         id
         name
         owner
+        createdAt
+        updatedAt
         photos {
           nextToken
         }
@@ -175,7 +195,7 @@ export const onUpdatePhoto = /* GraphQL */ `
   }
 `;
 export const onDeletePhoto = /* GraphQL */ `
-  subscription OnDeletePhoto($owner: String!) {
+  subscription OnDeletePhoto($owner: String) {
     onDeletePhoto(owner: $owner) {
       id
       albumId
@@ -212,10 +232,14 @@ export const onDeletePhoto = /* GraphQL */ `
           Direction
         }
       }
+      createdAt
+      updatedAt
       album {
         id
         name
         owner
+        createdAt
+        updatedAt
         photos {
           nextToken
         }

@@ -1,0 +1,12 @@
+projects:
+  photoshare:
+    schemaPath: src/react-frontend/src/graphql/schema.json
+    includes:
+      - src/graphql/**/*.js
+    excludes:
+      - ./amplify/**
+    extensions:
+      amplify:
+        codeGenTarget: javascript
+        generatedFileName: ''
+        docsFilePath: src/react-frontend/src/graphql

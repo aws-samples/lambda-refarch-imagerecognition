@@ -18,6 +18,8 @@ export const createAlbum = /* GraphQL */ `
       id
       name
       owner
+      createdAt
+      updatedAt
       photos {
         items {
           id
@@ -31,6 +33,8 @@ export const createAlbum = /* GraphQL */ `
           SfnExecutionArn
           ProcessingStatus
           objectDetected
+          createdAt
+          updatedAt
         }
         nextToken
       }
@@ -46,6 +50,8 @@ export const updateAlbum = /* GraphQL */ `
       id
       name
       owner
+      createdAt
+      updatedAt
       photos {
         items {
           id
@@ -59,6 +65,8 @@ export const updateAlbum = /* GraphQL */ `
           SfnExecutionArn
           ProcessingStatus
           objectDetected
+          createdAt
+          updatedAt
         }
         nextToken
       }
@@ -74,6 +82,8 @@ export const deleteAlbum = /* GraphQL */ `
       id
       name
       owner
+      createdAt
+      updatedAt
       photos {
         items {
           id
@@ -87,6 +97,8 @@ export const deleteAlbum = /* GraphQL */ `
           SfnExecutionArn
           ProcessingStatus
           objectDetected
+          createdAt
+          updatedAt
         }
         nextToken
       }
@@ -134,6 +146,18 @@ export const createPhoto = /* GraphQL */ `
           Direction
         }
       }
+      createdAt
+      updatedAt
+      album {
+        id
+        name
+        owner
+        createdAt
+        updatedAt
+        photos {
+          nextToken
+        }
+      }
     }
   }
 `;
@@ -178,6 +202,18 @@ export const updatePhoto = /* GraphQL */ `
           Direction
         }
       }
+      createdAt
+      updatedAt
+      album {
+        id
+        name
+        owner
+        createdAt
+        updatedAt
+        photos {
+          nextToken
+        }
+      }
     }
   }
 `;
@@ -220,6 +256,18 @@ export const deletePhoto = /* GraphQL */ `
           M
           S
           Direction
+        }
+      }
+      createdAt
+      updatedAt
+      album {
+        id
+        name
+        owner
+        createdAt
+        updatedAt
+        photos {
+          nextToken
         }
       }
     }
