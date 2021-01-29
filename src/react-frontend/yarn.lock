@@ -3827,7 +3827,7 @@ aws-amplify-react@^4.2.19:
     qrcode.react "^0.8.0"
     regenerator-runtime "^0.11.1"
 
-aws-amplify@^3.3.14:
+aws-amplify@^3.3.15:
   version "3.3.15"
   resolved "https://registry.yarnpkg.com/aws-amplify/-/aws-amplify-3.3.15.tgz#c5a42b530cc7c5bbb69e538c1aea68560d9de711"
   integrity sha512-enrubCfxL439r3RlJPjoeMZe3u06KtfKvUkBXL9I5sigSRDy3D32Jx6tP2Cz7adeT7/HArkK2UwdCrx7U96MuA==
