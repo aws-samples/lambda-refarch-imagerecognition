@@ -167,7 +167,7 @@
     uuid "^3.2.1"
     zen-observable-ts "0.8.19"
 
-"@aws-amplify/storage@3.3.17", "@aws-amplify/storage@^3.3.17":
+"@aws-amplify/storage@3.3.17":
   version "3.3.17"
   resolved "https://registry.yarnpkg.com/@aws-amplify/storage/-/storage-3.3.17.tgz#bbe432246f3afc0379db6f2c9638b7260b465616"
   integrity sha512-uA5NOd59r6clS6UyCHvNPPJjXuW5x3xHK/b11iagQVM2VVt5EI1HeGGCIQZU2CJuILSdB8Hn6HJIUp5+EpM+tw==
@@ -181,7 +181,7 @@
     events "^3.1.0"
     sinon "^7.5.0"
 
-"@aws-amplify/storage@3.3.18":
+"@aws-amplify/storage@3.3.18", "@aws-amplify/storage@^3.3.18":
   version "3.3.18"
   resolved "https://registry.yarnpkg.com/@aws-amplify/storage/-/storage-3.3.18.tgz#ef8ffd8333df7a663540d4318425a19bc3d3e787"
   integrity sha512-S5RNaPMoS3FIiXL3uqzpZfEqwzm9gxQIpXlJ8Ov4fNspvIpBbk/BjS7/GuxDvgSoJNZQAiY6LbVdNs/TUwWB7A==
