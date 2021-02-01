@@ -39,7 +39,7 @@
     "@aws-amplify/core" "3.8.10"
     axios "0.21.1"
 
-"@aws-amplify/api@3.2.18", "@aws-amplify/api@^3.2.18":
+"@aws-amplify/api@3.2.18", "@aws-amplify/api@^3.2.17":
   version "3.2.18"
   resolved "https://registry.yarnpkg.com/@aws-amplify/api/-/api-3.2.18.tgz#786a26ee6453f6dc30540c2d56564386e4b43992"
   integrity sha512-wkxHOKFkmFpV7R0Y9xg/Fy8uRfqo10rl28j40YnkSWiCCY9U2pijUYIbMxPblYY+7sQabkpHF7+NwwGvE1pReA==
