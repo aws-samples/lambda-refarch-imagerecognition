@@ -7,7 +7,7 @@
     "@aws-amplify/storage": "^3.3.18",
     "@aws-amplify/ui-react": "^0.2.35",
     "@testing-library/jest-dom": "^5.11.9",
-    "@testing-library/react": "^11.2.3",
+    "@testing-library/react": "^11.2.4",
     "@testing-library/user-event": "^12.6.2",
     "aws-amplify": "^3.3.16",
     "aws-amplify-react": "^4.2.19",
