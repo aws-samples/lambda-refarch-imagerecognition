@@ -156,7 +156,7 @@
     qrcode "^1.4.4"
     uuid "^8.2.0"
 
-"@aws-amplify/ui-react@^0.2.36":
+"@aws-amplify/ui-react@^0.2.37":
   version "0.2.37"
   resolved "https://registry.yarnpkg.com/@aws-amplify/ui-react/-/ui-react-0.2.37.tgz#b5a1f03adf0a977d9a9d2426935191b742fd7ea7"
   integrity sha512-bHGvuFaLrb6ZXYMu3430sXI1pUiKE21hJieyRUjDHKlyTH7gAwOIeiGf+4sH6R1Gz53x214l+9N4gGXgG+3FrA==
@@ -3832,7 +3832,7 @@ autoprefixer@^9.6.1:
     postcss "^7.0.32"
     postcss-value-parser "^4.1.0"
 
-aws-amplify-react@^4.2.19:
+aws-amplify-react@^4.2.21:
   version "4.2.21"
   resolved "https://registry.yarnpkg.com/aws-amplify-react/-/aws-amplify-react-4.2.21.tgz#1e64fd0bb8699e9c3eca44e1c2561b8b0a11cf15"
   integrity sha512-Hb7Rt2FH/CmmrIw2L7F4dgVRWfsksI24wdU2Yxy98h2kekgaU2EkdQ9FavtrkN51yrhYNsB8dlD15vKeNG9Nkg==
