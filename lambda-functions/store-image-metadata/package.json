@@ -7,7 +7,7 @@
   "author": "Angela Wang",
   "license": "Apache-2",
   "dependencies": {
-    "aws-appsync": "^3.0.2",
+    "aws-appsync": "^4.0.3",
     "graphql-tag": "^2.10.3",
     "isomorphic-fetch": "^3.0.0"
   }
