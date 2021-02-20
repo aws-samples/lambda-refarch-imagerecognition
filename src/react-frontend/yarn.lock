@@ -202,12 +202,26 @@
     uuid "^3.2.1"
     zen-observable-ts "0.8.19"
 
-"@aws-amplify/storage@3.3.22", "@aws-amplify/storage@^3.3.18":
+"@aws-amplify/storage@3.3.22":
   version "3.3.22"
   resolved "https://registry.yarnpkg.com/@aws-amplify/storage/-/storage-3.3.22.tgz#0783ab78fc2286210eab776595a235a4e915df48"
   integrity sha512-ldSGcnKY1cmOh7vv20uuDtK9heAaLRMlDc//+8ikMSFcHjrgemSb+jfEG9a+vpv2732PZKqX8w0+Fd0pgVHXvg==
   dependencies:
     "@aws-amplify/core" "3.8.14"
+    "@aws-sdk/client-s3" "3.4.1"
+    "@aws-sdk/s3-request-presigner" "3.4.1"
+    "@aws-sdk/util-create-request" "3.4.1"
+    "@aws-sdk/util-format-url" "3.4.1"
+    axios "0.21.1"
+    events "^3.1.0"
+    sinon "^7.5.0"
+
+"@aws-amplify/storage@^3.3.23":
+  version "3.3.23"
+  resolved "https://registry.yarnpkg.com/@aws-amplify/storage/-/storage-3.3.23.tgz#00914f8f74768780cd170cf9765d2378bfd2f8bf"
+  integrity sha512-1WWV+xds/1JkGIxq7kefeCWY6r4uEMgUWyb08Recdjso7eFBn7tYoGlFCKlaeCh8gazZJ1XcGbKkxDwSfGqA/Q==
+  dependencies:
+    "@aws-amplify/core" "3.8.15"
     "@aws-sdk/client-s3" "3.4.1"
     "@aws-sdk/s3-request-presigner" "3.4.1"
     "@aws-sdk/util-create-request" "3.4.1"
