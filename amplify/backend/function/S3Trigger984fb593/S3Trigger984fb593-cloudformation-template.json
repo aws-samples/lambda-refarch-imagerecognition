@@ -60,7 +60,7 @@
 							"Ref": "env"
 						},
 						"STATE_MACHINE_ARN": {
-							"Fn::Sub": "arn:aws:states:${AWS::Region}:${AWS::AccountId}:stateMachine:${SfnStateMachineName}-master"
+							"Fn::Sub": "arn:aws:states:${AWS::Region}:${AWS::AccountId}:stateMachine:${SfnStateMachineName}-main"
 						},
 						"REGION": {
 							"Ref": "AWS::Region"
