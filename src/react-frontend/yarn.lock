@@ -77,6 +77,19 @@
     universal-cookie "^4.0.4"
     zen-observable-ts "0.8.19"
 
+"@aws-amplify/core@3.8.18":
+  version "3.8.18"
+  resolved "https://registry.yarnpkg.com/@aws-amplify/core/-/core-3.8.18.tgz#fb4657a8e27d9f965fabffd908f82be972f41e24"
+  integrity sha512-Z84U/qGHVwlymxarl0EdY/XMSuTUgJOSEPmiv+uvzsfLEL1FQZscY6To91Zm60BqH+Qdfs5vZHJVO1IlX10wLg==
+  dependencies:
+    "@aws-crypto/sha256-js" "1.0.0-alpha.0"
+    "@aws-sdk/client-cognito-identity" "3.6.1"
+    "@aws-sdk/credential-provider-cognito-identity" "3.6.1"
+    "@aws-sdk/types" "3.6.1"
+    "@aws-sdk/util-hex-encoding" "3.6.1"
+    universal-cookie "^4.0.4"
+    zen-observable-ts "0.8.19"
+
 "@aws-amplify/datastore@2.9.11":
   version "2.9.11"
   resolved "https://registry.yarnpkg.com/@aws-amplify/datastore/-/datastore-2.9.11.tgz#acb62ca1399a36925103acbdd969b13c56a40259"
@@ -129,12 +142,26 @@
     uuid "^3.2.1"
     zen-observable-ts "0.8.19"
 
-"@aws-amplify/storage@3.3.25", "@aws-amplify/storage@^3.3.18":
+"@aws-amplify/storage@3.3.25":
   version "3.3.25"
   resolved "https://registry.yarnpkg.com/@aws-amplify/storage/-/storage-3.3.25.tgz#c1ef0b6501a1d0b4cb3ca1745dcd7e3198d83ddc"
   integrity sha512-oaVsy9XV3E6c6R3MrSeNYdD60XCjkWifsy8w7dCsoNh1U3/eVKEP9Y7IS3fi7qCI/LSZCZ+f0KtdSwBKqGqV2Q==
   dependencies:
     "@aws-amplify/core" "3.8.17"
+    "@aws-sdk/client-s3" "3.6.1"
+    "@aws-sdk/s3-request-presigner" "3.6.1"
+    "@aws-sdk/util-create-request" "3.6.1"
+    "@aws-sdk/util-format-url" "3.6.1"
+    axios "0.21.1"
+    events "^3.1.0"
+    sinon "^7.5.0"
+
+"@aws-amplify/storage@^3.3.26":
+  version "3.3.26"
+  resolved "https://registry.yarnpkg.com/@aws-amplify/storage/-/storage-3.3.26.tgz#560cddd1ffb5c3351545d49e9b208933ba355509"
+  integrity sha512-Qw5jAo2xoeEdZ58hVVayAiTOOjkADuaCC4yxoIAY+bFWmXHt50lSN7SMS2mw5LO0iXTVl1yUyH+EhF1GTb6JjA==
+  dependencies:
+    "@aws-amplify/core" "3.8.18"
     "@aws-sdk/client-s3" "3.6.1"
     "@aws-sdk/s3-request-presigner" "3.6.1"
     "@aws-sdk/util-create-request" "3.6.1"
