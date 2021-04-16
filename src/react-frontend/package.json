@@ -4,7 +4,7 @@
   "private": true,
   "dependencies": {
     "@aws-amplify/api": "^3.2.24",
-    "@aws-amplify/storage": "^3.3.18",
+    "@aws-amplify/storage": "^3.4.0",
     "@aws-amplify/ui-react": "^1.0.6",
     "@testing-library/jest-dom": "^5.11.9",
     "@testing-library/react": "^11.2.6",
