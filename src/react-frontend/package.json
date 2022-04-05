@@ -13,7 +13,7 @@
     "aws-amplify-react": "^5.1.9",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
-    "react-router-dom": "^6.2.2",
+    "react-router-dom": "^6.3.0",
     "react-scripts": "^5.0.0",
     "semantic-ui-react": "^2.1.2",
     "uuid": "^8.3.2"
