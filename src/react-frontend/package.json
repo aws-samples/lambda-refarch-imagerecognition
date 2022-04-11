@@ -8,7 +8,7 @@
     "@aws-amplify/ui-react": "^2.14.0",
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^13.0.0",
-    "@testing-library/user-event": "^14.0.4",
+    "@testing-library/user-event": "^14.1.0",
     "aws-amplify": "^4.3.19",
     "aws-amplify-react": "^5.1.9",
     "react": "^18.0.0",
