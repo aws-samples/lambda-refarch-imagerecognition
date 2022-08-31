@@ -5,7 +5,7 @@
   "dependencies": {
     "@aws-amplify/api": "^3.3.3",
     "@aws-amplify/storage": "^3.4.4",
-    "@aws-amplify/ui-react": "^3.4.0",
+    "@aws-amplify/ui-react": "^3.5.0",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.3.0",
     "@testing-library/user-event": "^14.4.3",
