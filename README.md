@@ -27,6 +27,7 @@ Follow these instructions to deploy the application (both backend and frontend):
     - Note: If you forked and changed the repository first, you can use the Amplify console and select "**Connect App**" to connect to your forked repo. 
 1. For IAM Service Role, create one if you don't have one or select an existing role. (This is required because the Amplify Console needs permissions to deploy backend resources on your behalf. More [info](https://docs.aws.amazon.com/amplify/latest/userguide/how-to-service-role-amplify-console.html))
     ![amplify console select role or create new role](images/amplify-select-role.png)
+1. Update the role that is created with an additional in-line policy allowing the following action: **lambda:PutFunctionConcurrency** and **serverlessrepo:CreateCloudFormationTemplate**.
 1. Within your new app in Amplify Console, wait for deployment to complete (this may take a while)
 1. Once the deployment is complete, you can test out the application! 
  
