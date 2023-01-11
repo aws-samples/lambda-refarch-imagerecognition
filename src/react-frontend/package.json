@@ -12,7 +12,7 @@
     "aws-amplify": "^5.0.9",
     "aws-amplify-react": "^5.1.9",
     "react": "^18.2.0",
-    "react-dom": "^18.1.0",
+    "react-dom": "^18.2.0",
     "react-router-dom": "^6.3.0",
     "react-scripts": "^5.0.1",
     "semantic-ui-react": "^2.1.3",
